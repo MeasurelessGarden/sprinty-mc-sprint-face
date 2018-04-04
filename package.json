@@ -4,5 +4,8 @@
   "description": "Measureless Measures Your Words",
   "main": "bot.js",
   "author": "Measureless",
-  "dependencies": {}
+  "dependencies": {
+    "discord.io": "latest",
+    "winston": "latest"
+  }
 }
