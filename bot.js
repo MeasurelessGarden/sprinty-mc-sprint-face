@@ -18,34 +18,26 @@ const dmOnMatchingCommand = (message, command) => {
   }
 }
 
+const mentionOrDmBotCommand = (message, command) => {
+  if(command.mentionRequired) {
+    if( message.channel.type == 'dm') {
+      dmOnMatchingCommand(message, command)
+    }
+    else
+    if( _.find(message.mentions.users.array(), (userMention) => {
+      return userMention.id == auth.clientId
+    })) {
+      dmOnMatchingCommand(message, command)
+    }
+  }
+}
+
 client.on("message", (message) => {
   // console.log(message)
   if (message.author.bot) {return} // prevent botception
 
   _.each(config.commands, (command) => {
-    if(command.mentionRequired) {
-      if( message.channel.type == 'dm') {
-        // console.log(message.channel)
-        // console.log(message.content)
-        // const msg = _.lowerCase(_.trim(_.replace(message.content, config.mentionMe, '')))
-        // if (_.find(command.cmds, (cmd)=> {return cmd == msg })) {
-        //   message.author.send(command.response)
-        // }
-        dmOnMatchingCommand(message, command)
-      }
-      else if( _.find(message.mentions.users.array(), (userMention) => {
-        return userMention.id == auth.clientId
-      })) {
-        // const msg = _.lowerCase(_.trim(_.replace(message.content, config.mentionMe, '')))
-        // if (_.find(command.cmds, (cmd)=> {return cmd == msg })) {
-        //   // console.log('found a command: ', command)
-        //   // message.channel.send(command.response)
-        //   message.author.send(command.response)
-        // }
-
-        dmOnMatchingCommand(message, command)
-    }
-    }
+    mentionOrDmBotCommand(message, command)
   })
 
 });
