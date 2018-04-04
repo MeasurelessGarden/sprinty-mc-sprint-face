@@ -6,6 +6,7 @@
   "author": "Measureless",
   "dependencies": {
     "discord.js": "latest",
-    "js-yaml": "latest"
+    "js-yaml": "latest",
+    "lodash": "latest"
   }
 }
