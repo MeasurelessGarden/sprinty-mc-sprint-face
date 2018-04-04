@@ -2,10 +2,12 @@
   "name": "sprinty-mc-sprintface",
   "version": "0.0.1",
   "description": "Measureless Measures Your Words",
-  "main": "bot.js",
+  "main": "bot2.js",
   "author": "Measureless",
   "dependencies": {
+    "discord": "latest",
     "discord.io": "latest",
+    "discord.js": "latest",
     "winston": "latest"
   }
 }
