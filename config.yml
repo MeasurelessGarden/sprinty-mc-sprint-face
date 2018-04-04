@@ -8,4 +8,4 @@ commands:
     response: |
       **Welcome to Sprinty McSprintFace!**
 
-      First up: typing 'help' will make this goofy bot try to help you!
+      First up: typing '<@430905454961623060> help' or 'help <@430905454961623060>' will make this goofy bot try to help you!
