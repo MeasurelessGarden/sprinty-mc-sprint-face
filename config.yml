@@ -1,8 +1,10 @@
 ---
+mentionMe: <@430905454961623060>
 commands:
   - name: help
+    mentionRequired: true
     cmds:
-      - <@430905454961623060> help
+      - help
     response: |
       **Welcome to Sprinty McSprintFace!**
 

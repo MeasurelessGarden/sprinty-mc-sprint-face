@@ -25,9 +25,26 @@ client.on("message", (message) => {
   //   })
   // }
   _.each(config.commands, (command) => {
-    if(_.find(command.cmds, (cmd) => { return message.content == cmd})) {
-      message.channel.send(command.response)
+    if(command.mentionRequired && _.find(message.mentions.users.array(), (userMention) => {
+      return userMention.id == auth.clientId
+    })) {
+      // console.log(_.find(message.mentions.users.array(), (userMention) => {
+      //   return userMention.id == auth.clientId
+      // }))
+      // console.log(message.content)
+      // console.log(_.trim(_.replace(message.content, config.mentionMe, '')))
+      // console.log(_.lowerCase(_.trim(_.replace(message.content, config.mentionMe, ''))))
+      const msg = _.lowerCase(_.trim(_.replace(message.content, config.mentionMe, '')))
+      if (_.find(command.cmds, (cmd)=> cmd)) {
+        console.log('found a command: ', command)
+        message.channel.send(command.response)
+      }
     }
+    // if(_.find(command.cmds, (cmd) => {
+    //   return _.lowerCase(message.content) == cmd
+    // })) {
+    //   message.channel.send(command.response)
+    // }
   })
 });
 
