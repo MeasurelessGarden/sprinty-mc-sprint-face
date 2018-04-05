@@ -40,7 +40,7 @@ const mentionOrDmBotCommand = (message, command) => {
     }
   }
 }
-const funcTest = (cache, id) => {
+export const funcTest = (cache, id) => {
   cache[id].channel.send('foo')
 }
 
