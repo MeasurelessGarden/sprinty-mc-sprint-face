@@ -34,9 +34,6 @@ const mentionOrDmBotCommand = (message, command) => {
   }
 }
 
-const debugMe = (debugMessage) => {
-  console.log("triggering ", debugMessage, new Date())
-}
 const startSprint = (id) => {
   cache[id].channel.send(":ghost:")
 }
@@ -48,53 +45,68 @@ const textChannelMention = (message) => {
   if (msg == "join" ) {
     console.log('join does nothing, but here is the cache', cache)
   }
-  console.log('wtf?', msg, _.startsWith(msg, 'sprint at '))
   if(_.startsWith(msg, 'sprint at ')) {
-    const args = _.split(_.trim(_.replace(msg, 'sprint at ', '')))
-    console.log(args, args.length)
-    if(args.length == 1 && Number(args[0]) >= 0 && Number(args[0]) < 60) {
-      console.log('valid')
-    } else { console.log('invalid', args.length == 1,Number(args[0]) , Number(args[0]) >= 0,  Number(args[0]) < 60)}
-    const now = new Date()
-    const start = new Date()
-    const end = new Date()
-    start.setMinutes(Number(args[0]))
-    start.setSeconds(0)
-    start.setMilliseconds(0)
-    timeout = start.getTime() - now.getTime()
-    /*
-    if (timeout > 0) {
-      console.log('setting a timeout in ...', timeout)
-      client.setTimeout( debugMe, timeout, 'hi')
-      client.setTimeout( debugMe, end.getTime() - now.getTime(), 'done')
-      cache[target.getTime()] = {
+    const args = _.split(_.trim(_.replace(msg, 'sprint at ', '')), ' ')
+    console.log(args.length == 3 ,
+      args[1] == 'to' ,
+      Number(args[0]) >= 0 , Number(args[0]) < 60 ,
+      Number(args[2]) >= 0 , Number(args[2]) < 60)
+      console.log(args)
+    if(args.length == 3 &&
+      args[1] == 'to' &&
+      Number(args[0]) >= 0 && Number(args[0]) < 60 &&
+      Number(args[2]) >= 0 && Number(args[2]) < 60) {
+      const now = new Date()
+      const start = new Date()
+      const end = new Date()
+      start.setMinutes(Number(args[0]))
+      start.setSeconds(0)
+      start.setMilliseconds(0)
+      timeout = start.getTime() - now.getTime()
+      if (timeout < 0) {
+        start.setHours(start.getHours() + 1)
+        timeout = start.getTime() - now.getTime()
+      }
+      end.setHours(start.getHours())
+      end.setMinutes(Number(args[2]))
+      if (end < start) {
+        end.setHours(end.getHours() + 1)
+      }
+      end.setSeconds(0)
+      end.setMilliseconds(0)
+      client.setTimeout( startSprint, timeout, start.getTime())
+      client.setTimeout( endSprint, end.getTime() - now.getTime(), start.getTime())
+      cache[start.getTime()] = { // sprint definition
         start: start,
         end: end,
-        participants: []
+        channel: message.channel,
       }
-    } else {
-      // console.log('???', target)
-      start.setHours(start.getHours() + 1)
-      timeout = start.getTime() - now.getTime()
-      client.setTimeout( debugMe, timeout, 'wrap')
-    }*/
-    if (timeout < 0) {
-      start.setHours(start.getHours() + 1)
-      timeout = start.getTime() - now.getTime()
     }
-    const defaultMinutes = 2
-    end.setHours(start.getHours())
-    end.setMinutes(start.getMinutes() + defaultMinutes)
-    end.setSeconds(0)
-    end.setMilliseconds(0)
-    console.log('setting a timeout in ...', timeout)
-    client.setTimeout( startSprint, timeout, start.getTime())
-    client.setTimeout( endSprint, end.getTime() - now.getTime(), start.getTime())
-    cache[start.getTime()] = {
-      start: start,
-      end: end,
-      channel: message.channel,
-      // participants: []
+    if(args.length == 1 && Number(args[0]) >= 0 && Number(args[0]) < 60) {
+      const now = new Date()
+      const start = new Date()
+      const end = new Date()
+      start.setMinutes(Number(args[0]))
+      start.setSeconds(0)
+      start.setMilliseconds(0)
+      timeout = start.getTime() - now.getTime()
+      if (timeout < 0) {
+        start.setHours(start.getHours() + 1)
+        timeout = start.getTime() - now.getTime()
+      }
+      const defaultMinutes = 2
+      end.setHours(start.getHours())
+      end.setMinutes(start.getMinutes() + defaultMinutes)
+      end.setSeconds(0)
+      end.setMilliseconds(0)
+      client.setTimeout( startSprint, timeout, start.getTime())
+      client.setTimeout( endSprint, end.getTime() - now.getTime(), start.getTime())
+      cache[start.getTime()] = { // sprint definition
+        start: start,
+        end: end,
+        channel: message.channel,
+      }
+
     }
 
   }
