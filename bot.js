@@ -37,6 +37,12 @@ const mentionOrDmBotCommand = (message, command) => {
 const debugMe = (debugMessage) => {
   console.log("triggering ", debugMessage, new Date())
 }
+const startSprint = (id) => {
+  cache[id].channel.send(":ghost:")
+}
+const endSprint = (id) => {
+  cache[id].channel.send("STOP")
+}
 const textChannelMention = (message) => {
   const msg = _.toLower(_.trim(message.content))
   if (msg == "join" ) {
@@ -50,45 +56,46 @@ const textChannelMention = (message) => {
       console.log('valid')
     } else { console.log('invalid', args.length == 1,Number(args[0]) , Number(args[0]) >= 0,  Number(args[0]) < 60)}
     const now = new Date()
-    // const nowMins = now.getMinutes()
-    /*
-    const startSeconds = Number(args[0])*60
-    const nowSeconds = now.getMinutes()*60 + now.getSeconds()
-    // console.log(nowMins*60+)
-    // console.log((Number(args[0])+60-nowMins)*1000)
-    if (startSeconds > nowSeconds) {
-      // console.log('start in ', start - nowMins)
-      client.setInterval(debugMe, (startSeconds > nowSeconds)*1000*60, 'testing interval')
-      client.setTimeout(debugMe, (startSeconds > nowSeconds)*1000*60, 'testing timeout')
-    } else {
-      // TODO
-    }*/
-    const target = new Date()
+    const start = new Date()
     const end = new Date()
-    target.setMinutes(Number(args[0]))
-    target.setSeconds(0)
-    target.setMilliseconds(0)
-    end.setMinutes(Number(args[0]) + 1) // TODO make this wrap over hours yo (not to mention configurable)
-    end.setSeconds(0)
-    end.setMilliseconds(0)
-    timeout = target.getTime() - now.getTime()
-    console.log(now, target, now.getTime(), target.getTime(), timeout)
+    start.setMinutes(Number(args[0]))
+    start.setSeconds(0)
+    start.setMilliseconds(0)
+    timeout = start.getTime() - now.getTime()
+    /*
     if (timeout > 0) {
       console.log('setting a timeout in ...', timeout)
       client.setTimeout( debugMe, timeout, 'hi')
       client.setTimeout( debugMe, end.getTime() - now.getTime(), 'done')
       cache[target.getTime()] = {
-        start: target,
+        start: start,
         end: end,
         participants: []
       }
     } else {
       // console.log('???', target)
-      target.setHours(target.getHours() + 1)
-      timeout = target.getTime() - now.getTime()
+      start.setHours(start.getHours() + 1)
+      timeout = start.getTime() - now.getTime()
       client.setTimeout( debugMe, timeout, 'wrap')
+    }*/
+    if (timeout < 0) {
+      start.setHours(start.getHours() + 1)
+      timeout = start.getTime() - now.getTime()
     }
-
+    const defaultMinutes = 2
+    end.setHours(start.getHours())
+    end.setMinutes(start.getMinutes() + defaultMinutes)
+    end.setSeconds(0)
+    end.setMilliseconds(0)
+    console.log('setting a timeout in ...', timeout)
+    client.setTimeout( startSprint, timeout, start.getTime())
+    client.setTimeout( endSprint, end.getTime() - now.getTime(), start.getTime())
+    cache[start.getTime()] = {
+      start: start,
+      end: end,
+      channel: message.channel,
+      // participants: []
+    }
 
   }
 
