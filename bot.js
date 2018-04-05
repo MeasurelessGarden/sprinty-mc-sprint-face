@@ -11,6 +11,8 @@ client.on("ready", () => {
   console.log("I am ready!")
 });
 
+const cache = {}
+
 const dmOnMatchingCommand = (message, command) => {
   const msg = _.toLower(_.trim(_.replace(message.content, config.mentionMe, '')))
   if (_.find(command.cmds, (cmd)=> {return cmd == msg })) {
@@ -39,7 +41,11 @@ const textChannelMention = (message, command) => {
   if(!command.mentionRequired) {
     const msg = _.toLower(_.trim(message.content))
     // console.log(msg, command)
+    if (msg == "join" ) {
+      console.log('join does nothing, but here is the cache', cache)
+    }
     const cmd = _.find(command.startsWith, (cmd)=> { return msg.startsWith(cmd) })
+    console.log('matching command?', message.content, msg, cmd)
     if(cmd) {
       const args = _.split(_.trim(_.replace(msg, cmd, '')))
       console.log(args)
@@ -58,15 +64,26 @@ const textChannelMention = (message, command) => {
         // TODO
       }*/
       const target = new Date()
+      // const end = new Date()
       target.setMinutes(Number(args[0]))
       target.setSeconds(0)
       target.setMilliseconds(0)
+      // end.setMinutes(Number(args[0]) + 1) // TODO make this wrap over hours yo (not to mention configurable)
+      // end.setSeconds(0)
+      // end.setMilliseconds(0)
       timeout = target.getTime() - now.getTime()
       console.log(now, target, now.getTime(), target.getTime(), timeout)
       if (timeout > 0) {
         console.log('setting a timeout in ...', timeout)
         client.setTimeout( debugMe, timeout, 'hi')
+        // client.setTimeout( debugMe, end.getTime() - now.getTime(), 'done')
+        cache[target.getTime()] = {
+          start: target,
+          // end: end,
+          participants: []
+        }
       } else {
+        // console.log('???', target)
         target.setHours(target.getHours() + 1)
         timeout = target.getTime() - now.getTime()
         client.setTimeout( debugMe, timeout, 'wrap')
