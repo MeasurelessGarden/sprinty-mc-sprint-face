@@ -1,4 +1,4 @@
-const Discord = require("discord.js")
+const Discord = require('discord.js')
 var auth = require('./secret.json')
 var yaml = require('js-yaml')
 var fs = require('fs')
@@ -7,55 +7,73 @@ var _ = require('lodash')
 let config = yaml.load(fs.readFileSync('./config.yml', {encoding: 'utf-8'}))
 const client = new Discord.Client()
 
-client.on("ready", () => {
-  console.log("I am ready!")
-});
+client.on('ready', () => {
+  console.log('I am ready!')
+})
 
 const cache = {}
 
 const dmOnMatchingCommand = (message, command) => {
-  const msg = _.toLower(_.trim(_.replace(message.content, config.mentionMe, '')))
-  if (_.find(command.cmds, (cmd)=> {return cmd == msg })) {
+  const msg = _.toLower(
+    _.trim(_.replace(message.content, config.mentionMe, ''))
+  )
+  if (
+    _.find(command.cmds, cmd => {
+      return cmd == msg
+    })
+  ) {
     message.author.send(command.response)
   }
 }
 
 const mentionOrDmBotCommand = (message, command) => {
-  if(command.mentionRequired) {
-    if( message.channel.type == 'dm') {
+  if (command.mentionRequired) {
+    if (message.channel.type == 'dm') {
       dmOnMatchingCommand(message, command)
     }
-    else
-    if( _.find(message.mentions.users.array(), (userMention) => {
-      return userMention.id == auth.clientId
-    })) {
+    else if (
+      _.find(message.mentions.users.array(), userMention => {
+        return userMention.id == auth.clientId
+      })
+    ) {
       dmOnMatchingCommand(message, command)
     }
   }
+}
+const funcTest = (cache, id) => {
+  cache[id].channel.send('foo')
 }
 
-const startSprint = (id) => {
-  cache[id].channel.send(":ghost:")
+const startSprint = id => {
+  cache[id].channel.send(':ghost:')
 }
-const endSprint = (id) => {
-  cache[id].channel.send("STOP")
+const endSprint = id => {
+  cache[id].channel.send('STOP')
 }
-const textChannelMention = (message) => {
+const textChannelMention = message => {
   const msg = _.toLower(_.trim(message.content))
-  if (msg == "join" ) {
+  if (msg == 'join') {
     console.log('join does nothing, but here is the cache', cache)
   }
-  if(_.startsWith(msg, 'sprint at ')) {
+  if (_.startsWith(msg, 'sprint at ')) {
     const args = _.split(_.trim(_.replace(msg, 'sprint at ', '')), ' ')
-    console.log(args.length == 3 ,
-      args[1] == 'to' ,
-      Number(args[0]) >= 0 , Number(args[0]) < 60 ,
-      Number(args[2]) >= 0 , Number(args[2]) < 60)
-      console.log(args)
-    if(args.length == 3 &&
+    console.log(
+      args.length == 3,
+      args[1] == 'to',
+      Number(args[0]) >= 0,
+      Number(args[0]) < 60,
+      Number(args[2]) >= 0,
+      Number(args[2]) < 60
+    )
+    console.log(args)
+    if (
+      args.length == 3 &&
       args[1] == 'to' &&
-      Number(args[0]) >= 0 && Number(args[0]) < 60 &&
-      Number(args[2]) >= 0 && Number(args[2]) < 60) {
+      Number(args[0]) >= 0 &&
+      Number(args[0]) < 60 &&
+      Number(args[2]) >= 0 &&
+      Number(args[2]) < 60
+    ) {
       const now = new Date()
       const start = new Date()
       const end = new Date()
@@ -74,15 +92,20 @@ const textChannelMention = (message) => {
       }
       end.setSeconds(0)
       end.setMilliseconds(0)
-      client.setTimeout( startSprint, timeout, start.getTime())
-      client.setTimeout( endSprint, end.getTime() - now.getTime(), start.getTime())
-      cache[start.getTime()] = { // sprint definition
+      client.setTimeout(startSprint, timeout, start.getTime())
+      client.setTimeout(
+        endSprint,
+        end.getTime() - now.getTime(),
+        start.getTime()
+      )
+      cache[start.getTime()] = {
+        // sprint definition
         start: start,
         end: end,
         channel: message.channel,
       }
     }
-    if(args.length == 1 && Number(args[0]) >= 0 && Number(args[0]) < 60) {
+    if (args.length == 1 && Number(args[0]) >= 0 && Number(args[0]) < 60) {
       const now = new Date()
       const start = new Date()
       const end = new Date()
@@ -99,30 +122,33 @@ const textChannelMention = (message) => {
       end.setMinutes(start.getMinutes() + defaultMinutes)
       end.setSeconds(0)
       end.setMilliseconds(0)
-      client.setTimeout( startSprint, timeout, start.getTime())
-      client.setTimeout( endSprint, end.getTime() - now.getTime(), start.getTime())
-      cache[start.getTime()] = { // sprint definition
+      client.setTimeout(startSprint, timeout, start.getTime())
+      client.setTimeout(
+        endSprint,
+        end.getTime() - now.getTime(),
+        start.getTime()
+      )
+      cache[start.getTime()] = {
+        // sprint definition
         start: start,
         end: end,
         channel: message.channel,
       }
-
     }
-
   }
-
 }
 
-client.on("message", (message) => {
+client.on('message', message => {
   // console.log(message)
-  if (message.author.bot) {return} // prevent botception
+  if (message.author.bot) {
+    return
+  } // prevent botception
 
-  _.each(config.commands, (command) => {
+  _.each(config.commands, command => {
     mentionOrDmBotCommand(message, command)
   })
 
   textChannelMention(message)
+})
 
-});
-
-client.login(auth.token);
+client.login(auth.token)
