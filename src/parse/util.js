@@ -8,42 +8,34 @@ export const preparseMessage = message => {
 
 export const parse = (message, command, args) => {
   // assumes message is cleaned by preparse first
-  // const split = _.split(message, ' ')
   const parseArgsEquality = (value, arg) => {
-    console.log('????', arg, value)
-
     if (_.isEqual(arg, 'Number')) {
       return Number(value) >= 0
     }
     return _.isEqual(value, arg)
   }
-  const matches = []
-  let messageArr = _.split(message, ' ')
-  const maybe = _.takeWhile(_.concat([ command ], args), function(param){
-    console.log('internal', messageArr, param)
-    if (messageArr.length == 0) return false
+  const matchingValues = []
+  let workingMessage = _.split(message, ' ')
+  const partsOfMatchingCommand = _.takeWhile(
+    _.concat([ command ], args),
+    function(param){
+      if (workingMessage.length == 0) return false
 
-    const result = _.intersectionWith(messageArr, [ param ], parseArgsEquality)
-    if (result) {
-      const index = _.indexOf(messageArr, result[0])
-      matches.push(messageArr[index])
-      messageArr = _.takeRight(messageArr, messageArr.length - index)
-      // _.remove(messageArr, function(it) {
-      // return it != result[0]
-      // })
-      console.log('remove some', messageArr)
-      // _.pullAt(messageArr,0)
+      const result = _.intersectionWith(
+        workingMessage,
+        [ param ],
+        parseArgsEquality
+      )
+      if (result) {
+        const index = _.indexOf(workingMessage, result[0])
+        matchingValues.push(workingMessage[index])
+        workingMessage = _.takeRight(
+          workingMessage,
+          workingMessage.length - index
+        )
+      }
+      return result
     }
-    return result
-    // if(messageArr[0] === param) {
-    //   matches.push(messageArr[0])
-    //   _.pullAt(messageArr, 0)
-    //   return true
-    // }
-    // _.pullAt(messageArr, 0)
-    // return false
-  })
-  console.log('IDEA', maybe, matches)
-  return matches
-  // return _.intersectionWith(_.split(message, ' '), _.concat([command], args), parseArgsEquality);
+  )
+  return matchingValues
 }
