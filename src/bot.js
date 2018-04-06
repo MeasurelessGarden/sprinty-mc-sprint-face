@@ -151,4 +151,4 @@ client.on('message', message => {
   textChannelMention(message)
 })
 
-// client.login(auth.token)
+client.login(auth.token)
