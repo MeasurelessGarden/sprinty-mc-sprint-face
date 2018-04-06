@@ -21,6 +21,7 @@
     "chai-as-promised": "^7.1.1",
     "mocha": "^4.0.1",
     "sinon": "^4.1.2",
-    "prettier-miscellaneous": "^1.5.3"
+    "prettier-miscellaneous": "^1.5.3",
+    "unroll": "latest"
   }
 }

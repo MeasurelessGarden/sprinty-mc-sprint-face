@@ -40,9 +40,9 @@ const mentionOrDmBotCommand = (message, command) => {
     }
   }
 }
-export const funcTest = (cache, id) => {
-  cache[id].channel.send('foo')
-}
+// export const funcTest = (cache, id) => {
+//   cache[id].channel.send('foo')
+// }
 
 const startSprint = id => {
   cache[id].channel.send(':ghost:')
@@ -151,4 +151,4 @@ client.on('message', message => {
   textChannelMention(message)
 })
 
-client.login(auth.token)
+// client.login(auth.token)
