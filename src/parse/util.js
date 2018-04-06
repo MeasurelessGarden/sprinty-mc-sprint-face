@@ -10,7 +10,7 @@ export const parse = (message, command, args) => {
   // assumes message is cleaned by preparse first
   const parseArgsEquality = (value, arg) => {
     if (_.isEqual(arg, 'Number')) {
-      return Number(value) >= 0
+      return Number(value) >= 0 // TODO note that the removal of punctuation means negative numbers cannot happen anyway
     }
     return _.isEqual(value, arg)
   }
@@ -38,4 +38,13 @@ export const parse = (message, command, args) => {
     }
   )
   return matchingValues
+}
+
+export const convertFunctionArgs = (message, fullCommand) => {
+  return _.map(message, (m, index) => {
+    if (_.isEqual(fullCommand[index], 'Number')) {
+      return Number(m)
+    }
+    return m
+  })
 }

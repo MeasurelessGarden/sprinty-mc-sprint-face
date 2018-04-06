@@ -1,5 +1,9 @@
 import {unroll} from '../spec.js'
-import {preparseMessage, parse} from '../../src/parse/util.js'
+import {
+  preparseMessage,
+  parse,
+  convertFunctionArgs,
+} from '../../src/parse/util.js'
 import {expect} from 'chai'
 
 const itPreparsesMessage = (rawMessage, expectedMessage) => {
@@ -87,5 +91,32 @@ describe('parse util', function(){
         [ 'sprint', '0', 'to', '5' ],
       ],
     ] // TODO list some that fail to match...
+  )
+
+  unroll(
+    'converts function params from strings - #reason',
+    function(done, args){
+      const parsedFunctionArgs = convertFunctionArgs(
+        args.parsedMessage,
+        args.commandWithArgs
+      )
+      expect(parsedFunctionArgs).to.be.deep.equal(args.expected)
+      done()
+    },
+    [
+      [ 'reason', 'parsedMessage', 'commandWithArgs', 'expected' ],
+      [
+        'convert literal no op',
+        [ 'sprint', '0', 'to', '5' ],
+        [ 'sprint', '0', 'to', '5' ],
+        [ 'sprint', '0', 'to', '5' ],
+      ],
+      [
+        'convert numbers in matching parsed message',
+        [ 'sprint', '0', 'to', '5' ],
+        [ 'sprint', 'Number', 'to', 'Number' ],
+        [ 'sprint', 0, 'to', 5 ],
+      ],
+    ]
   )
 })
