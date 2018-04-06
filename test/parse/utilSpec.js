@@ -1,5 +1,5 @@
 import {unroll} from '../spec.js'
-import {preparseMessage} from '../../src/parse/util.js'
+import {preparseMessage, parse} from '../../src/parse/util.js'
 import {expect} from 'chai'
 
 const itPreparsesMessage = (rawMessage, expectedMessage) => {
@@ -25,6 +25,67 @@ describe('parse util', function(){
         'period. comma, quote" singlequote\' colon: etc!@$%^&*()',
         'period comma quote singlequote colon etc',
       ],
+      [
+        // this one is just a consequence of removing all punctuation...
+        'negative numbers do not exist',
+        'negative -1',
+        'negative 1',
+      ],
+      [ 'number ranges change', '7-20', '7 20' ],
     ]
+  )
+
+  unroll(
+    'parses #message to match #command with #args - reason',
+    function(done, args){
+      const parsedMessage = parse(args.message, args.command, args.args)
+      expect(parsedMessage).to.be.deep.equal(args.expected)
+      done()
+    },
+    [
+      [ 'reason', 'message', 'command', 'args', 'expected' ],
+      [
+        'exact match literal',
+        'foo bar cat',
+        'foo',
+        [ 'bar', 'cat' ],
+        [ 'foo', 'bar', 'cat' ],
+      ],
+      [
+        'match literal with extra',
+        'a foo b bar c cat d',
+        'foo',
+        [ 'bar', 'cat' ],
+        [ 'foo', 'bar', 'cat' ],
+      ],
+      [
+        'match literal with extras duplicates out of order',
+        'sprint 0 5 to 5',
+        'sprint',
+        [ '0', 'to', '5' ],
+        [ 'sprint', '0', 'to', '5' ],
+      ],
+      [
+        'match arg type',
+        'sprint 0',
+        'sprint',
+        [ 'Number' ],
+        [ 'sprint', '0' ],
+      ],
+      [
+        'match arg type first match',
+        'sprint 0 1 2 3 5',
+        'sprint',
+        [ 'Number' ],
+        [ 'sprint', '0' ],
+      ],
+      [
+        'match arg type first match each num',
+        'sprint 0 1 2 3 to 5',
+        'sprint',
+        [ 'Number', 'to', 'Number' ],
+        [ 'sprint', '0', 'to', '5' ],
+      ],
+    ] // TODO list some that fail to match...
   )
 })
