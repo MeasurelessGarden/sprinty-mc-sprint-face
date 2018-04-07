@@ -306,6 +306,13 @@ describe('Sprint generator', function(){
         },
       ],
       [
+        'sprint at 20 for 6 min',
+        {
+          start: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:26:00.000Z')),
+        },
+      ],
+      [
         'sprint at 25',
         {
           start: new Date(Date.parse('2018-04-04T04:25:00.000Z')),
@@ -345,6 +352,27 @@ describe('Sprint generator', function(){
         {
           start: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:50:00.000Z')),
+        },
+      ],
+      [
+        'shall we sprint :20 for about 55 min?',
+        {
+          start: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T06:15:00.000Z')),
+        },
+      ],
+      [
+        'sprint 30 for 34 minutes',
+        {
+          start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:04:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 30 for 34 minutes',
+        {
+          start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:04:00.000Z')),
         },
       ],
       // [
