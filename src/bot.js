@@ -1,3 +1,13 @@
+import {
+  preparseMessage, // cleanup
+  parse,//cleanup
+  convertFunctionArgs, //cleanup
+  parseMessageToArgs
+} from './parse/util.js'
+import {
+  generateSprintWithDuration,
+  generateSprintWithEndTime,
+} from './sprint/generator.js'
 const Discord = require('discord.js')
 var auth = require('./secret.json')
 var yaml = require('js-yaml')
@@ -50,6 +60,81 @@ const startSprint = id => {
 const endSprint = id => {
   cache[id].channel.send('STOP')
 }
+
+const testNewFuncs = (message) => {
+
+    const command = ['sprint', 'at', 'Number']
+    generateSprintWithDuration(new Date(), args[2], 30)
+      const command = ['sprint', 'Number', 'for', 'Number', 'min']
+      generateSprintWithDuration(new Date(), args[1], args[3])
+        const command = ['sprint', 'Number', 'to', 'Number']
+        generateSprintWithEndTime(new Date(), args[1], args[3])
+  parseMessageToArgs
+}
+
+const testNewFuncs1 = (message) => {
+  const command = ['sprint', 'at', 'Number']
+  // sprint Number to Number
+  // sprint Number for Number
+  let m = parse(preparseMessage(message), command)
+  if(m.length == command.length) {
+    let args = convertFunctionArgs(m, command)
+    // TODO map command to which args are input to what function..., other features like new Date()
+    let sprint = generateSprintWithDuration(new Date(), args[2], 30)
+    // TODO generate timeout stuff from sprint, now, etc
+    // TODO figure out how channel gets piped into callback (or is the configured channel static enough..)
+    // console.log('generated a sprint', sprint)
+
+    console.log('x1', 'messge:', message)
+    console.log('x1', 'command:', command)
+    console.log('x1', 'parsed:', m)
+    console.log('x1', 'args:', args)
+    console.log('x1', 'N1:', args[2])
+    console.log('x1', 'N2 (hardcoded):',30)
+    console.log('x1', 'sprint:', sprint)
+  }
+}
+const testNewFuncs2 = (message) => {
+  const command = ['sprint', 'Number', 'for', 'Number', 'min']
+  // sprint Number for Number min
+  let m = parse(preparseMessage(message), command)
+  if(m.length == command.length) {
+    let args = convertFunctionArgs(m, command)
+    // TODO map command to which args are input to what function..., other features like new Date()
+    let sprint = generateSprintWithDuration(new Date(), args[1], args[3])
+    // TODO generate timeout stuff from sprint, now, etc
+    // TODO figure out how channel gets piped into callback (or is the configured channel static enough..)
+    // console.log('x2', 'message', message, 'command', command, 'parsed', m, 'args', args, 'N1', args[1], 'N2', args[3], 'sprint', sprint)
+    console.log('x2', 'messge:', message)
+    console.log('x2', 'command:', command)
+    console.log('x2', 'parsed:', m)
+    console.log('x2', 'args:', args)
+    console.log('x2', 'N1:', args[1])
+    console.log('x2', 'N2:', args[3])
+    console.log('x2', 'sprint:', sprint)
+  }
+}
+const testNewFuncs3 = (message) => {
+  const command = ['sprint', 'Number', 'to', 'Number']
+  // sprint Number to Number
+  let m = parse(preparseMessage(message), command)
+  if(m.length == command.length) {
+    let args = convertFunctionArgs(m, command)
+    // TODO map command to which args are input to what function..., other features like new Date()
+    let sprint = generateSprintWithEndTime(new Date(), args[1], args[3])
+    // TODO generate timeout stuff from sprint, now, etc
+    // TODO figure out how channel gets piped into callback (or is the configured channel static enough..)
+    // console.log('generated a sprint x3', sprint)
+    console.log('x3', 'messge:', message)
+    console.log('x3', 'command:', command)
+    console.log('x3', 'parsed:', m)
+    console.log('x3', 'args:', args)
+    console.log('x3', 'N1:', args[1])
+    console.log('x3', 'N2:', args[3])
+    console.log('x3', 'sprint:', sprint)
+  }
+}
+
 const textChannelMention = message => {
   const msg = _.toLower(_.trim(message.content))
   if (msg == 'join') {
@@ -148,7 +233,11 @@ client.on('message', message => {
     mentionOrDmBotCommand(message, command)
   })
 
-  textChannelMention(message)
+  // textChannelMention(message)
+
+  testNewFuncs(message.content)
+  // testNewFuncs2(message.content)
+  // testNewFuncs3(message.content)
 })
 
 client.login(auth.token)

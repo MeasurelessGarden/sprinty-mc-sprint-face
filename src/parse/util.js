@@ -1,13 +1,15 @@
 var _ = require('lodash')
 
 export const preparseMessage = message => {
+  // message, a string typed by a user (assumes no @USERNAME)
   return _.toLower(
     _.trim(_.replace(_.replace(message, /[^\w]/g, ' '), /\s\s*/g, ' '))
   )
 }
 
-export const parse = (message, command, args) => {
+export const parse = (message, command) => { // TODO change input to [command ,args]
   // assumes message is cleaned by preparse first
+  // command, an array to match terms from to identify command and args
   const parseArgsEquality = (value, arg) => {
     if (_.isEqual(arg, 'Number')) {
       return Number(value) >= 0 // TODO note that the removal of punctuation means negative numbers cannot happen anyway
@@ -17,7 +19,7 @@ export const parse = (message, command, args) => {
   const matchingValues = []
   let workingMessage = _.split(message, ' ')
   const partsOfMatchingCommand = _.takeWhile(
-    _.concat([ command ], args),
+    command,
     function(param){
       if (workingMessage.length == 0) return false
 
@@ -26,7 +28,7 @@ export const parse = (message, command, args) => {
         [ param ],
         parseArgsEquality
       )
-      if (result) {
+      if (result && result.length > 0) {
         const index = _.indexOf(workingMessage, result[0])
         matchingValues.push(workingMessage[index])
         workingMessage = _.takeRight(
@@ -34,17 +36,29 @@ export const parse = (message, command, args) => {
           workingMessage.length - index
         )
       }
-      return result
+      return result && result.length > 0
     }
   )
   return matchingValues
 }
 
-export const convertFunctionArgs = (message, fullCommand) => {
+export const convertFunctionArgs = (message, command) => {
+  // message, array from parse(...)
+  // command, array of command
+  // TODO test / verify assumption - these args *must* be the same length...
   return _.map(message, (m, index) => {
-    if (_.isEqual(fullCommand[index], 'Number')) {
+    if (_.isEqual(command[index], 'Number')) {
       return Number(m)
     }
     return m
   })
+}
+
+export const parseMessageToArgs = (message, command) => {
+  // puts preparse, parse, and convertFunctionArgs together
+  let m = parse(preparseMessage(message), command)
+  if(m.length == command.length) {
+    let args = convertFunctionArgs(m, command)
+    return args
+  }
 }

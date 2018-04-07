@@ -1,0 +1,215 @@
+sprint at 30
+
+generated a sprint { start: 2018-04-07T00:30:00.000Z,
+end: 2018-04-07T01:00:00.000Z }
+generated a sprint x2 { start: 2018-04-07T00:30:00.000Z,
+  end: 2018-04-07T01:00:00.000Z }
+generated a sprint x3 { start: 2018-04-07T00:30:00.000Z,
+end: 2018-04-07T00:30:00.000Z }
+
+sprint at 30 for 14
+
+generated a sprint { start: 2018-04-07T00:30:00.000Z,
+end: 2018-04-07T01:00:00.000Z }
+generated a sprint x2 { start: 2018-04-07T00:30:00.000Z,
+  end: 2018-04-07T00:44:00.000Z }
+generated a sprint x3 { start: 2018-04-07T00:30:00.000Z,
+end: 2018-04-07T00:30:00.000Z }
+
+ANYONE WANT TO SPRINT AT 25?
+
+generated a sprint { start: 2018-04-07T00:25:00.000Z,
+end: 2018-04-07T00:55:00.000Z }
+generated a sprint x2 { start: 2018-04-07T00:25:00.000Z,
+  end: 2018-04-07T00:50:00.000Z }
+generated a sprint x3 { start: 2018-04-07T00:25:00.000Z,
+end: 2018-04-07T00:25:00.000Z }
+
+
+let's sprint 40 to 45
+
+generated a sprint { start: 2018-04-07T00:40:00.000Z,
+end: 2018-04-07T01:10:00.000Z }
+generated a sprint x2 { start: 2018-04-07T00:40:00.000Z,
+  end: 2018-04-07T01:20:00.000Z }
+generated a sprint x3 { start: 2018-04-07T00:40:00.000Z,
+end: 2018-04-07T00:45:00.000Z }
+
+sprint at 27 for 10 min
+
+generated a sprint { start: 2018-04-07T00:27:00.000Z,
+end: 2018-04-07T00:57:00.000Z }
+generated a sprint x2 { start: 2018-04-07T00:27:00.000Z,
+  end: 2018-04-07T00:37:00.000Z }
+generated a sprint x3 { start: 2018-04-07T00:27:00.000Z,
+end: 2018-04-07T00:27:00.000Z }
+
+
+
+
+x2 message sprint at 30 command [ 'sprint', 'Number', 'for', 'Number', 'min' ] parsed [ 'sprint', '30', undefined, '30', undefined ] args [ 'sprint', 30, undefined, 30, undefined ] N1 30 N2 30 sprint { start: 2018-04-07T00:30:00.000Z,
+  end: 2018-04-07T01:00:00.000Z }
+x2 message sprint at 35 for 14 command [ 'sprint', 'Number', 'for', 'Number', 'min' ] parsed [ 'sprint', '35', 'for', '14', undefined ] args [ 'sprint', 35, 'for', 14, undefined ] N1 35 N2 14 sprint { start: 2018-04-07T00:35:00.000Z,
+  end: 2018-04-07T00:49:00.000Z }
+x2 message ANYONE WANT TO SPRINT AT 25? command [ 'sprint', 'Number', 'for', 'Number', 'min' ] parsed [ 'sprint', '25', undefined, '25', undefined ] args [ 'sprint', 25, undefined, 25, undefined ] N1 25 N2 25 sprint { start: 2018-04-07T00:25:00.000Z,
+  end: 2018-04-07T00:50:00.000Z }
+x2 message let's sprint 40 to 45 command [ 'sprint', 'Number', 'for', 'Number', 'min' ] parsed [ 'sprint', '40', undefined, '40', undefined ] args [ 'sprint', 40, undefined, 40, undefined ] N1 40 N2 40 sprint { start: 2018-04-07T00:40:00.000Z,
+  end: 2018-04-07T01:20:00.000Z }
+x2 message sprint at 27 for 10 min command [ 'sprint', 'Number', 'for', 'Number', 'min' ] parsed [ 'sprint', '27', 'for', '10', 'min' ] args [ 'sprint', 27, 'for', 10, 'min' ] N1 27 N2 10 sprint { start: 2018-04-07T00:27:00.000Z,
+  end: 2018-04-07T00:37:00.000Z }
+x2 message sprint :15 command [ 'sprint', 'Number', 'for', 'Number', 'min' ] parsed [ 'sprint', '15', undefined, '15', undefined ] args [ 'sprint', 15, undefined, 15, undefined ] N1 15 N2 15 sprint { start: 2018-04-07T00:15:00.000Z,
+  end: 2018-04-07T00:30:00.000Z }
+
+
+## TEST DATA
+sprint at 30
+sprint at 35 for 14
+ANYONE WANT TO SPRINT AT 25?
+let's sprint 40 to 45
+sprint at 27 for 10 min
+sprint :15
+
+x1 messge: sprint at 30
+x1 command: [ 'sprint', 'at', 'Number' ]
+x1 parsed: [ 'sprint', 'at', '30' ]
+x1 args: [ 'sprint', 'at', 30 ]
+x1 N1: 30
+x1 N2 (hardcoded): 30
+x1 sprint: { start: 2018-04-07T00:30:00.000Z,
+  end: 2018-04-07T01:00:00.000Z }
+x2 messge: sprint at 30
+x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
+x2 parsed: [ 'sprint', '30', undefined, '30', undefined ]
+x2 args: [ 'sprint', 30, undefined, 30, undefined ]
+x2 N1: 30
+x2 N2: 30
+x2 sprint: { start: 2018-04-07T00:30:00.000Z,
+  end: 2018-04-07T01:00:00.000Z }
+x3 messge: sprint at 30
+x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
+x3 parsed: [ 'sprint', '30', undefined, '30' ]
+x3 args: [ 'sprint', 30, undefined, 30 ]
+x3 N1: 30
+x3 N2: 30
+x3 sprint: { start: 2018-04-07T00:30:00.000Z,
+  end: 2018-04-07T00:30:00.000Z }
+x1 messge: sprint at 35 for 14
+x1 command: [ 'sprint', 'at', 'Number' ]
+x1 parsed: [ 'sprint', 'at', '35' ]
+x1 args: [ 'sprint', 'at', 35 ]
+x1 N1: 35
+x1 N2 (hardcoded): 30
+x1 sprint: { start: 2018-04-07T00:35:00.000Z,
+  end: 2018-04-07T01:05:00.000Z }
+x2 messge: sprint at 35 for 14
+x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
+x2 parsed: [ 'sprint', '35', 'for', '14', undefined ]
+x2 args: [ 'sprint', 35, 'for', 14, undefined ]
+x2 N1: 35
+x2 N2: 14
+x2 sprint: { start: 2018-04-07T00:35:00.000Z,
+  end: 2018-04-07T00:49:00.000Z }
+x3 messge: sprint at 35 for 14
+x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
+x3 parsed: [ 'sprint', '35', undefined, '35' ]
+x3 args: [ 'sprint', 35, undefined, 35 ]
+x3 N1: 35
+x3 N2: 35
+x3 sprint: { start: 2018-04-07T00:35:00.000Z,
+  end: 2018-04-07T00:35:00.000Z }
+x1 messge: ANYONE WANT TO SPRINT AT 25?
+x1 command: [ 'sprint', 'at', 'Number' ]
+x1 parsed: [ 'sprint', 'at', '25' ]
+x1 args: [ 'sprint', 'at', 25 ]
+x1 N1: 25
+x1 N2 (hardcoded): 30
+x1 sprint: { start: 2018-04-07T00:25:00.000Z,
+  end: 2018-04-07T00:55:00.000Z }
+x2 messge: ANYONE WANT TO SPRINT AT 25?
+x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
+x2 parsed: [ 'sprint', '25', undefined, '25', undefined ]
+x2 args: [ 'sprint', 25, undefined, 25, undefined ]
+x2 N1: 25
+x2 N2: 25
+x2 sprint: { start: 2018-04-07T00:25:00.000Z,
+  end: 2018-04-07T00:50:00.000Z }
+x3 messge: ANYONE WANT TO SPRINT AT 25?
+x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
+x3 parsed: [ 'sprint', '25', undefined, '25' ]
+x3 args: [ 'sprint', 25, undefined, 25 ]
+x3 N1: 25
+x3 N2: 25
+x3 sprint: { start: 2018-04-07T00:25:00.000Z,
+  end: 2018-04-07T00:25:00.000Z }
+x1 messge: let's sprint 40 to 45
+x1 command: [ 'sprint', 'at', 'Number' ]
+x1 parsed: [ 'sprint', undefined, '40' ]
+x1 args: [ 'sprint', undefined, 40 ]
+x1 N1: 40
+x1 N2 (hardcoded): 30
+x1 sprint: { start: 2018-04-07T00:40:00.000Z,
+  end: 2018-04-07T01:10:00.000Z }
+x2 messge: let's sprint 40 to 45
+x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
+x2 parsed: [ 'sprint', '40', undefined, '40', undefined ]
+x2 args: [ 'sprint', 40, undefined, 40, undefined ]
+x2 N1: 40
+x2 N2: 40
+x2 sprint: { start: 2018-04-07T00:40:00.000Z,
+  end: 2018-04-07T01:20:00.000Z }
+x3 messge: let's sprint 40 to 45
+x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
+x3 parsed: [ 'sprint', '40', 'to', '45' ]
+x3 args: [ 'sprint', 40, 'to', 45 ]
+x3 N1: 40
+x3 N2: 45
+x3 sprint: { start: 2018-04-07T00:40:00.000Z,
+  end: 2018-04-07T00:45:00.000Z }
+x1 messge: sprint at 27 for 10 min
+x1 command: [ 'sprint', 'at', 'Number' ]
+x1 parsed: [ 'sprint', 'at', '27' ]
+x1 args: [ 'sprint', 'at', 27 ]
+x1 N1: 27
+x1 N2 (hardcoded): 30
+x1 sprint: { start: 2018-04-07T00:27:00.000Z,
+  end: 2018-04-07T00:57:00.000Z }
+x2 messge: sprint at 27 for 10 min
+x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
+x2 parsed: [ 'sprint', '27', 'for', '10', 'min' ]
+x2 args: [ 'sprint', 27, 'for', 10, 'min' ]
+x2 N1: 27
+x2 N2: 10
+x2 sprint: { start: 2018-04-07T00:27:00.000Z,
+  end: 2018-04-07T00:37:00.000Z }
+x3 messge: sprint at 27 for 10 min
+x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
+x3 parsed: [ 'sprint', '27', undefined, '27' ]
+x3 args: [ 'sprint', 27, undefined, 27 ]
+x3 N1: 27
+x3 N2: 27
+x3 sprint: { start: 2018-04-07T00:27:00.000Z,
+  end: 2018-04-07T00:27:00.000Z }
+x1 messge: sprint :15
+x1 command: [ 'sprint', 'at', 'Number' ]
+x1 parsed: [ 'sprint', undefined, '15' ]
+x1 args: [ 'sprint', undefined, 15 ]
+x1 N1: 15
+x1 N2 (hardcoded): 30
+x1 sprint: { start: 2018-04-07T00:15:00.000Z,
+  end: 2018-04-07T00:45:00.000Z }
+x2 messge: sprint :15
+x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
+x2 parsed: [ 'sprint', '15', undefined, '15', undefined ]
+x2 args: [ 'sprint', 15, undefined, 15, undefined ]
+x2 N1: 15
+x2 N2: 15
+x2 sprint: { start: 2018-04-07T00:15:00.000Z,
+  end: 2018-04-07T00:30:00.000Z }
+x3 messge: sprint :15
+x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
+x3 parsed: [ 'sprint', '15', undefined, '15' ]
+x3 args: [ 'sprint', 15, undefined, 15 ]
+x3 N1: 15
+x3 N2: 15
+x3 sprint: { start: 2018-04-07T00:15:00.000Z,
+  end: 2018-04-07T00:15:00.000Z }
