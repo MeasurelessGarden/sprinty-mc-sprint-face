@@ -64,6 +64,20 @@ const commands = [
   },
 ]
 
+export const createSprintFromMessage = (message, timestamp) => {
+  // timestamp -> pass in Message.createdTimestamp ie 1522815707792
+  const config = _.find(commands, config => {
+    return parseMessageToArgs(message, config.command)
+  })
+  if (config) {
+    const sprint = config.call(
+      new Date(timestamp),
+      parseMessageToArgs(message, config.command)
+    )
+    return sprint
+  }
+}
+
 export const generateSprintWithDuration = (now, startMin, duration) => {
   // now, a datetime TODO test inputs are valid
   // start, a number between 0 and 59
@@ -82,20 +96,6 @@ export const generateSprintWithDuration = (now, startMin, duration) => {
   return {
     start: start,
     end: end,
-  }
-}
-
-export const createSprintFromMessage = (message, timestamp) => {
-  // timestamp -> pass in Message.createdTimestamp ie 1522815707792
-  const config = _.find(commands, config => {
-    return parseMessageToArgs(message, config.command)
-  })
-  if (config) {
-    const sprint = config.call(
-      new Date(timestamp),
-      parseMessageToArgs(message, config.command)
-    )
-    return sprint
   }
 }
 

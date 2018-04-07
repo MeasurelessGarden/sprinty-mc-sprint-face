@@ -7,3 +7,7 @@
 
 ## features
 - word count diffs
+- @Sprinty run @here
+- nevermind / oops commands
+- NN until NN
+- or sprint at 25 for 30?
