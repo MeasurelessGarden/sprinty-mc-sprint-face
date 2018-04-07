@@ -414,6 +414,27 @@ describe('Sprint generator', function(){
         undefined,
       ],
       [
+        'sprints of no length make zero sense',
+        'sprint at 10 for 0',
+        undefined,
+      ],
+      [
+        'sprints of 1 minute are ok',
+        'sprint at 10 for 1',
+        {
+          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:11:00.000Z')),
+        },
+      ],
+      [
+        'sprints of 1 minute can be defined multiple ways',
+        'sprint at 10 to 11',
+        {
+          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:11:00.000Z')),
+        },
+      ],
+      [
         'this notation implies an hour',
         'sprint 10 to 10',
         {
