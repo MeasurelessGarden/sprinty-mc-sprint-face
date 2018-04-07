@@ -53,20 +53,29 @@ const mentionOrDmBotCommand = (message, command) => {
 
 const startSprint = () => {
   cache.channel.send(':ghost:')
+  client.clearTimeout(cache.timeout.start)
 }
 const endSprint = () => {
   cache.channel.send('STOP')
+  client.clearTimeout(cache.timeout.end)
+  cache.timeout = {}
 }
 
 const testNewFuncs = (message, timestamp, channel) => {
   const sprint = createSprintFromMessage(message, timestamp)
   // const now = new Date(timestamp)
+  if (cache.timeout) {
+    client.clearTimeout(cache.timeout.start)
+    client.clearTimeout(cache.timeout.end)
+    console.log('clearing old / running sprint', cache.timeout)
+  }
   if (sprint) {
     const timeout = {
       start: sprint.start.getTime() - timestamp,
       end: sprint.end.getTime() - timestamp,
     }
     cache.channel = channel
+    cache.timeout = timeout
     client.setTimeout(startSprint, timeout.start)
     client.setTimeout(endSprint, timeout.end)
   }

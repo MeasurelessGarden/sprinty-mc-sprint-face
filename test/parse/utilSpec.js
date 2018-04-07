@@ -118,15 +118,6 @@ describe('parse util', function(){
       expect(parsedFunctionArgs).to.be.deep.equal(args.expected)
       done()
     },
-    // sprint at 30
-    // sprint at 35 for 14
-    // ANYONE WANT TO SPRINT AT 25?
-    // let's sprint 40 to 45
-    // sprint at 27 for 10 min
-    // sprint :15
-    // x1 command: [ 'sprint', 'at', 'Number' ]
-    // TODO x2 command: [ 'sprint', 'Number', 'for', 'Number', 'min' ]
-    // TODO x3 command: [ 'sprint', 'Number', 'to', 'Number' ]
     [
       [ 'reason', 'message', 'command', 'expected' ],
       [

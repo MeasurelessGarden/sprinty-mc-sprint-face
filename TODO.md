@@ -11,3 +11,5 @@
 - nevermind / oops commands
 - NN until NN
 - or sprint at 25 for 30?
+- ok ((join))
+- wait no ((cancel))

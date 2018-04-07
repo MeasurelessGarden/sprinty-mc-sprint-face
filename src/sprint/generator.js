@@ -1,65 +1,89 @@
 var _ = require('lodash')
 import {parseMessageToArgs} from '../parse/util'
 
+export const validateSprintWithEndTime = (start, end) => {
+  // TODO these validate methods are not unit tested directly yet
+  return start >= 0 && start < 60 && end >= 0 && end < 60
+}
+
+export const validateSprintWithDuration = (start, duration) => {
+  // TODO these validate methods are not unit tested directly yet
+  return start >= 0 && start < 60 && duration >= 1 && duration <= 60
+}
+
 const commands = [
   {
     command: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
-    call: (now, args) => {
-      return generateSprintWithEndTime(now, args[2], args[4])
+    args: (now, args) => {
+      return [ now, args[2], args[4] ]
+    },
+    // TODO validate + call has only 2 templates in this list, but each has a few different command + args to get there
+    // TODO ... and the args functions could easily be derrived from the commands, considering it's just now + the indices of 'Nummber'.... ... well except for where there are defaults....
+    validate: args => {
+      return validateSprintWithEndTime(args[1], args[2])
+    },
+    call: args => {
+      return generateSprintWithEndTime(args[0], args[1], args[2])
     },
   },
   {
     command: [ 'sprint', 'Number', 'to', 'Number' ],
-    call: (now, args) => {
-      return generateSprintWithEndTime(now, args[1], args[3])
+    args: (now, args) => {
+      return [ now, args[1], args[3] ]
+    },
+    validate: args => {
+      return validateSprintWithEndTime(args[1], args[2])
+    },
+    call: args => {
+      return generateSprintWithEndTime(args[0], args[1], args[2])
     },
   },
-  // {
-  //   command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'minutes' ],
-  //   call: (now, args) => {
-  //     return generateSprintWithDuration(now, args[2], args[4])
-  //   },
-  // },
-  // {
-  //   command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'min' ],
-  //   call: (now, args) => {
-  //     return generateSprintWithDuration(now, args[2], args[4])
-  //   },
-  // },
   {
     command: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
-    call: (now, args) => {
-      return generateSprintWithDuration(now, args[2], args[4])
+    args: (now, args) => {
+      return [ now, args[2], args[4] ]
+    },
+    validate: args => {
+      return validateSprintWithDuration(args[1], args[2])
+    },
+    call: args => {
+      return generateSprintWithDuration(args[0], args[1], args[2])
     },
   },
-  // {
-  //   command: [ 'sprint', 'Number', 'for', 'Number', 'minutes' ],
-  //   call: (now, args) => {
-  //     return generateSprintWithDuration(now, args[1], args[3])
-  //   },
-  // },
-  // {
-  //   command: [ 'sprint', 'Number', 'for', 'Number', 'min' ],
-  //   call: (now, args) => {
-  //     return generateSprintWithDuration(now, args[1], args[3])
-  //   },
-  // },
   {
     command: [ 'sprint', 'Number', 'for', 'Number' ],
-    call: (now, args) => {
-      return generateSprintWithDuration(now, args[1], args[3])
+    args: (now, args) => {
+      return [ now, args[1], args[3] ]
+    },
+    validate: args => {
+      return validateSprintWithDuration(args[1], args[2])
+    },
+    call: args => {
+      return generateSprintWithDuration(args[0], args[1], args[2])
     },
   },
   {
     command: [ 'sprint', 'at', 'Number' ],
-    call: (now, args) => {
-      return generateSprintWithDuration(now, args[2], 30)
+    args: (now, args) => {
+      return [ now, args[2], 30 ]
+    },
+    validate: args => {
+      return validateSprintWithDuration(args[1], args[2])
+    },
+    call: args => {
+      return generateSprintWithDuration(args[0], args[1], args[2])
     },
   },
   {
     command: [ 'sprint', 'Number' ],
-    call: (now, args) => {
-      return generateSprintWithDuration(now, args[1], 30)
+    args: (now, args) => {
+      return [ now, args[1], 30 ]
+    },
+    validate: args => {
+      return validateSprintWithDuration(args[1], args[2])
+    },
+    call: args => {
+      return generateSprintWithDuration(args[0], args[1], args[2])
     },
   },
 ]
@@ -70,11 +94,14 @@ export const createSprintFromMessage = (message, timestamp) => {
     return parseMessageToArgs(message, config.command)
   })
   if (config) {
-    const sprint = config.call(
+    const args = config.args(
       new Date(timestamp),
       parseMessageToArgs(message, config.command)
     )
-    return sprint
+    if (config.validate(args)) {
+      const sprint = config.call(args)
+      return sprint
+    }
   }
 }
 
@@ -114,7 +141,7 @@ export const generateSprintWithEndTime = (now, startMin, endMin) => {
   }
   const end = new Date(start)
   end.setMinutes(endMin)
-  if (end < start) {
+  if (end <= start) {
     end.setHours(end.getHours() + 1)
   }
   return {
