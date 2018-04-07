@@ -5,70 +5,60 @@ const commands = [
   {
     command: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
     call: (now, args) => {
-      console.log('testcase 8')
       return generateSprintWithEndTime(now, args[2], args[4])
     },
   },
   {
     command: [ 'sprint', 'Number', 'to', 'Number' ],
     call: (now, args) => {
-      console.log('testcase 7')
       return generateSprintWithEndTime(now, args[1], args[3])
     },
   },
-  {
-    command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'minutes' ],
-    call: (now, args) => {
-      console.log('testcase 9')
-      return generateSprintWithDuration(now, args[2], args[4])
-    },
-  },
-  {
-    command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'min' ],
-    call: (now, args) => {
-      console.log('testcase 6')
-      return generateSprintWithDuration(now, args[2], args[4])
-    },
-  },
+  // {
+  //   command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'minutes' ],
+  //   call: (now, args) => {
+  //     return generateSprintWithDuration(now, args[2], args[4])
+  //   },
+  // },
+  // {
+  //   command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'min' ],
+  //   call: (now, args) => {
+  //     return generateSprintWithDuration(now, args[2], args[4])
+  //   },
+  // },
   {
     command: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
     call: (now, args) => {
-      console.log('testcase 5')
       return generateSprintWithDuration(now, args[2], args[4])
     },
   },
-  {
-    command: [ 'sprint', 'Number', 'for', 'Number', 'minutes' ],
-    call: (now, args) => {
-      console.log('testcase 10')
-      return generateSprintWithDuration(now, args[1], args[3])
-    },
-  },
-  {
-    command: [ 'sprint', 'Number', 'for', 'Number', 'min' ],
-    call: (now, args) => {
-      console.log('testcase 4')
-      return generateSprintWithDuration(now, args[1], args[3])
-    },
-  },
+  // {
+  //   command: [ 'sprint', 'Number', 'for', 'Number', 'minutes' ],
+  //   call: (now, args) => {
+  //     return generateSprintWithDuration(now, args[1], args[3])
+  //   },
+  // },
+  // {
+  //   command: [ 'sprint', 'Number', 'for', 'Number', 'min' ],
+  //   call: (now, args) => {
+  //     return generateSprintWithDuration(now, args[1], args[3])
+  //   },
+  // },
   {
     command: [ 'sprint', 'Number', 'for', 'Number' ],
     call: (now, args) => {
-      console.log('testcase 3')
       return generateSprintWithDuration(now, args[1], args[3])
     },
   },
   {
     command: [ 'sprint', 'at', 'Number' ],
     call: (now, args) => {
-      console.log('testcase 1')
       return generateSprintWithDuration(now, args[2], 30)
     },
   },
   {
     command: [ 'sprint', 'Number' ],
     call: (now, args) => {
-      console.log('testcase 2')
       return generateSprintWithDuration(now, args[1], 30)
     },
   },

@@ -7,7 +7,6 @@ export const unroll = require('unroll')
 unroll.use(it)
 
 const equalDateTime = (expected, actual) => {
-  console.log('exp', expectedDate, 'act', actualDate)
   const expectedDate = expected.toISOString()
   const actualDate = actual.toISOString()
   // return
@@ -27,7 +26,6 @@ chai.Assertion.addChainableMethod('equalSprintDefinition', function(
   expectedSprint
 ){
   const actualSprint = this._obj
-  console.log('exp', expectedSprint, 'act', actualSprint)
 
   this.assert(
     actualSprint._type === expectedSprint._type,
