@@ -11,7 +11,10 @@ export const validateSprintWithDuration = (start, duration) => {
   return start >= 0 && start < 60 && duration >= 1 && duration <= 60
 }
 
-const commands = [
+export const help =
+  'There are a lot of ways to start a sprint! Other sprint commands you might care about are "cancel" and "info".'
+
+export const commands = [
   {
     command: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
     args: (now, args) => {

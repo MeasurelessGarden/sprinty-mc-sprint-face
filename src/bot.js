@@ -1,4 +1,8 @@
-import {createSprintFromMessage} from './sprint/generator.js'
+import {
+  createSprintFromMessage,
+  commands as SprintCommands,
+  help as SprintHelp,
+} from './sprint/generator.js'
 const Discord = require('discord.js')
 var auth = require('./secret.json')
 var yaml = require('js-yaml')
@@ -24,6 +28,18 @@ const dmOnMatchingCommand = (message, command) => {
     })
   ) {
     message.author.send(command.response)
+    if (command.showHelp) {
+      let sprintHelp = SprintHelp + '\n'
+      _.each(SprintCommands, sprintCommand => {
+        // console.log('asdfasfasdf', _.join(sprintCommand.command, ' '))
+        sprintHelp = sprintHelp + '\n' + _.join(sprintCommand.command, ' ')
+      })
+      message.author.send(sprintHelp)
+    }
+    // console.log('wooo?',SprintCommands)
+    // _.each(SprintCommands, sprintCommand => {
+    //   console.log('????', sprintCommand)
+    // })
   }
 }
 
