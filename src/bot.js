@@ -57,12 +57,7 @@ const triggerSprintCommands = (message, timestamp, channel) => {
 
   if (sprint) {
     if (cache.timeout.end) {
-      // obj.react('😦')
-      // channel.send('A sprint already exists.') // TODO this requires a command to cancel the sprint
       return 'ERR_SPRINT_RUNNING_ALREADY'
-      // client.clearTimeout(cache.timeout.start)
-      // client.clearTimeout(cache.timeout.end)
-      // console.log('clearing old / running sprint', cache.timeout)
     }
     const timeout = {
       start: sprint.start.getTime() - timestamp,
@@ -72,11 +67,46 @@ const triggerSprintCommands = (message, timestamp, channel) => {
     // .catch(console.error)
     cache.channel = channel
     cache.timeout = timeout
+    cache.start = sprint.start
+    cache.end = sprint.end
     client.setTimeout(startSprint, timeout.start)
     client.setTimeout(endSprint, timeout.end)
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
-  // TODO info, cancel
+  if (message === 'info') {
+    const now = new Date()
+    if (cache.timeout.end) {
+      if (cache.start < now) {
+        let until = cache.end.getTime() - now.getTime()
+        until = `${until / 1000 / 60}`
+        until = _.replace(until, /\..*/, '')
+        channel.send(`There's a sprint right now, for about ${until} minutes.`)
+      }
+      else {
+        let from = cache.start.getTime() - now.getTime()
+        from = `${from / 1000 / 60}`
+        from = _.replace(from, /\..*/, '')
+        let until = cache.end.getTime() - now.getTime()
+        until = `${until / 1000 / 60}`
+        until = _.replace(until, /\..*/, '')
+        channel.send(
+          `There's a sprint in about ${from} minutes, something like ${until -
+            from} minutes.`
+        )
+      }
+    }
+    else {
+      return 'NO_SPRINT_TO_INFO'
+    }
+  }
+  if (message === 'cancel') {
+    if (cache.timeout.end) {
+      client.clearTimeout(cache.timeout.start)
+      client.clearTimeout(cache.timeout.end)
+      cache.timeout = {}
+      return 'OK_SPRINT_CANCELLED'
+    }
+  }
 }
 
 client.on('message', message => {
@@ -99,6 +129,12 @@ client.on('message', message => {
   }
   if (result === 'OK_SPRINT_SET') {
     message.react('💯')
+  }
+  if (result === 'OK_SPRINT_CANCELLED') {
+    message.react('👍')
+  }
+  if (result === 'NO_SPRINT_TO_INFO') {
+    message.react('🤖')
   }
 })
 
