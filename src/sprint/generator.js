@@ -13,7 +13,30 @@ export const validateSprintWithDuration = (start, duration) => {
 
 export const help =
   'There are a lot of ways to start a sprint! Other sprint commands you might care about are "cancel" and "info".'
-
+/*
+Examples:
+ANYONE WANT TO SPRINT AT 25?
+I want to sprint at :45
+let's sprint 40 to 45
+sprint 15
+sprint 15 to 25
+sprint 15 to :35
+sprint 57 for 32
+sprint :15
+sprint at 20
+sprint at 25
+sprint at 27 for 10 min
+sprint at 30
+sprint at 30 for 14
+sprint at 35 for 14
+sprint at 35 to 20
+sprint at 55 for 55
+shall we sprint :20 for about 55 min?
+sprint 30 for 34 minutes
+sprint at 20 for 6 min
+///should we go at 10?
+(also compile a list from all the tests! THEY'RE ALL OVER!)
+*/
 export const commands = [
   {
     command: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
