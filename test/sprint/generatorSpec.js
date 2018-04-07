@@ -2,6 +2,7 @@ import {unroll} from '../spec.js'
 import {
   generateSprintWithDuration,
   generateSprintWithEndTime,
+  createSprintFromMessage,
 } from '../../src/sprint/generator.js'
 import {expect} from 'chai'
 
@@ -19,6 +20,7 @@ describe('Sprint generator', function(){
   // it('can run a function', function(){
   //   const sprint = generateSprintWithDuration(new Date(), 15, 20)
   // })
+
   unroll(
     'generates a sprint from #now starting at #startMin with duration #duration - #reason',
     function(done, args){
@@ -228,6 +230,130 @@ describe('Sprint generator', function(){
           end: new Date(Date.parse('2018-04-05T05:37:00.000Z')),
         },
       ],
+    ]
+  )
+
+  unroll(
+    'generates a sprint from #message',
+    function(done, args){
+      const sprint = createSprintFromMessage(args.message, 1522815707792)
+      expect(sprint).to.be.equalSprintDefinition(args.expected)
+      done()
+    },
+    [
+      [ 'message', 'expected' ],
+      [
+        'ANYONE WANT TO SPRINT AT 25?',
+        {
+          start: new Date(Date.parse('2018-04-04T04:25:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
+        },
+      ],
+      [
+        'I want to sprint at :45',
+        {
+          start: new Date(Date.parse('2018-04-04T04:45:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
+        },
+      ],
+      [
+        "let's sprint 40 to 45",
+        {
+          start: new Date(Date.parse('2018-04-04T04:40:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T04:45:00.000Z')),
+        },
+      ],
+      [
+        'sprint 15',
+        {
+          start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:45:00.000Z')),
+        },
+      ],
+      [
+        'sprint 15 to 25',
+        {
+          start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:25:00.000Z')),
+        },
+      ],
+      [
+        'sprint 15 to :35',
+        {
+          start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:35:00.000Z')),
+        },
+      ],
+      [
+        'sprint 57 for 32',
+        {
+          start: new Date(Date.parse('2018-04-04T04:57:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:29:00.000Z')),
+        },
+      ],
+      [
+        'sprint :15',
+        {
+          start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:45:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 20',
+        {
+          start: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:50:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 25',
+        {
+          start: new Date(Date.parse('2018-04-04T04:25:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 30',
+        {
+          start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:00:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 30 for 14',
+        {
+          start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T04:44:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 35 for 14',
+        {
+          start: new Date(Date.parse('2018-04-04T04:35:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T04:49:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 35 to 20',
+        {
+          start: new Date(Date.parse('2018-04-04T04:35:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
+        },
+      ],
+      [
+        'sprint at 55 for 55',
+        {
+          start: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
+          end: new Date(Date.parse('2018-04-04T05:50:00.000Z')),
+        },
+      ],
+      // [
+      //   'should we go at 10?',
+      //   {
+      //     start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
+      //     end: new Date(Date.parse('2018-04-04T05:40:00.000Z')),
+      //   },
+      // ],
     ]
   )
 })

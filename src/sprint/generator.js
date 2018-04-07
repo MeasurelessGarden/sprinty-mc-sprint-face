@@ -1,3 +1,63 @@
+var _ = require('lodash')
+import {parseMessageToArgs} from '../parse/util'
+
+const commands = [
+  {
+    command: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
+    call: (now, args) => {
+      return generateSprintWithEndTime(now, args[2], args[4])
+    },
+  },
+  {
+    command: [ 'sprint', 'Number', 'to', 'Number' ],
+    call: (now, args) => {
+      return generateSprintWithEndTime(now, args[1], args[3])
+    },
+  },
+  {
+    command: [ 'sprint', 'at', 'Number', 'for', 'Number', 'min' ],
+    call: (now, args) => {
+      return generateSprintWithDuration(now, args[2], args[4])
+    },
+  },
+  {
+    command: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
+    call: (now, args) => {
+      return generateSprintWithDuration(now, args[2], args[4])
+    },
+  },
+  {
+    command: [ 'sprint', 'Number', 'for', 'Number', 'min' ],
+    call: (now, args) => {
+      return generateSprintWithDuration(now, args[1], args[3])
+    },
+  },
+  {
+    command: [ 'sprint', 'Number', 'for', 'Number' ],
+    call: (now, args) => {
+      return generateSprintWithDuration(now, args[1], args[3])
+    },
+  },
+  {
+    command: [ 'sprint', 'at', 'Number' ],
+    call: (now, args) => {
+      console.log(
+        'testcase 1',
+        now,
+        args,
+        generateSprintWithDuration(now, args[2], 30)
+      )
+      return generateSprintWithDuration(now, args[2], 30)
+    },
+  },
+  {
+    command: [ 'sprint', 'Number' ],
+    call: (now, args) => {
+      return generateSprintWithDuration(now, args[1], 30)
+    },
+  },
+]
+
 export const generateSprintWithDuration = (now, startMin, duration) => {
   // now, a datetime TODO test inputs are valid
   // start, a number between 0 and 59
@@ -16,6 +76,20 @@ export const generateSprintWithDuration = (now, startMin, duration) => {
   return {
     start: start,
     end: end,
+  }
+}
+
+export const createSprintFromMessage = (message, timestamp) => {
+  // timestamp -> pass in Message.createdTimestamp ie 1522815707792
+  const config = _.find(commands, config => {
+    return parseMessageToArgs(message, config.command)
+  })
+  if (config) {
+    const sprint = config.call(
+      new Date(timestamp),
+      parseMessageToArgs(message, config.command)
+    )
+    return sprint
   }
 }
 
