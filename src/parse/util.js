@@ -8,7 +8,6 @@ export const preparseMessage = message => {
 }
 
 export const parse = (message, command) => {
-  // TODO change input to [command ,args]
   // assumes message is cleaned by preparse first
   // command, an array to match terms from to identify command and args
   const parseArgsEquality = (value, arg) => {

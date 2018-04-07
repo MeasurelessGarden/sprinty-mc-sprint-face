@@ -130,7 +130,7 @@ describe('parse util', function(){
         'simple sprint command matched... but not really (example 1)',
         'sprint at 35 for 14',
         [ 'sprint', 'at', 'Number' ],
-        [ 'sprint', 'at', 35 ], // TODO is this a 'command match fail' or a need to find the *best* command match?
+        [ 'sprint', 'at', 35 ],
       ],
       [
         'simple sprint command matched perfectly with human phrasing',
@@ -156,9 +156,6 @@ describe('parse util', function(){
         [ 'sprint', 'at', 'Number' ],
         undefined,
       ],
-
-      // TODO x2
-
       [
         'sprint with default override does not match command implying default',
         'sprint at 30',
@@ -207,8 +204,6 @@ describe('parse util', function(){
         [ 'sprint', 'Number', 'for', 'Number', 'min' ],
         undefined,
       ],
-      // TODO x3
-
       [
         'sprint from-to command ignores simple command',
         'sprint at 30',
