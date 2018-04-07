@@ -44,11 +44,11 @@ const mentionOrDmBotCommand = (message, command) => {
 
 const startSprint = () => {
   cache.channel.send(':ghost:')
-  client.clearTimeout(cache.timeout.start)
+  client.clearTimeout(cache.timeout.startId)
 }
 const endSprint = () => {
   cache.channel.send('STOP')
-  client.clearTimeout(cache.timeout.end)
+  client.clearTimeout(cache.timeout.endId)
   cache.timeout = {}
 }
 
@@ -69,8 +69,8 @@ const triggerSprintCommands = (message, timestamp, channel) => {
     cache.timeout = timeout
     cache.start = sprint.start
     cache.end = sprint.end
-    client.setTimeout(startSprint, timeout.start)
-    client.setTimeout(endSprint, timeout.end)
+    cache.timeout.startId = client.setTimeout(startSprint, timeout.start)
+    cache.timeout.endId = client.setTimeout(endSprint, timeout.end)
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
   if (message === 'info') {
@@ -101,8 +101,8 @@ const triggerSprintCommands = (message, timestamp, channel) => {
   }
   if (message === 'cancel') {
     if (cache.timeout.end) {
-      client.clearTimeout(cache.timeout.start)
-      client.clearTimeout(cache.timeout.end)
+      client.clearTimeout(cache.timeout.startId)
+      client.clearTimeout(cache.timeout.endId)
       cache.timeout = {}
       return 'OK_SPRINT_CANCELLED'
     }

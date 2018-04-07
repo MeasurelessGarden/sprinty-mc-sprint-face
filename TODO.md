@@ -13,3 +13,6 @@
 - or sprint at 25 for 30?
 - ok ((join))
 - wait no ((cancel))
+- well i'm going now to :55:
+
+
