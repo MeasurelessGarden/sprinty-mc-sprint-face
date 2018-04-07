@@ -1,4 +1,20 @@
-https://discordapp.com/oauth2/authorize?&client_id=430905454961623060&scope=bot&permissions=0
+# Requirements
 
-npm install
-node bot.js
+- Discord accound
+- node.js installed
+
+# Set up a test bot
+
+1. Go to https://discordapp.com/developers/applications/me and create a bot (make sure to add a bot user!)
+1. Copy resources/template.json to src/secret.json and fill in both values
+1. Update the following URL with your bot client id, https://discordapp.com/oauth2/authorize?&client_id=BOT_CLIENT_ID&scope=bot&permissions=0, then use it to add the bot to a server - wherever you want to test and/or run i.
+
+# Run the bot locally
+
+1. npm install
+1. npm run dev
+
+# Development commands
+
+1. npm run format
+1. npm run test
