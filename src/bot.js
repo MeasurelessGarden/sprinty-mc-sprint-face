@@ -6,7 +6,7 @@ var fs = require('fs')
 var _ = require('lodash')
 
 let config = yaml.load(fs.readFileSync('./config.yml', {encoding: 'utf-8'}))
-var client = new Discord.Client()
+const client = new Discord.Client()
 
 client.on('ready', () => {
   console.log('I am ready!')
@@ -51,15 +51,15 @@ const endSprint = () => {
   client.clearTimeout(cache.timeout.end)
   cache.timeout = {}
 }
-function triggerSprintCommands(message, timestamp, channel, react){
+
+const triggerSprintCommands = (message, timestamp, channel) => {
   const sprint = createSprintFromMessage(message, timestamp)
 
   if (sprint) {
     if (cache.timeout.end) {
-      console.log('ugh, scoping', this)
-      react('😦')
+      // obj.react('😦')
       // channel.send('A sprint already exists.') // TODO this requires a command to cancel the sprint
-      return
+      return 'ERR_SPRINT_RUNNING_ALREADY'
       // client.clearTimeout(cache.timeout.start)
       // client.clearTimeout(cache.timeout.end)
       // console.log('clearing old / running sprint', cache.timeout)
@@ -74,6 +74,7 @@ function triggerSprintCommands(message, timestamp, channel, react){
     cache.timeout = timeout
     client.setTimeout(startSprint, timeout.start)
     client.setTimeout(endSprint, timeout.end)
+    return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
   // TODO info, cancel
 }
@@ -88,14 +89,17 @@ client.on('message', message => {
     mentionOrDmBotCommand(message, command)
   })
 
-  message.react('😦')
-  console.log('???', client.emojis, message.guild.emojis)
-  triggerSprintCommands(
+  let result = triggerSprintCommands(
     message.content,
     message.createdTimestamp,
-    message.channel,
-    message.react
+    message.channel
   )
+  if (result === 'ERR_SPRINT_RUNNING_ALREADY') {
+    message.react('😦')
+  }
+  if (result === 'OK_SPRINT_SET') {
+    message.react('💯')
+  }
 })
 
 client.login(auth.token)
