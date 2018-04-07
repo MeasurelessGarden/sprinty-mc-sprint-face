@@ -7,7 +7,8 @@ export const preparseMessage = message => {
   )
 }
 
-export const parse = (message, command) => { // TODO change input to [command ,args]
+export const parse = (message, command) => {
+  // TODO change input to [command ,args]
   // assumes message is cleaned by preparse first
   // command, an array to match terms from to identify command and args
   const parseArgsEquality = (value, arg) => {
@@ -18,27 +19,24 @@ export const parse = (message, command) => { // TODO change input to [command ,a
   }
   const matchingValues = []
   let workingMessage = _.split(message, ' ')
-  const partsOfMatchingCommand = _.takeWhile(
-    command,
-    function(param){
-      if (workingMessage.length == 0) return false
+  const partsOfMatchingCommand = _.takeWhile(command, function(param){
+    if (workingMessage.length == 0) return false
 
-      const result = _.intersectionWith(
+    const result = _.intersectionWith(
+      workingMessage,
+      [ param ],
+      parseArgsEquality
+    )
+    if (result && result.length > 0) {
+      const index = _.indexOf(workingMessage, result[0])
+      matchingValues.push(workingMessage[index])
+      workingMessage = _.takeRight(
         workingMessage,
-        [ param ],
-        parseArgsEquality
+        workingMessage.length - index
       )
-      if (result && result.length > 0) {
-        const index = _.indexOf(workingMessage, result[0])
-        matchingValues.push(workingMessage[index])
-        workingMessage = _.takeRight(
-          workingMessage,
-          workingMessage.length - index
-        )
-      }
-      return result && result.length > 0
     }
-  )
+    return result && result.length > 0
+  })
   return matchingValues
 }
 
@@ -57,7 +55,7 @@ export const convertFunctionArgs = (message, command) => {
 export const parseMessageToArgs = (message, command) => {
   // puts preparse, parse, and convertFunctionArgs together
   let m = parse(preparseMessage(message), command)
-  if(m.length == command.length) {
+  if (m.length == command.length) {
     let args = convertFunctionArgs(m, command)
     return args
   }

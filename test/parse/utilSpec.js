@@ -3,7 +3,7 @@ import {
   preparseMessage,
   parse,
   convertFunctionArgs,
-  parseMessageToArgs
+  parseMessageToArgs,
 } from '../../src/parse/util.js'
 import {expect} from 'chai'
 
@@ -114,10 +114,7 @@ describe('parse util', function(){
   unroll(
     'parseMessageToArgs converts #message with #command - #reason',
     function(done, args){
-      const parsedFunctionArgs = parseMessageToArgs(
-        args.message,
-        args.command
-      )
+      const parsedFunctionArgs = parseMessageToArgs(args.message, args.command)
       expect(parsedFunctionArgs).to.be.deep.equal(args.expected)
       done()
     },
@@ -152,7 +149,7 @@ describe('parse util', function(){
       ],
       [
         'simple sprint command without match - missing word to match (example 1)',
-        'let\'s sprint 40 to 45',
+        "let's sprint 40 to 45",
         [ 'sprint', 'at', 'Number' ],
         undefined,
       ],
@@ -181,13 +178,13 @@ describe('parse util', function(){
         'sprint with default override requires all words',
         'sprint at 35 for 14',
         [ 'sprint', 'Number', 'for', 'Number', 'min' ],
-        undefined
+        undefined,
       ],
       [
         'sprint with default override (different command) matched perfectly',
         'sprint at 35 for 14',
-        [ 'sprint', 'Number', 'for', 'Number'],
-        ['sprint', 35, 'for', 14]
+        [ 'sprint', 'Number', 'for', 'Number' ],
+        [ 'sprint', 35, 'for', 14 ],
       ],
       [
         'sprint with default override ignores non-match',
@@ -197,7 +194,7 @@ describe('parse util', function(){
       ],
       [
         'sprint with default override ignores unrelated command',
-        'let\'s sprint 40 to 45',
+        "let's sprint 40 to 45",
         [ 'sprint', 'Number', 'for', 'Number', 'min' ],
         undefined,
       ],
@@ -210,8 +207,8 @@ describe('parse util', function(){
       [
         'sprint with default override (different command) matched with extras',
         'sprint at 27 for 10 min',
-        [ 'sprint', 'Number', 'for', 'Number'],
-        ['sprint', 27, 'for', 10]
+        [ 'sprint', 'Number', 'for', 'Number' ],
+        [ 'sprint', 27, 'for', 10 ],
       ],
       [
         'sprint with default override ignores unrelated too many words missing command',
@@ -220,7 +217,6 @@ describe('parse util', function(){
         undefined,
       ],
       // TODO x3
-
 
       [
         'sprint from-to command ignores simple command',
@@ -232,31 +228,31 @@ describe('parse util', function(){
         'sprint from-to command ignores different command',
         'sprint at 35 for 14',
         [ 'sprint', 'Number', 'to', 'Number' ],
-        undefined
+        undefined,
       ],
       [
         'sprint from-to command ignores simple sprint command',
         'ANYONE WANT TO SPRINT AT 25?',
         [ 'sprint', 'Number', 'to', 'Number' ],
-        undefined
+        undefined,
       ],
       [
         'sprint from-to command matches human phrasing (example 1)',
-        'let\'s sprint 40 to 45',
+        "let's sprint 40 to 45",
         [ 'sprint', 'Number', 'to', 'Number' ],
-        ['sprint', 40, 'to', 45]
+        [ 'sprint', 40, 'to', 45 ],
       ],
       [
         'sprint from-to command matches human phrasing (example 2)',
         'sprint from 13 to 29??',
         [ 'sprint', 'Number', 'to', 'Number' ],
-        ['sprint', 13, 'to', 29]
+        [ 'sprint', 13, 'to', 29 ],
       ],
       [
         'sprint from-to command ignores non-matching command',
         'sprint at 27 for 10 min',
         [ 'sprint', 'Number', 'to', 'Number' ],
-        undefined
+        undefined,
       ],
       [
         'sprint from-to command ignores due to missing words',
@@ -264,9 +260,6 @@ describe('parse util', function(){
         [ 'sprint', 'Number', 'to', 'Number' ],
         undefined,
       ],
-
     ]
   )
-
-
 })
