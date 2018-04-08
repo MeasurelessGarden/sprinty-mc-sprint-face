@@ -1,9 +1,9 @@
 import {unroll} from '../spec.js'
 import {sprintCommands} from '../../src/commands/sprintCommand.js'
-import {createObjFromMessage} from '../../src/commands/generator.js'
+import {createObjFromMessage} from '../../src/commands/parseUtils.js'
 import {expect} from 'chai'
 
-describe('Sprint generator', function(){
+describe('Parse Sprint Command', function(){
   unroll(
     'generates a sprint from #message',
     function(done, args){
