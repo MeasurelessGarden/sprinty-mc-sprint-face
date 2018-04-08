@@ -1,10 +1,5 @@
-// import {
-//   createSprintFromMessage,
-//   commands as SprintCommands,
-//   help as SprintHelp,
-// } from './sprint/generator.js'
-import {sprintHelpIntro, sprintCommands} from './commands/sprintCommand.js'
-import {generateHelp} from './commands/helpUtils.js'
+import {sprintCommands} from './commands/sprintCommand.js'
+import {helpCommands} from './commands/helpCommand.js'
 import {createObjFromMessage} from './commands/parseUtils.js'
 const Discord = require('discord.js')
 var auth = require('./secret.json')
@@ -21,34 +16,10 @@ client.on('ready', () => {
 
 const cache = {timeout: {}}
 
-const dmOnMatchingCommand = (message, command) => {
-  const msg = _.toLower(
-    _.trim(_.replace(message.content, config.mentionMe, ''))
-  )
-  if (
-    _.find(command.cmds, cmd => {
-      return cmd == msg
-    })
-  ) {
-    message.author.send(command.response)
-    if (command.showHelp) {
-      message.author.send(generateHelp(sprintHelpIntro, sprintCommands))
-    }
-  }
-}
-
-const mentionOrDmBotCommand = (message, command) => {
-  if (command.mentionRequired) {
-    if (message.channel.type == 'dm') {
-      dmOnMatchingCommand(message, command)
-    }
-    else if (
-      _.find(message.mentions.users.array(), userMention => {
-        return userMention.id == auth.clientId
-      })
-    ) {
-      dmOnMatchingCommand(message, command)
-    }
+const triggerHelpCommands = (message, timestamp, channel) => {
+  if (channel) {
+    const help = createObjFromMessage(helpCommands, message, timestamp)
+    channel.send(help)
   }
 }
 
@@ -122,9 +93,15 @@ client.on('message', message => {
     return
   } // prevent botception
 
-  _.each(config.commands, command => {
-    mentionOrDmBotCommand(message, command)
-  })
+  triggerHelpCommands(
+    message.content,
+    message.createdTimestamp,
+    _.find(message.mentions.users.array(), userMention => {
+      return userMention.id == auth.clientId
+    })
+      ? message.author
+      : message.channel.type == 'dm' ? message.channel : null
+  )
 
   let result = triggerSprintCommands(
     message.content,

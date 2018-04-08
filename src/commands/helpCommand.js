@@ -11,7 +11,9 @@ Note, for spam reasons, Sprinty will only reply to you in a DM! Please DM Sprint
 
 Xe acknowledges commands with reactions, so that's how you'll know if Sprinty heard you!
 
-Sprinty parses many commands out of normally phrased text, so it's important to dig through the help and figure out how to say what you mean, and understand the places where xe can get it hilariously wrong.`
+Sprinty parses many commands out of normally phrased text, so it's important to dig through the help and figure out how to say what you mean, and understand the places where xe can get it hilariously wrong.
+
+Capitalization and punctation don't matter. Not to xem, anyway.`
 
 const BasicHelpTemplate = {
   // exact: true, // TODO need to figure out how to test this - for now, it'll just depend on the same matching everything else does
@@ -52,11 +54,22 @@ export const helpCommands = [
         // TODO flag these help: 'basic'?
         input: 'help sprint',
       },
+      {
+        name: 'sprint natural',
+        input: 'help me create a sprint',
+      },
+      // TODO invalid: help with sprints
     ],
   },
   {
     vocabulary: [ 'help' ],
     template: BasicHelpTemplate,
+    examples: [
+      {name: 'basic', input: 'help'},
+      {name: 'natural inquery', input: 'will u help me?'},
+      {name: 'natural', input: 'help me plz'},
+      {name: 'natural insistant', input: 'YO HELP'},
+    ],
     // examples: []
   },
   //help command examples - allows 'help help examples'

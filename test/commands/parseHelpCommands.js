@@ -20,6 +20,8 @@ Xe acknowledges commands with reactions, so that's how you'll know if Sprinty he
 
 Sprinty parses many commands out of normally phrased text, so it's important to dig through the help and figure out how to say what you mean, and understand the places where xe can get it hilariously wrong.
 
+Capitalization and punctation don't matter. Not to xem, anyway.
+
 commands:
 
 help [COMMAND]
