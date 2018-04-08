@@ -196,7 +196,7 @@ export const sprintCommands = [
         endMin: '26',
       },
       {
-        name: '',
+        name: 'straight-forward',
         input: 'sprint at 30 for 14',
         startMin: '30',
         endMin: '44',

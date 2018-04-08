@@ -140,9 +140,7 @@ simple [BIG NUM] and [VALUE]
         twoArgCommand,
         simpleCommand,
       ])
-      expect(help).to.be.equals(`command name
-
-examples:
+      expect(help).to.be.equals(`command name examples:
 
 simple [INPUT NUM]
 \t\`simple 3\` - exact

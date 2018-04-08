@@ -66,8 +66,7 @@ export const generateExamplesForCommands = commands => {
 
 export const generateExamples = (commandName, commands) => {
   return [
-    commandName,
-    'examples:',
+    `${commandName} examples:`,
     generateExamplesForCommands(commands),
   ].join('\n\n')
 }
