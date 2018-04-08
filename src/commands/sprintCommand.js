@@ -51,6 +51,9 @@ const WithEndTimeTemplate = {
   additionalHelp:
     'Start and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.',
   // examples: [], // TODO generate help docs and tests from these!
+  // examples: [
+  //   {input: 'foobar', args:}
+  // ]
 }
 
 const WithDurationTemplate = {
@@ -99,6 +102,14 @@ export const sprintCommands = [
   {
     vocabulary: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
     template: WithEndTimeTemplate,
+    examples: [
+      {input: 'sprint at :15 to :45', startMin: '15', endMin: '45'}, //args: [15, 45]},
+      {
+        input: 'anyone want to sprint at :15 to :45?',
+        startMin: '15',
+        endMin: '45',
+      }, // args: [15, 45]},
+    ],
   },
   {
     vocabulary: [ 'sprint', 'Number', 'to', 'Number' ],

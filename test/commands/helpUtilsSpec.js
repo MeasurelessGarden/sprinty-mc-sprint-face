@@ -1,5 +1,5 @@
 import {unroll} from '../spec.js'
-import {assert, expect} from 'chai'
+import {expect} from 'chai'
 import {
   substituteInputParamsForHelp,
   generateHelpForCommands,
@@ -85,7 +85,6 @@ simple [BIG NUM] and [VALUE]
     it('does not mutate the command', function(){
       substituteInputParamsForHelp(simpleCommand)
       expect(simpleCommand.vocabulary).to.deep.equals([ 'simple', 'Number' ])
-      // assert(_.isEqual(simpleCommand.vocabulary, ['simple', 'Number']))
     })
 
     unroll(

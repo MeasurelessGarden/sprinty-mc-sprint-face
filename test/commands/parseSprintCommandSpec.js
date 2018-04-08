@@ -1,9 +1,68 @@
+var _ = require('lodash')
 import {unroll} from '../spec.js'
 import {sprintCommands} from '../../src/commands/sprintCommand.js'
 import {createObjFromMessage} from '../../src/commands/parseUtils.js'
 import {expect} from 'chai'
 
+// TODO this is probably a convoluted way to create the structure I want to unroll...
+const unrollMapExamples = _.map(
+  _.flatMap(sprintCommands, command => {
+    return _.map(command.examples, example => {
+      return {ex: example, config: command}
+    })
+  }),
+  unroll => {
+    return [
+      unroll.config,
+      unroll.ex,
+      {
+        start: new Date(
+          Date.parse(`2018-04-07T00:${unroll.ex.startMin}:00.000Z`)
+        ),
+        end: new Date(Date.parse(`2018-04-07T00:${unroll.ex.endMin}:00.000Z`)),
+      },
+    ]
+  }
+)
+console.log('PARSE', unrollMapExamples)
+console.log(_.concat([ [ 'a', 'b', 'c' ] ], unrollMapExamples))
+console.log(new Date(Date.parse('2018-04-07T00:00:00.000Z')))
+console.log(new Date(Date.parse('2018-04-07T00:00:00.000Z')).getTime())
 describe('Parse Sprint Command', function(){
+  describe('self describing generated tests', function(){
+    unroll(
+      'can generate sprint from #example.input with #command.vocabulary',
+      function(done, args){
+        // expect(args).to.be.undefined()
+        console.log(args)
+        const sprint = createObjFromMessage(
+          sprintCommands,
+          args.example.input,
+          1523059200000
+        )
+
+        expect(sprint).to.be.equalSprintDefinition(args.expected)
+        done()
+      },
+      _.concat([ [ 'command', 'example', 'expected' ] ], unrollMapExamples)
+    )
+  })
+
+  // unroll(
+  //   'generates tests from examples in #command.vocabulary',
+  //   function(done, args) {
+  //     console.log(args)
+  //     expect(args).to.be.undefined()
+  //     // unroll('asdf', function(done, args) {
+  //     //     console.log('foobar',args)
+  //     //     expect(args).to.be.undefined()
+  //     //   done()
+  //     // }, _.map(_.concat(['example'], args.command.examples), item=>{return [item]}))
+  //     done()
+  //   },
+  //   _.map(_.concat(['command'], sprintCommands), item=>{return [item]})
+  // )
+
   unroll(
     'generates a sprint from #message',
     function(done, args){
