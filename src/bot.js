@@ -63,9 +63,7 @@ const endSprint = () => {
 }
 
 const triggerSprintCommands = (message, timestamp, channel) => {
-  console.log('sprint commands', sprintCommands)
   const sprint = createObjFromMessage(sprintCommands, message, timestamp)
-  console.log('sprint?', sprint)
   if (sprint) {
     if (cache.timeout.end) {
       return 'ERR_SPRINT_RUNNING_ALREADY'
@@ -74,15 +72,12 @@ const triggerSprintCommands = (message, timestamp, channel) => {
       start: sprint.start.getTime() - timestamp,
       end: sprint.end.getTime() - timestamp,
     }
-    //   react(':100:').then(console.log)
-    // .catch(console.error)
     cache.channel = channel
     cache.timeout = timeout
     cache.start = sprint.start
     cache.end = sprint.end
     cache.timeout.startId = client.setTimeout(startSprint, timeout.start)
     cache.timeout.endId = client.setTimeout(endSprint, timeout.end)
-    console.log('cache is now', cache)
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
   if (message === 'info') {

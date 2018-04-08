@@ -1,7 +1,7 @@
 var _ = require('lodash')
 
 export const substituteInputParamsForHelp = command => {
-  let help = command.vocabulary // TODO is this a copy??
+  let help = _.clone(command.vocabulary)
   const inputDesc = _.map(command.template.input, input => {
     const name = _.toUpper(input.name) // TODO formatting: bold name with **?
     const units = `(${input.units})`
