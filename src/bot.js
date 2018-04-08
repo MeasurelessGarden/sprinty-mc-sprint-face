@@ -1,8 +1,11 @@
-import {
-  createSprintFromMessage,
-  commands as SprintCommands,
-  help as SprintHelp,
-} from './sprint/generator.js'
+// import {
+//   createSprintFromMessage,
+//   commands as SprintCommands,
+//   help as SprintHelp,
+// } from './sprint/generator.js'
+import {sprintHelpIntro, sprintCommands} from './commands/sprintCommand.js'
+import {generateHelp} from './commands/helpUtils.js'
+import {createObjFromMessage} from './commands/parseUtils.js'
 const Discord = require('discord.js')
 var auth = require('./secret.json')
 var yaml = require('js-yaml')
@@ -29,12 +32,12 @@ const dmOnMatchingCommand = (message, command) => {
   ) {
     message.author.send(command.response)
     if (command.showHelp) {
-      let sprintHelp = SprintHelp + '\n'
-      _.each(SprintCommands, sprintCommand => {
-        // console.log('asdfasfasdf', _.join(sprintCommand.command, ' '))
-        sprintHelp = sprintHelp + '\n' + _.join(sprintCommand.command, ' ')
-      })
-      message.author.send(sprintHelp)
+      // let sprintHelp = SprintHelp + '\n'
+      // _.each(SprintCommands, sprintCommand => {
+      //   // console.log('asdfasfasdf', _.join(sprintCommand.command, ' '))
+      //   sprintHelp = sprintHelp + '\n' + _.join(sprintCommand.command, ' ')
+      // })
+      message.author.send(generateHelp(sprintHelpIntro, sprintCommands))
     }
     // console.log('wooo?',SprintCommands)
     // _.each(SprintCommands, sprintCommand => {
@@ -69,7 +72,7 @@ const endSprint = () => {
 }
 
 const triggerSprintCommands = (message, timestamp, channel) => {
-  const sprint = createSprintFromMessage(message, timestamp)
+  const sprint = createObjFromMessage(sprintCommands, message, timestamp)
 
   if (sprint) {
     if (cache.timeout.end) {

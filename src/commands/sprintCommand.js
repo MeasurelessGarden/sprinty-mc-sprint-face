@@ -3,6 +3,8 @@ import {
   generateSprintWithDuration,
 } from './timeUtils.js'
 
+export const sprintHelpIntro = `There are many valid ways to start a sprint.`
+
 // export const help =
 //   'There are a lot of ways to start a sprint! Other sprint commands you might care about are "cancel" and "info".'
 
