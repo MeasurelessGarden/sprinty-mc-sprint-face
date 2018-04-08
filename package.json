@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "babel-node --presets es2015 src/bot.js",
     "test": "NODE_ENV=test mocha --recursive ./test",
+    "test2": "NODE_ENV=test mocha ./test/commands/parseHelpCommands.js",
     "format": "find src test -name '*.js' | xargs ./node_modules/.bin/prettier --config .prettierrc.json --write"
   },
   "dependencies": {

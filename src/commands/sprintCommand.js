@@ -6,7 +6,7 @@ import {
 // TODO main command: 'sprint' --> @Sprinty help sprint
 // @Sprinty help sprint examples
 // TODO tag each example (list) - 'basic', 'verbose', 'natural', 'invalid', 'deceptive', 'clock notation', 'long', 'short' - a more formal variation than what's in the name (possibly even generate the name from it?)
-export const sprintHelpIntro = `There are many valid ways to start a sprint.`
+export const sprintIntro = `There are many valid ways to start a sprint.`
 
 /*
 Examples:
