@@ -50,10 +50,6 @@ const WithEndTimeTemplate = {
   call: generateSprintWithEndTime,
   additionalHelp:
     'Start and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.',
-  // examples: [], // TODO generate help docs and tests from these!
-  // examples: [
-  //   {input: 'foobar', args:}
-  // ]
 }
 
 const WithDurationTemplate = {
@@ -76,7 +72,6 @@ const WithDurationTemplate = {
   call: generateSprintWithDuration,
   additionalHelp:
     'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.',
-  // examples: [], // TODO generate help docs and tests from these!
 }
 
 const WithDurationDefaultTemplate = {
@@ -94,7 +89,6 @@ const WithDurationDefaultTemplate = {
   },
   additionalHelp:
     'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.',
-  // examples: [], // TODO generate help docs and tests from these!
 }
 
 export const sprintCommands = [
@@ -103,12 +97,46 @@ export const sprintCommands = [
     vocabulary: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
     template: WithEndTimeTemplate,
     examples: [
-      {input: 'sprint at :15 to :45', startMin: '15', endMin: '45'}, //args: [15, 45]},
+      // TODO test each example against the specific command it belongs to, instead of just the overall command list - otherwise examples could apply to different parsing than they are labeled for! (it's ok if 2 commands parse the same phrase - as long as they parse it the same!)
       {
+        name: 'straight-forward',
+        input: 'sprint at :15 to :45',
+        startMin: '15',
+        endMin: '45',
+      },
+      {
+        name: 'verbose and natural',
         input: 'anyone want to sprint at :15 to :45?',
         startMin: '15',
         endMin: '45',
-      }, // args: [15, 45]},
+      },
+      {
+        name: 'wraps to next hour',
+        input: 'sprint at 35 to 20',
+        startMin: '35',
+        endHour: '01',
+        endMin: '20',
+      },
+      {
+        name: 'to the end of the hour',
+        input: 'sprint at 10 to 59',
+        startMin: '10',
+        endMin: '59',
+      },
+      {
+        name: 'to the beginning of the next hour',
+        input: 'sprint at 10 to 0',
+        startMin: '10',
+        endHour: '01',
+        endMin: '00',
+      },
+      {
+        name: 'using two digits for minutes',
+        input: 'sprint at 10 to 00',
+        startMin: '10',
+        endHour: '01',
+        endMin: '00',
+      },
     ],
   },
   {

@@ -5,13 +5,14 @@ import {createObjFromMessage} from '../../src/commands/parseUtils.js'
 import {expect} from 'chai'
 
 // TODO this is probably a convoluted way to create the structure I want to unroll...
-const unrollMapExamples = _.map(
+const unrollCommandExamples = _.map(
   _.flatMap(sprintCommands, command => {
     return _.map(command.examples, example => {
       return {ex: example, config: command}
     })
   }),
   unroll => {
+    const endHour = unroll.ex.endHour ? `${unroll.ex.endHour}` : '00'
     return [
       unroll.config,
       unroll.ex,
@@ -19,49 +20,31 @@ const unrollMapExamples = _.map(
         start: new Date(
           Date.parse(`2018-04-07T00:${unroll.ex.startMin}:00.000Z`)
         ),
-        end: new Date(Date.parse(`2018-04-07T00:${unroll.ex.endMin}:00.000Z`)),
+        end: new Date(
+          Date.parse(`2018-04-07T${endHour}:${unroll.ex.endMin}:00.000Z`)
+        ),
       },
     ]
   }
 )
-console.log('PARSE', unrollMapExamples)
-console.log(_.concat([ [ 'a', 'b', 'c' ] ], unrollMapExamples))
-console.log(new Date(Date.parse('2018-04-07T00:00:00.000Z')))
-console.log(new Date(Date.parse('2018-04-07T00:00:00.000Z')).getTime())
+
 describe('Parse Sprint Command', function(){
   describe('self describing generated tests', function(){
     unroll(
-      'can generate sprint from #example.input with #command.vocabulary',
+      '#example.name can generate sprint from #example.input with #command.vocabulary',
       function(done, args){
-        // expect(args).to.be.undefined()
-        console.log(args)
         const sprint = createObjFromMessage(
           sprintCommands,
           args.example.input,
-          1523059200000
+          1523059200000 // zero hour day, to make it easy to compute expected times (see above hacky thing to generate the unroll)
         )
 
         expect(sprint).to.be.equalSprintDefinition(args.expected)
         done()
       },
-      _.concat([ [ 'command', 'example', 'expected' ] ], unrollMapExamples)
+      _.concat([ [ 'command', 'example', 'expected' ] ], unrollCommandExamples)
     )
   })
-
-  // unroll(
-  //   'generates tests from examples in #command.vocabulary',
-  //   function(done, args) {
-  //     console.log(args)
-  //     expect(args).to.be.undefined()
-  //     // unroll('asdf', function(done, args) {
-  //     //     console.log('foobar',args)
-  //     //     expect(args).to.be.undefined()
-  //     //   done()
-  //     // }, _.map(_.concat(['example'], args.command.examples), item=>{return [item]}))
-  //     done()
-  //   },
-  //   _.map(_.concat(['command'], sprintCommands), item=>{return [item]})
-  // )
 
   unroll(
     'generates a sprint from #message',
@@ -175,7 +158,7 @@ describe('Parse Sprint Command', function(){
         },
       ],
       [
-        'sprint at 35 to 20',
+        'sprint at 35 to 20', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:35:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
@@ -305,7 +288,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'sprint to 59 is fine',
-        'sprint at 10 to 59',
+        'sprint at 10 to 59', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:59:00.000Z')),
@@ -313,7 +296,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'sprint to 0 is also fine',
-        'sprint at 10 to 0',
+        'sprint at 10 to 0', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T06:00:00.000Z')),
@@ -321,7 +304,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'numbers like :00 do not confuse anything',
-        'sprint at 10 to 00',
+        'sprint at 10 to 00', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T06:00:00.000Z')),
