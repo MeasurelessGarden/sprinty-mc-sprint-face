@@ -19,6 +19,7 @@ const equalDateTime = (expected, actual) => {
 
 //https://teamgaslight.com/blog/how-we-handled-the-problem-of-js-date-slash-time-equality
 chai.Assertion.addChainableMethod('equalDateTime', function(date){
+  // expect (actualDatetime).to.be.equalDateTime(expectedDatetime)
   equalDateTime(date, this._obj)
 })
 
