@@ -19,7 +19,9 @@ const cache = {timeout: {}}
 const triggerHelpCommands = (message, timestamp, channel) => {
   if (channel) {
     const help = createObjFromMessage(helpCommands, message, timestamp)
-    channel.send(help)
+    if (help) {
+      channel.send(help)
+    }
   }
 }
 
