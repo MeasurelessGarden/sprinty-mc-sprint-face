@@ -89,7 +89,6 @@ const WithDurationDefaultTemplate = {
     },
   ],
   call: (...args) => {
-    console.log('args', args)
     return generateSprintWithDuration(...args, 30)
   },
   additionalHelp:
@@ -127,7 +126,6 @@ export const commands = [
 
 // TODO I should probably put testing around this function directly...
 const parseCommandArgs = (vocabulary, messageArgs, templateInputs) => {
-  console.log('parsing args with', vocabulary, messageArgs)
   return _.difference(messageArgs, vocabulary)
   // TODO, somehow use templateInputs to fill in defaults!
 }
@@ -135,28 +133,17 @@ const parseCommandArgs = (vocabulary, messageArgs, templateInputs) => {
 // TODO I should probably put testing around this function directly...
 const validate = (templateInputs, commandArgs) => {
   if (templateInputs.length == commandArgs.length) {
-    console.log('validating with', templateInputs, commandArgs)
     const invalid = _.find(templateInputs, (input, index) => {
       // find the first input that fails a check
       // TODO assumes that the command parsing has already covered the type must be Number thing...
-      console.log('validating input', input)
       const checks = _.find(input.checks, check => {
         // find the first check that fails
-        console.log(
-          'validation check: ',
-          commandArgs[index],
-          check(commandArgs[index])
-        )
         return !check(commandArgs[index])
       })
-      console.log('checks, result:', checks, !!checks)
       return !!checks
     })
-    console.log('who what where valid?', invalid)
-    // if(!!!invalid) {return false} else {return true} // I think?
     return !!!invalid
   }
-  console.log('not even remotely valid')
   return false
 }
 
@@ -165,7 +152,6 @@ export const createSprintFromMessage = (message, timestamp) => {
   const config = _.find(commands, config => {
     return parseMessageToArgs(message, config.vocabulary) // TODO how to prevent running this twice? do I care? it bugs me, but it's probably fine
   })
-  console.log('matching config', config)
   if (config) {
     // const commandArgs = config.args(
     //   // new Date(timestamp), // all sprint
@@ -176,17 +162,13 @@ export const createSprintFromMessage = (message, timestamp) => {
       parseMessageToArgs(message, config.vocabulary),
       config.template.input
     )
-    console.log('got commandArgs', commandArgs)
     // if (config.validate(commandArgs)) {
     //   const sprint = config.call(args)
     //   return sprint
     // }
     if (validate(config.template.input, commandArgs)) {
-      console.log('wtf is timestamp?', timestamp)
       const functionArgs = _.concat([ timestamp ], commandArgs) // TODO actually.... probably makes sense just to pass in the timestamp anyway....
-      console.log('functionArgs', functionArgs)
       const sprint = config.template.call(...functionArgs)
-      console.log('got sprint', sprint)
       return sprint
     }
   }
