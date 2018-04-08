@@ -8,6 +8,45 @@ import {expect} from 'chai'
 
 describe('Parse Help Command', function(){
   describe('basic help command', function(){
+    it('generates a examples for help', function(){
+      const reply = createObjFromMessage(helpCommands, 'help help example', 0)
+      expect(reply).to.be.equals(`help examples:
+
+help
+\t\`help\` - basic
+\t\`will u help me?\` - natural inquery
+\t\`help me plz\` - natural
+\t\`YO HELP\` - natural insistant
+
+help [COMMAND]
+\t\`help sprint\` - sprint
+\t\`help me create a sprint\` - sprint natural
+
+show example
+\t\`show examples\` - straight-forward
+
+show example
+\t\`show example\` - straight-forward
+
+help examples
+\t\`help examples\` - straight-forward
+
+help example
+\t\`help example\` - straight-forward
+
+show [COMMAND] example
+\t\`show sprint examples\` - straight-forward
+
+show [COMMAND] example
+\t\`show sprint example\` - straight-forward
+
+help [COMMAND] examples
+\t\`help sprint examples\` - straight-forward
+
+help [COMMAND] example
+\t\`help sprint example\` - straight-forward`)
+    })
+
     it('generates a help message', function(){
       const reply = createObjFromMessage(helpCommands, 'help', 0)
       expect(reply).to.be.equals(`**Welcome to Sprinty McSprintFace!**
@@ -30,6 +69,30 @@ help
 help [COMMAND]
 \tCOMMAND - must be one of: sprint
 \tGet more info on managing sprints. This command must be in a DM.
+
+show example
+\tGet examples.
+
+show example
+\tGet examples.
+
+help examples
+\tGet examples.
+
+help example
+\tGet examples.
+
+show [COMMAND] example
+\tCOMMAND - must be one of: sprint
+\tGet examples.
+
+show [COMMAND] example
+\tCOMMAND - must be one of: sprint
+\tGet examples.
+
+help [COMMAND] examples
+\tCOMMAND - must be one of: sprint
+\tGet examples.
 
 help [COMMAND] example
 \tCOMMAND - must be one of: sprint

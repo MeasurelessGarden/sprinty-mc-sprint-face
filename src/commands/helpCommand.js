@@ -32,7 +32,7 @@ const CommandHelpTemplate = {
       name: 'command',
       type: 'Command', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
       description: 'must be one of: sprint', // TODO this has some duplication in parseUtils for anything ever to work (for now)
-      checks: [ arg => arg == 'sprint' ],
+      checks: [ arg => arg == 'sprint' ], // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
     },
   ],
   call: (...args) => {
@@ -61,28 +61,55 @@ const CommandHelpExamplesTemplate = {
   additionalHelp: 'Get examples.',
 }
 
+const HelpExamplesTemplate = {
+  input: [],
+  call: (...args) => {
+    return generateExamples('help', helpCommands)
+  },
+  additionalHelp: 'Get examples.',
+}
+
 export const helpCommands = [
-  //help command examples - allows 'help help examples'
   {
     vocabulary: [ 'help', 'Command', 'example' ],
     template: CommandHelpExamplesTemplate,
-    examples: [],
+    examples: [ {name: 'straight-forward', input: 'help sprint example'} ],
   },
-  // {
-  //   vocabulary: [ 'help', 'Command', 'examples' ],
-  //   template: CommandHelpExamplesTemplate,
-  //   examples: [],
-  // },
-  // {
-  //   vocabulary: [ 'help', 'example' ],
-  //   template: HelpExamplesTemplate,
-  //   examples: [],
-  // },
-  // {
-  //   vocabulary: [ 'help', 'examples' ],
-  //   template: HelpExamplesTemplate,
-  //   examples: [],
-  // },
+  {
+    vocabulary: [ 'help', 'Command', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    template: CommandHelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'help sprint examples'} ],
+  },
+  {
+    vocabulary: [ 'show', 'Command', 'example' ],
+    template: CommandHelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'show sprint example'} ],
+  },
+  {
+    vocabulary: [ 'show', 'Command', 'example' ],
+    template: CommandHelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'show sprint examples'} ],
+  },
+  {
+    vocabulary: [ 'help', 'example' ],
+    template: HelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'help example'} ],
+  },
+  {
+    vocabulary: [ 'help', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    template: HelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'help examples'} ],
+  },
+  {
+    vocabulary: [ 'show', 'example' ],
+    template: HelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'show example'} ],
+  },
+  {
+    vocabulary: [ 'show', 'example' ],
+    template: HelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'show examples'} ],
+  },
   // {
   //   vocabulary: [ 'help', 'COMMAND', 'list' ],
   //   template: HelpListTemplate,
@@ -105,7 +132,8 @@ export const helpCommands = [
     ],
   },
   {
-    vocabulary: [ 'help' ],
+    vocabulary: [ 'help' ], // TODO basically this is 'help COMMAND' where command defaults to 'help' - need to get a defaults mechanism to make it simpler to list command variations
+    // TODO alternate spelling: halp
     template: BasicHelpTemplate,
     examples: [
       {name: 'basic', input: 'help'},
