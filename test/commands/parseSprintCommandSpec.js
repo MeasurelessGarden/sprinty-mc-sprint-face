@@ -31,7 +31,7 @@ const unrollCommandExamples = _.map(
 describe('Parse Sprint Command', function(){
   describe('self describing generated tests', function(){
     unroll(
-      '#example.name can generate sprint from #example.input with #command.vocabulary',
+      'creates sprint from #example.input', // (#example.name) with #command.vocabulary',
       function(done, args){
         const sprint = createObjFromMessage(
           sprintCommands,
@@ -60,98 +60,98 @@ describe('Parse Sprint Command', function(){
     [
       [ 'message', 'expected' ],
       [
-        'ANYONE WANT TO SPRINT AT 25?',
+        'ANYONE WANT TO SPRINT AT 25?', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:25:00.000Z')),
           end: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
         },
       ],
       [
-        'I want to sprint at :45',
+        'I want to sprint at :45', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:45:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
         },
       ],
       [
-        "let's sprint 40 to 45",
+        "let's sprint 40 to 45", // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:40:00.000Z')),
           end: new Date(Date.parse('2018-04-04T04:45:00.000Z')),
         },
       ],
       [
-        'sprint 15',
+        'sprint 15', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:45:00.000Z')),
         },
       ],
       [
-        'sprint 15 to 25',
+        'sprint 15 to 25', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:25:00.000Z')),
         },
       ],
       [
-        'sprint 15 to :35',
+        'sprint 15 to :35', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:35:00.000Z')),
         },
       ],
       [
-        'sprint 57 for 32',
+        'sprint 57 for 32', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:57:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:29:00.000Z')),
         },
       ],
       [
-        'sprint :15',
+        'sprint :15', //in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:45:00.000Z')),
         },
       ],
       [
-        'sprint at 20',
+        'sprint at 20', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:50:00.000Z')),
         },
       ],
       [
-        'sprint at 20 for 6 min',
+        'sprint at 20 for 6 min', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:26:00.000Z')),
         },
       ],
       [
-        'sprint at 25',
+        'sprint at 25', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:25:00.000Z')),
           end: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
         },
       ],
       [
-        'sprint at 30',
+        'sprint at 30', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:00:00.000Z')),
         },
       ],
       [
-        'sprint at 30 for 14',
+        'sprint at 30 for 14', //in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
           end: new Date(Date.parse('2018-04-04T04:44:00.000Z')),
         },
       ],
       [
-        'sprint at 35 for 14',
+        'sprint at 35 for 14', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:35:00.000Z')),
           end: new Date(Date.parse('2018-04-04T04:49:00.000Z')),
@@ -165,28 +165,28 @@ describe('Parse Sprint Command', function(){
         },
       ],
       [
-        'sprint at 55 for 55',
+        'sprint at 55 for 55', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:55:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:50:00.000Z')),
         },
       ],
       [
-        'shall we sprint :20 for about 55 min?',
+        'shall we sprint :20 for about 55 min?', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:20:00.000Z')),
           end: new Date(Date.parse('2018-04-04T06:15:00.000Z')),
         },
       ],
       [
-        'sprint 30 for 34 minutes',
+        'sprint 30 for 34 minutes', //in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:04:00.000Z')),
         },
       ],
       [
-        'sprint at 30 for 34 minutes',
+        'sprint at 30 for 34 minutes', //in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:30:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:04:00.000Z')),
@@ -223,7 +223,7 @@ describe('Parse Sprint Command', function(){
       [ 'reason', 'message', 'expected' ],
       [
         'an hour is allowed',
-        'sprint at 10 for 60',
+        'sprint at 10 for 60', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T06:10:00.000Z')),
@@ -241,7 +241,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'sprints of 1 minute are ok',
-        'sprint at 10 for 1',
+        'sprint at 10 for 1', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:11:00.000Z')),
@@ -249,7 +249,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'sprints of 1 minute can be defined multiple ways',
-        'sprint at 10 to 11',
+        'sprint at 10 to 11', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:11:00.000Z')),
@@ -257,7 +257,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'this notation implies an hour',
-        'sprint 10 to 10',
+        'sprint 10 to 10', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
           end: new Date(Date.parse('2018-04-04T06:10:00.000Z')),
@@ -265,7 +265,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'sprint at 59 is fine',
-        'sprint at 59',
+        'sprint at 59', // in example: check
         {
           start: new Date(Date.parse('2018-04-04T04:59:00.000Z')),
           end: new Date(Date.parse('2018-04-04T05:29:00.000Z')),
@@ -273,7 +273,7 @@ describe('Parse Sprint Command', function(){
       ],
       [
         'sprint at 60 is nonsense! what does that mean?',
-        'sprint at 60',
+        'sprint at 60', // TODO make an 'invalid examples' auto section?
         undefined,
       ],
       [

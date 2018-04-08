@@ -3,31 +3,14 @@ import {
   generateSprintWithDuration,
 } from './timeUtils.js'
 
+// TODO main command: 'sprint' --> @Sprinty help sprint
+// @Sprinty help sprint examples
+// TODO tag each example (list) - 'basic', 'verbose', 'natural', 'invalid', 'clock notation', 'long', 'short' - a more formal variation than what's in the name (possibly even generate the name from it?)
 export const sprintHelpIntro = `There are many valid ways to start a sprint.`
 
-/* TODO
+/*
 Examples:
-ANYONE WANT TO SPRINT AT 25?
-I want to sprint at :45
-let's sprint 40 to 45
-sprint 15
-sprint 15 to 25
-sprint 15 to :35
-sprint 57 for 32
-sprint :15
-sprint at 20
-sprint at 25
-sprint at 27 for 10 min
-sprint at 30
-sprint at 30 for 14
-sprint at 35 for 14
-sprint at 35 to 20
-sprint at 55 for 55
-shall we sprint :20 for about 55 min?
-sprint 30 for 34 minutes
-sprint at 20 for 6 min
 ///should we go at 10?
-(also compile a list from all the tests! THEY'RE ALL OVER!)
 */
 
 const WithEndTimeTemplate = {
@@ -99,14 +82,15 @@ export const sprintCommands = [
     examples: [
       // TODO test each example against the specific command it belongs to, instead of just the overall command list - otherwise examples could apply to different parsing than they are labeled for! (it's ok if 2 commands parse the same phrase - as long as they parse it the same!)
       {
-        name: 'straight-forward',
+        // TODO add flag for examples to include in help, and also tests to generate those messages!
+        name: 'straight-forward', // TODO flag these help: 'basic'?
         input: 'sprint at :15 to :45',
         startMin: '15',
         endMin: '45',
       },
       {
         name: 'verbose and natural',
-        input: 'anyone want to sprint at :15 to :45?',
+        input: 'anyone want to sprint at :15 to :45?', // TODO flag these help: 'verbose'?
         startMin: '15',
         endMin: '45',
       },
@@ -142,21 +126,205 @@ export const sprintCommands = [
   {
     vocabulary: [ 'sprint', 'Number', 'to', 'Number' ],
     template: WithEndTimeTemplate,
+    examples: [
+      {
+        name: 'natural',
+        input: "let's sprint 40 to 45",
+        startMin: '40',
+        endMin: '45',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint 15 to 25',
+        startMin: '15',
+        endMin: '25',
+      },
+      {
+        name: 'clock notation',
+        input: 'sprint 15 to :35',
+        startMin: '15',
+        endMin: '35',
+      },
+      {
+        name: 'very short',
+        input: 'sprint at 10 to 11',
+        startMin: '10',
+        endMin: '11',
+      },
+      {
+        name: 'implied hour',
+        input: 'sprint 10 to 10',
+        startMin: '10',
+        endHour: '01',
+        endMin: '10',
+      },
+      // {
+      //   name: '',
+      //   input: ,
+      //   startMin: '',
+      //   endHour: '',
+      //   endMin: '',
+      // },
+    ],
   },
   {
     vocabulary: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
     template: WithDurationTemplate,
+    examples: [
+      {
+        name: '10 minute sprint',
+        input: 'sprint at 27 for 10 min',
+        startMin: '27',
+        endMin: '37',
+      },
+      {
+        name: 'short and sweet',
+        input: 'sprint at 20 for 6 min',
+        startMin: '20',
+        endMin: '26',
+      },
+      {
+        name: '',
+        input: 'sprint at 30 for 14',
+        startMin: '30',
+        endMin: '44',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint at 35 for 14',
+        startMin: '35',
+        endMin: '49',
+      },
+      {
+        name: 'long running',
+        input: 'sprint at 55 for 55',
+        startMin: '55',
+        endHour: '01',
+        endMin: '50',
+      },
+      {
+        name: 'slightly longer than default',
+        input: 'sprint at 30 for 34 minutes',
+        startMin: '30',
+        endHour: '01',
+        endMin: '04',
+      },
+      {
+        name: 'maximum length sprint',
+        input: 'sprint at 10 for 60',
+        startMin: '10',
+        endHour: '01',
+        endMin: '10',
+      },
+
+      {
+        name: 'very short sprint',
+        input: 'sprint at 10 for 1',
+        startMin: '10',
+        endMin: '11',
+      },
+    ],
   },
   {
     vocabulary: [ 'sprint', 'Number', 'for', 'Number' ],
     template: WithDurationTemplate,
+    examples: [
+      {
+        name: 'uncommon start and stop time',
+        input: 'sprint 57 for 32',
+        startMin: '57',
+        endHour: '01',
+        endMin: '29',
+      },
+      {
+        name: 'natural and verbose, with clock notation',
+        input: 'shall we sprint :20 for about 55 min?',
+        startMin: '20',
+        endHour: '01',
+        endMin: '15', // TODO also make example output if run later in the hour (for help)
+      },
+      {
+        name: 'simple',
+        input: 'sprint 30 for 34 minutes',
+        startMin: '30',
+        endHour: '01',
+        endMin: '04',
+      },
+      {
+        name: 'confusing, the word hour is ignored',
+        input: 'sprint 30 for 1 hour',
+        startMin: '30',
+        endMin: '31',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint 15 for 20',
+        startMin: '15',
+        endMin: '35',
+      },
+    ],
   },
   {
     vocabulary: [ 'sprint', 'at', 'Number' ],
     template: WithDurationDefaultTemplate,
+    examples: [
+      {
+        name: 'enthusiastic',
+        input: 'ANYONE WANT TO SPRINT AT 25?',
+        startMin: '25',
+        endMin: '55',
+      },
+      {
+        name: 'natural',
+        input: 'I want to sprint at :45',
+        startMin: '45',
+        endHour: '01',
+        endMin: '15',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint at 20',
+        startMin: '20',
+        endMin: '50',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint at 25',
+        startMin: '25',
+        endMin: '55',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint at 30',
+        startMin: '30',
+        endHour: '01',
+        endMin: '00',
+      },
+      {
+        name: 'end of the hour',
+        input: 'sprint at 59',
+        startMin: '59',
+        endHour: '01',
+        endMin: '29',
+      },
+    ],
   },
   {
     vocabulary: [ 'sprint', 'Number' ],
     template: WithDurationDefaultTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint 15',
+        startMin: '15',
+        endMin: '45',
+      },
+      {
+        name: 'with clock-minute notation',
+        input: 'sprint :15',
+        startMin: '15',
+        endMin: '45',
+      },
+    ],
   },
 ]
