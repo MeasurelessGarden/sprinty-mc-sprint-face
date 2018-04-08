@@ -4,6 +4,9 @@ import {
   substituteInputParamsForHelp,
   generateHelpForCommands,
   generateHelp,
+  listExamples,
+  generateExamplesForCommands, // TODO
+  generateExamples, // TODO
 } from '../../src/commands/helpUtils.js'
 
 const simpleCommand = {
@@ -18,8 +21,17 @@ const simpleCommand = {
       },
     ],
     additionalHelp: 'additional info',
-    // examples: [],
   },
+  examples: [
+    {
+      name: 'exact',
+      input: 'simple 3',
+    },
+    {
+      name: 'verbose',
+      input: 'a simple example with num 3',
+    },
+  ],
 }
 
 const twoArgCommand = {
@@ -41,16 +53,21 @@ const twoArgCommand = {
     ],
     additionalHelp:
       'There are two inputs, with different validation requirements.',
-    // examples: [],
   },
+  examples: [
+    {
+      name: 'exact',
+      input: 'simple 100 and 5',
+    },
+  ],
 }
 
 describe('Help Utils', function(){
   describe('generateHelp', function(){
     it('generates a message with a header', function(){
       const help = generateHelp('Intro Text Here', [
-        simpleCommand,
         twoArgCommand,
+        simpleCommand,
       ])
       expect(help).to.be.equals(`Intro Text Here
 
@@ -69,7 +86,7 @@ simple [BIG NUM] and [VALUE]
 
   describe('generateHelpForCommands', function(){
     it('generates a formatted help message', function(){
-      const help = generateHelpForCommands([ simpleCommand, twoArgCommand ])
+      const help = generateHelpForCommands([ twoArgCommand, simpleCommand ])
       expect(help).to.be.equals(`simple [INPUT NUM]
 \tINPUT NUM (minutes) - cannot be negative
 \tadditional info
@@ -112,6 +129,63 @@ simple [BIG NUM] and [VALUE]
             'VALUE (counts) - cannot be negative',
             'There are two inputs, with different validation requirements.',
           ],
+        ],
+      ]
+    )
+  })
+
+  describe('generateExamples', function(){
+    it('generates examples for all the commands', function(){
+      const help = generateExamples('command name', [
+        twoArgCommand,
+        simpleCommand,
+      ])
+      expect(help).to.be.equals(`command name
+
+examples:
+
+simple [INPUT NUM]
+\t\`simple 3\` - exact
+\t\`a simple example with num 3\` - verbose
+
+simple [BIG NUM] and [VALUE]
+\t\`simple 100 and 5\` - exact`)
+    })
+  })
+
+  describe('generateExamplesForCommands', function(){
+    it('generates a formatted help message', function(){
+      const help = generateExamplesForCommands([ twoArgCommand, simpleCommand ])
+      expect(help).to.be.equals(`simple [INPUT NUM]
+\t\`simple 3\` - exact
+\t\`a simple example with num 3\` - verbose
+
+simple [BIG NUM] and [VALUE]
+\t\`simple 100 and 5\` - exact`)
+    })
+  })
+
+  describe('listExamples', function(){
+    unroll(
+      'generates examples for #command',
+      function(done, args){
+        const examples = listExamples(args.command)
+        expect(examples).to.be.deep.equals(args.expected)
+        done()
+      },
+      [
+        [ 'command', 'expected' ],
+        [
+          simpleCommand,
+          [
+            'simple [INPUT NUM]',
+            '`simple 3` - exact',
+            '`a simple example with num 3` - verbose',
+          ],
+        ],
+        [
+          twoArgCommand,
+          [ 'simple [BIG NUM] and [VALUE]', '`simple 100 and 5` - exact' ],
         ],
       ]
     )

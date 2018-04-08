@@ -1,4 +1,4 @@
-import {generateHelp} from './helpUtils.js'
+import {generateHelp, generateExamples} from './helpUtils.js'
 
 import {sprintIntro, sprintCommands} from './sprintCommand.js'
 
@@ -41,10 +41,53 @@ const CommandHelpTemplate = {
     return generateHelp(sprintIntro, sprintCommands)
   },
   additionalHelp:
-    'Get more info on managing sprints. This command must be in a DM.',
+    'Get more info on managing sprints. This command must be in a DM.', // TODO this message is sprint specific too - will need to change for when there are more commands supported
+}
+
+const CommandHelpExamplesTemplate = {
+  input: [
+    {
+      name: 'command', // TODO pull out const input shared between commands....
+      type: 'Command',
+      description: 'must be one of: sprint',
+      checks: [ arg => arg == 'sprint' ],
+    },
+  ],
+  call: (...args) => {
+    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
+    // I guess I could test it with `help help` ....
+    return generateExamples('sprint', sprintCommands)
+  },
+  additionalHelp: 'Get examples.',
 }
 
 export const helpCommands = [
+  //help command examples - allows 'help help examples'
+  {
+    vocabulary: [ 'help', 'Command', 'example' ],
+    template: CommandHelpExamplesTemplate,
+    examples: [],
+  },
+  // {
+  //   vocabulary: [ 'help', 'Command', 'examples' ],
+  //   template: CommandHelpExamplesTemplate,
+  //   examples: [],
+  // },
+  // {
+  //   vocabulary: [ 'help', 'example' ],
+  //   template: HelpExamplesTemplate,
+  //   examples: [],
+  // },
+  // {
+  //   vocabulary: [ 'help', 'examples' ],
+  //   template: HelpExamplesTemplate,
+  //   examples: [],
+  // },
+  // {
+  //   vocabulary: [ 'help', 'COMMAND', 'list' ],
+  //   template: HelpListTemplate,
+  //   examples: [], // JSUT the commands, in a list, nothing extra // TODO if I do this, I should have more specific types than 'Number' like 'ClockMin' and 'DurationMin' .... or something?
+  // },
   {
     vocabulary: [ 'help', 'Command' ],
     template: CommandHelpTemplate,
@@ -72,5 +115,4 @@ export const helpCommands = [
     ],
     // examples: []
   },
-  //help command examples - allows 'help help examples'
 ]

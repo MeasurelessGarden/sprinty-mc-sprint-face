@@ -24,12 +24,16 @@ Capitalization and punctation don't matter. Not to xem, anyway.
 
 commands:
 
+help
+\t(bet you figured out this one!) Please always ask for help in a DM to Sprinty.
+
 help [COMMAND]
 \tCOMMAND - must be one of: sprint
 \tGet more info on managing sprints. This command must be in a DM.
 
-help
-\t(bet you figured out this one!) Please always ask for help in a DM to Sprinty.`)
+help [COMMAND] example
+\tCOMMAND - must be one of: sprint
+\tGet examples.`)
     })
   })
 
@@ -40,33 +44,33 @@ help
 
 commands:
 
-sprint at [START TIME] to [END TIME]
+sprint [START TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
-\tEND TIME (minutes of hour) - must be in the range [0:59]
-\tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.
+\tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
 
-sprint [START TIME] to [END TIME]
+sprint at [START TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
-\tEND TIME (minutes of hour) - must be in the range [0:59]
-\tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.
-
-sprint at [START TIME] for [DURATION]
-\tSTART TIME (minutes of hour) - must be in the range [0:59]
-\tDURATION (minutes) - must be in the range [1:60]
-\tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.
+\tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
 
 sprint [START TIME] for [DURATION]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tDURATION (minutes) - must be in the range [1:60]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.
 
-sprint at [START TIME]
+sprint at [START TIME] for [DURATION]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
-\tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
+\tDURATION (minutes) - must be in the range [1:60]
+\tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.
 
-sprint [START TIME]
+sprint [START TIME] to [END TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
-\tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.`)
+\tEND TIME (minutes of hour) - must be in the range [0:59]
+\tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.
+
+sprint at [START TIME] to [END TIME]
+\tSTART TIME (minutes of hour) - must be in the range [0:59]
+\tEND TIME (minutes of hour) - must be in the range [0:59]
+\tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.`)
     })
   })
 })
