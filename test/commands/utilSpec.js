@@ -1,10 +1,10 @@
 import {unroll} from '../spec.js'
 import {
   preparseMessage,
-  parse,
-  convertFunctionArgs,
+  parseMessageToArray,
+  convertFunctionArgsToNumbers,
   parseMessageToArgs,
-} from '../../src/parse/util.js'
+} from '../../src/commands/generator.js'
 import {expect} from 'chai'
 
 describe('parse util', function(){
@@ -39,7 +39,7 @@ describe('parse util', function(){
   unroll(
     'parses #message to match #command - reason',
     function(done, args){
-      const parsedMessage = parse(args.message, args.command)
+      const parsedMessage = parseMessageToArray(args.message, args.command)
       expect(parsedMessage).to.be.deep.equal(args.expected)
       done()
     },
@@ -87,7 +87,7 @@ describe('parse util', function(){
   unroll(
     'converts function params from strings - #reason',
     function(done, args){
-      const parsedFunctionArgs = convertFunctionArgs(
+      const parsedFunctionArgs = convertFunctionArgsToNumbers(
         args.parsedMessage,
         args.command
       )
