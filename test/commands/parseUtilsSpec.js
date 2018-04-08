@@ -33,7 +33,7 @@ describe('Parse Utils', function(){
           'negative -1',
           'negative 1',
         ],
-        [ 'number ranges change', '7-20', '7 20' ],
+        [ 'number ranges change', '7-20', '7 20' ], // TODO make this a parsable command?
       ]
     )
   })
@@ -129,127 +129,127 @@ describe('Parse Utils', function(){
         [ 'reason', 'message', 'command', 'expected' ],
         [
           'simple sprint command matched perfectly',
-          'sprint at 30',
+          'sprint at 30', // in example: check
           [ 'sprint', 'at', 'Number' ],
           [ 'sprint', 'at', 30 ],
         ],
         [
           'simple sprint command matched... but not really (example 1)',
-          'sprint at 35 for 14',
+          'sprint at 35 for 14', // in example: check
           [ 'sprint', 'at', 'Number' ],
           [ 'sprint', 'at', 35 ],
         ],
         [
           'simple sprint command matched perfectly with human phrasing',
-          'ANYONE WANT TO SPRINT AT 25?',
+          'ANYONE WANT TO SPRINT AT 25?', // in example: check
           [ 'sprint', 'at', 'Number' ],
           [ 'sprint', 'at', 25 ],
         ],
         [
           'simple sprint command without match - missing word to match (example 1)',
-          "let's sprint 40 to 45",
+          "let's sprint 40 to 45", // in example: check
           [ 'sprint', 'at', 'Number' ],
           undefined,
         ],
         [
           'simple sprint command matched... but not really (example 2)',
-          'sprint at 27 for 10 min',
+          'sprint at 27 for 10 min', // in example: check
           [ 'sprint', 'at', 'Number' ],
           [ 'sprint', 'at', 27 ],
         ],
         [
           'simple sprint command without match - missing word to match (example 2)',
-          'sprint :15',
+          'sprint :15', // in example: check
           [ 'sprint', 'at', 'Number' ],
           undefined,
         ],
         [
           'sprint with default override does not match command implying default',
-          'sprint at 30',
+          'sprint at 30', // in example: check
           [ 'sprint', 'Number', 'for', 'Number', 'min' ],
           undefined,
         ],
         [
           'sprint with default override requires all words',
-          'sprint at 35 for 14',
+          'sprint at 35 for 14', // in example: check
           [ 'sprint', 'Number', 'for', 'Number', 'min' ],
           undefined,
         ],
         [
           'sprint with default override (different command) matched perfectly',
-          'sprint at 35 for 14',
+          'sprint at 35 for 14', // in example: check
           [ 'sprint', 'Number', 'for', 'Number' ],
           [ 'sprint', 35, 'for', 14 ],
         ],
         [
           'sprint with default override ignores non-match',
-          'ANYONE WANT TO SPRINT AT 25?',
+          'ANYONE WANT TO SPRINT AT 25?', // in example: check
           [ 'sprint', 'Number', 'for', 'Number', 'min' ],
           undefined,
         ],
         [
           'sprint with default override ignores unrelated command',
-          "let's sprint 40 to 45",
+          "let's sprint 40 to 45", // in example: check
           [ 'sprint', 'Number', 'for', 'Number', 'min' ],
           undefined,
         ],
         [
           'sprint with default override matched perfect',
-          'sprint at 27 for 10 min',
+          'sprint at 27 for 10 min', // in example: check
           [ 'sprint', 'Number', 'for', 'Number', 'min' ],
           [ 'sprint', 27, 'for', 10, 'min' ],
         ],
         [
           'sprint with default override (different command) matched with extras',
-          'sprint at 27 for 10 min',
+          'sprint at 27 for 10 min', // in example: check
           [ 'sprint', 'Number', 'for', 'Number' ],
           [ 'sprint', 27, 'for', 10 ],
         ],
         [
           'sprint with default override ignores unrelated too many words missing command',
-          'sprint :15',
+          'sprint :15', // in example: check
           [ 'sprint', 'Number', 'for', 'Number', 'min' ],
           undefined,
         ],
         [
           'sprint from-to command ignores simple command',
-          'sprint at 30',
+          'sprint at 30', // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           undefined,
         ],
         [
           'sprint from-to command ignores different command',
-          'sprint at 35 for 14',
+          'sprint at 35 for 14', // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           undefined,
         ],
         [
           'sprint from-to command ignores simple sprint command',
-          'ANYONE WANT TO SPRINT AT 25?',
+          'ANYONE WANT TO SPRINT AT 25?', // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           undefined,
         ],
         [
           'sprint from-to command matches human phrasing (example 1)',
-          "let's sprint 40 to 45",
+          "let's sprint 40 to 45", // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           [ 'sprint', 40, 'to', 45 ],
         ],
         [
           'sprint from-to command matches human phrasing (example 2)',
-          'sprint from 13 to 29??',
+          'sprint from 13 to 29??', // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           [ 'sprint', 13, 'to', 29 ],
         ],
         [
           'sprint from-to command ignores non-matching command',
-          'sprint at 27 for 10 min',
+          'sprint at 27 for 10 min', // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           undefined,
         ],
         [
           'sprint from-to command ignores due to missing words',
-          'sprint :15',
+          'sprint :15', // in example: check
           [ 'sprint', 'Number', 'to', 'Number' ],
           undefined,
         ],

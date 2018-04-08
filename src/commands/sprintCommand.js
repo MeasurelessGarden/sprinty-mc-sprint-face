@@ -5,7 +5,7 @@ import {
 
 // TODO main command: 'sprint' --> @Sprinty help sprint
 // @Sprinty help sprint examples
-// TODO tag each example (list) - 'basic', 'verbose', 'natural', 'invalid', 'clock notation', 'long', 'short' - a more formal variation than what's in the name (possibly even generate the name from it?)
+// TODO tag each example (list) - 'basic', 'verbose', 'natural', 'invalid', 'deceptive', 'clock notation', 'long', 'short' - a more formal variation than what's in the name (possibly even generate the name from it?)
 export const sprintHelpIntro = `There are many valid ways to start a sprint.`
 
 /*
@@ -89,6 +89,12 @@ export const sprintCommands = [
         endMin: '45',
       },
       {
+        name: 'potentially confusing extra numbers (maybe deceptive)',
+        input: 'sprint at 15 with extra 5 number to 30',
+        startMin: '15',
+        endMin: '30',
+      },
+      {
         name: 'verbose and natural',
         input: 'anyone want to sprint at :15 to :45?', // TODO flag these help: 'verbose'?
         startMin: '15',
@@ -132,6 +138,12 @@ export const sprintCommands = [
         input: "let's sprint 40 to 45",
         startMin: '40',
         endMin: '45',
+      },
+      {
+        name: 'natural, question',
+        input: 'sprint from 13 to 29??',
+        startMin: '13',
+        endMin: '29',
       },
       {
         name: 'straight-forward',
@@ -251,7 +263,7 @@ export const sprintCommands = [
         endMin: '04',
       },
       {
-        name: 'confusing, the word hour is ignored',
+        name: 'confusing (deceptive), the word hour is ignored',
         input: 'sprint 30 for 1 hour',
         startMin: '30',
         endMin: '31',
@@ -261,6 +273,13 @@ export const sprintCommands = [
         input: 'sprint 15 for 20',
         startMin: '15',
         endMin: '35',
+      },
+      {
+        name:
+          'deceptive punctuation (interpreted as sprint 15 for 1 and the 5 is nonsense)',
+        input: 'sprint 15 for 1.5 minutes',
+        startMin: '15',
+        endMin: '16',
       },
     ],
   },
@@ -322,6 +341,12 @@ export const sprintCommands = [
       {
         name: 'with clock-minute notation',
         input: 'sprint :15',
+        startMin: '15',
+        endMin: '45',
+      },
+      {
+        name: 'deceptive negatives',
+        input: 'sprint -15',
         startMin: '15',
         endMin: '45',
       },
