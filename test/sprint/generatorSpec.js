@@ -232,7 +232,19 @@ describe('Sprint generator', function(){
       ],
     ]
   )
+  describe('find_me', function() {
 
+    it( 'filtered', function(){
+       // TODO this is temporary while I unbreak my shit
+      const message = 'sprint 15 to 25'
+      const expected = {
+        start: new Date(Date.parse('2018-04-04T05:15:00.000Z')),
+        end: new Date(Date.parse('2018-04-04T05:25:00.000Z')),
+      }
+      const sprint = createSprintFromMessage(message, 1522815707792)
+      expect(sprint).to.be.equalSprintDefinition(expected)
+    })
+  })
   unroll(
     'generates a sprint from #message',
     function(done, args){

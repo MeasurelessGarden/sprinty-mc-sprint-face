@@ -1,5 +1,6 @@
 var _ = require('lodash')
 
+// this one has to do with *raw user messages*
 export const preparseMessage = message => {
   // message, a string typed by a user (assumes no @USERNAME)
   return _.toLower(
@@ -7,6 +8,7 @@ export const preparseMessage = message => {
   )
 }
 
+// this is part of the command itself! or at least - how I structure commands TODO ... no I just need a consistent set of terms. command in this context is different than in another...
 export const parse = (message, command) => {
   // assumes message is cleaned by preparse first
   // command, an array to match terms from to identify command and args
