@@ -32,17 +32,8 @@ const dmOnMatchingCommand = (message, command) => {
   ) {
     message.author.send(command.response)
     if (command.showHelp) {
-      // let sprintHelp = SprintHelp + '\n'
-      // _.each(SprintCommands, sprintCommand => {
-      //   // console.log('asdfasfasdf', _.join(sprintCommand.command, ' '))
-      //   sprintHelp = sprintHelp + '\n' + _.join(sprintCommand.command, ' ')
-      // })
       message.author.send(generateHelp(sprintHelpIntro, sprintCommands))
     }
-    // console.log('wooo?',SprintCommands)
-    // _.each(SprintCommands, sprintCommand => {
-    //   console.log('????', sprintCommand)
-    // })
   }
 }
 
@@ -72,8 +63,9 @@ const endSprint = () => {
 }
 
 const triggerSprintCommands = (message, timestamp, channel) => {
+  console.log('sprint commands', sprintCommands)
   const sprint = createObjFromMessage(sprintCommands, message, timestamp)
-
+  console.log('sprint?', sprint)
   if (sprint) {
     if (cache.timeout.end) {
       return 'ERR_SPRINT_RUNNING_ALREADY'
@@ -90,6 +82,7 @@ const triggerSprintCommands = (message, timestamp, channel) => {
     cache.end = sprint.end
     cache.timeout.startId = client.setTimeout(startSprint, timeout.start)
     cache.timeout.endId = client.setTimeout(endSprint, timeout.end)
+    console.log('cache is now', cache)
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
   if (message === 'info') {

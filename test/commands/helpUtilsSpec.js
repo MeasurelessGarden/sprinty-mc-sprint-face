@@ -66,12 +66,9 @@ simple [BIG NUM] and [VALUE]
 \tThere are two inputs, with different validation requirements.`)
     })
   })
+
   describe('generateHelpForCommands', function(){
     it('generates a formatted help message', function(){
-      // const commands = [
-      //   simpleCommand, twoArgCommand
-      //
-      // ]
       const help = generateHelpForCommands([ simpleCommand, twoArgCommand ])
       expect(help).to.be.equals(`simple [INPUT NUM]
 \tINPUT NUM (minutes) - cannot be negative
@@ -83,6 +80,7 @@ simple [BIG NUM] and [VALUE]
 \tThere are two inputs, with different validation requirements.`)
     })
   })
+
   describe('substituteInputParamsForHelp', function(){
     unroll(
       'generates help message for #command',
