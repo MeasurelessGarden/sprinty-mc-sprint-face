@@ -5,16 +5,6 @@ import {
   generateSprintWithDuration,
 } from './timeUtils.js'
 
-export const validateSprintWithEndTime = (start, end) => {
-  // TODO these validate methods are not unit tested directly yet
-  return start >= 0 && start < 60 && end >= 0 && end < 60
-}
-
-export const validateSprintWithDuration = (start, duration) => {
-  // TODO these validate methods are not unit tested directly yet
-  return start >= 0 && start < 60 && duration >= 1 && duration <= 60
-}
-
 export const help =
   'There are a lot of ways to start a sprint! Other sprint commands you might care about are "cancel" and "info".'
 /*
@@ -42,13 +32,6 @@ sprint at 20 for 6 min
 (also compile a list from all the tests! THEY'RE ALL OVER!)
 */
 
-// const validate = (inputDefs, args) => {
-//   if (inputDefs.length == args.length) {
-//
-//   }
-//   return false
-// }
-
 const WithEndTimeTemplate = {
   input: [
     {
@@ -65,121 +48,91 @@ const WithEndTimeTemplate = {
       description: 'must be in the range [0:59]',
       checks: [ arg => arg >= 0, arg => arg < 60 ],
     },
-    // [
-    //   {
-    //     isValid: (arg) => (start >= 0),
-    //     description: ''
-    //   }
-    // ]
   ],
-  // validate: args => {
-  //   return validateSprintWithEndTime(args[1], args[2])
-  // },
-  // call: args => {
-  //   return generateSprintWithEndTime(args[0], args[1], args[2])
-  // },
-  // call: (...args) => { generateSprintWithEndTime(...args)},
   call: generateSprintWithEndTime,
   additionalHelp:
     'Start and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.',
   // examples: [], // TODO generate help docs and tests from these!
 }
 
+const WithDurationTemplate = {
+  input: [
+    {
+      name: 'start time',
+      type: 'Number',
+      units: 'minutes of hour',
+      description: 'must be in the range [0:59]',
+      checks: [ arg => arg >= 0, arg => arg < 60 ],
+    },
+    {
+      name: 'duration',
+      type: 'Number',
+      units: 'minutes',
+      description: 'must be in the range [1:60]',
+      checks: [ arg => arg > 0, arg => arg <= 60 ],
+    },
+  ],
+  call: generateSprintWithDuration,
+  additionalHelp:
+    'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.',
+  // examples: [], // TODO generate help docs and tests from these!
+}
+
+const WithDurationDefaultTemplate = {
+  input: [
+    {
+      name: 'start time',
+      type: 'Number',
+      units: 'minutes of hour',
+      description: 'must be in the range [0:59]',
+      checks: [ arg => arg >= 0, arg => arg < 60 ],
+    },
+  ],
+  call: (...args) => {
+    console.log('args', args)
+    return generateSprintWithDuration(...args, 30)
+  },
+  additionalHelp:
+    'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.',
+  // examples: [], // TODO generate help docs and tests from these!
+}
+
 export const commands = [
+  // order is used to resolve commands without conflicts
   {
     vocabulary: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
     template: WithEndTimeTemplate,
-    // // args: (now, args) => {
-    //   return [ now, args[2], args[4] ]
-    // },
-    // // TODO validate + call has only 2 templates in this list, but each has a few different command + args to get there
-    // // TODO ... and the args functions could easily be derrived from the commands, considering it's just now + the indices of 'Nummber'.... ... well except for where there are defaults....
-    // validate: args => {
-    //   return validateSprintWithEndTime(args[1], args[2])
-    // },
-    // call: args => {
-    //   return generateSprintWithEndTime(args[0], args[1], args[2])
-    // },
   },
   {
     vocabulary: [ 'sprint', 'Number', 'to', 'Number' ],
     template: WithEndTimeTemplate,
-    // args: (now, args) => {
-    //   return [ now, args[1], args[3] ]
-    // },
-    // validate: args => {
-    //   return validateSprintWithEndTime(args[1], args[2])
-    // },
-    // call: args => {
-    //   return generateSprintWithEndTime(args[0], args[1], args[2])
-    // },
   },
-  // {
-  //   command: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
-  //   args: (now, args) => {
-  //     return [ now, args[2], args[4] ]
-  //   },
-  //   validate: args => {
-  //     return validateSprintWithDuration(args[1], args[2])
-  //   },
-  //   call: args => {
-  //     return generateSprintWithDuration(args[0], args[1], args[2])
-  //   },
-  // },
-  // {
-  //   command: [ 'sprint', 'Number', 'for', 'Number' ],
-  //   args: (now, args) => {
-  //     return [ now, args[1], args[3] ]
-  //   },
-  //   validate: args => {
-  //     return validateSprintWithDuration(args[1], args[2])
-  //   },
-  //   call: args => {
-  //     return generateSprintWithDuration(args[0], args[1], args[2])
-  //   },
-  // },
-  // {
-  //   command: [ 'sprint', 'at', 'Number' ],
-  //   args: (now, args) => {
-  //     return [ now, args[2], 30 ]
-  //   },
-  //   validate: args => {
-  //     return validateSprintWithDuration(args[1], args[2])
-  //   },
-  //   call: args => {
-  //     return generateSprintWithDuration(args[0], args[1], args[2])
-  //   },
-  // },
-  // {
-  //   command: [ 'sprint', 'Number' ],
-  //   args: (now, args) => {
-  //     return [ now, args[1], 30 ]
-  //   },
-  //   validate: args => {
-  //     return validateSprintWithDuration(args[1], args[2])
-  //   },
-  //   call: args => {
-  //     return generateSprintWithDuration(args[0], args[1], args[2])
-  //   },
-  // },
+  {
+    vocabulary: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
+    template: WithDurationTemplate,
+  },
+  {
+    vocabulary: [ 'sprint', 'Number', 'for', 'Number' ],
+    template: WithDurationTemplate,
+  },
+  {
+    vocabulary: [ 'sprint', 'at', 'Number' ],
+    template: WithDurationDefaultTemplate,
+  },
+  {
+    vocabulary: [ 'sprint', 'Number' ],
+    template: WithDurationDefaultTemplate,
+  },
 ]
 
+// TODO I should probably put testing around this function directly...
 const parseCommandArgs = (vocabulary, messageArgs, templateInputs) => {
   console.log('parsing args with', vocabulary, messageArgs)
   return _.difference(messageArgs, vocabulary)
   // TODO, somehow use templateInputs to fill in defaults!
 }
 
-// {
-//   name: 'start time',
-//   type: 'Number', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
-//   units: 'minutes of hour',
-//   description: 'must be in the range [0:59]',
-//   checks: [
-//     (arg) => (arg >= 0),
-//     (arg) => (arg < 60),
-//   ]
-// },
+// TODO I should probably put testing around this function directly...
 const validate = (templateInputs, commandArgs) => {
   if (templateInputs.length == commandArgs.length) {
     console.log('validating with', templateInputs, commandArgs)
