@@ -1,13 +1,12 @@
-var _ = require('lodash')
-import {parseMessageToArgs} from '../parse/util'
 import {
   generateSprintWithEndTime,
   generateSprintWithDuration,
 } from './timeUtils.js'
 
-export const help =
-  'There are a lot of ways to start a sprint! Other sprint commands you might care about are "cancel" and "info".'
-/*
+// export const help =
+//   'There are a lot of ways to start a sprint! Other sprint commands you might care about are "cancel" and "info".'
+
+/* TODO
 Examples:
 ANYONE WANT TO SPRINT AT 25?
 I want to sprint at :45
@@ -96,7 +95,7 @@ const WithDurationDefaultTemplate = {
   // examples: [], // TODO generate help docs and tests from these!
 }
 
-export const commands = [
+export const sprintCommands = [
   // order is used to resolve commands without conflicts
   {
     vocabulary: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
@@ -123,53 +122,3 @@ export const commands = [
     template: WithDurationDefaultTemplate,
   },
 ]
-
-// TODO I should probably put testing around this function directly...
-const parseCommandArgs = (vocabulary, messageArgs, templateInputs) => {
-  return _.difference(messageArgs, vocabulary)
-  // TODO, somehow use templateInputs to fill in defaults!
-}
-
-// TODO I should probably put testing around this function directly...
-const validate = (templateInputs, commandArgs) => {
-  if (templateInputs.length == commandArgs.length) {
-    const invalid = _.find(templateInputs, (input, index) => {
-      // find the first input that fails a check
-      // TODO assumes that the command parsing has already covered the type must be Number thing...
-      const checks = _.find(input.checks, check => {
-        // find the first check that fails
-        return !check(commandArgs[index])
-      })
-      return !!checks
-    })
-    return !!!invalid
-  }
-  return false
-}
-
-export const createSprintFromMessage = (message, timestamp) => {
-  // timestamp -> pass in Message.createdTimestamp ie 1522815707792
-  const config = _.find(commands, config => {
-    return parseMessageToArgs(message, config.vocabulary) // TODO how to prevent running this twice? do I care? it bugs me, but it's probably fine
-  })
-  if (config) {
-    // const commandArgs = config.args(
-    //   // new Date(timestamp), // all sprint
-    //   parseMessageToArgs(message, config.vocabulary)
-    // )
-    const commandArgs = parseCommandArgs(
-      config.vocabulary,
-      parseMessageToArgs(message, config.vocabulary),
-      config.template.input
-    )
-    // if (config.validate(commandArgs)) {
-    //   const sprint = config.call(args)
-    //   return sprint
-    // }
-    if (validate(config.template.input, commandArgs)) {
-      const functionArgs = _.concat([ timestamp ], commandArgs) // TODO actually.... probably makes sense just to pass in the timestamp anyway....
-      const sprint = config.template.call(...functionArgs)
-      return sprint
-    }
-  }
-}

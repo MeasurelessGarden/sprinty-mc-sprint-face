@@ -1,12 +1,17 @@
 import {unroll} from '../spec.js'
-import {createSprintFromMessage} from '../../src/sprint/generator.js'
+import {sprintCommands} from '../../src/commands/sprintCommand.js'
+import {createObjFromMessage} from '../../src/commands/generator.js'
 import {expect} from 'chai'
 
 describe('Sprint generator', function(){
   unroll(
     'generates a sprint from #message',
     function(done, args){
-      const sprint = createSprintFromMessage(args.message, 1522815707792)
+      const sprint = createObjFromMessage(
+        sprintCommands,
+        args.message,
+        1522815707792
+      )
       expect(sprint).to.be.equalSprintDefinition(args.expected)
       done()
     },
@@ -159,7 +164,11 @@ describe('Sprint generator', function(){
   unroll(
     'validates a sprint to control length #message - #reason',
     function(done, args){
-      const sprint = createSprintFromMessage(args.message, 1522815707792)
+      const sprint = createObjFromMessage(
+        sprintCommands,
+        args.message,
+        1522815707792
+      )
       if (args.expected) {
         expect(sprint).to.be.equalSprintDefinition(args.expected)
       }
