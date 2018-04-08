@@ -71,14 +71,19 @@ const HelpExamplesTemplate = {
 
 export const helpCommands = [
   {
+    vocabulary: [ 'help', 'Command', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    template: CommandHelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'help sprint examples'} ],
+  },
+  {
     vocabulary: [ 'help', 'Command', 'example' ],
     template: CommandHelpExamplesTemplate,
     examples: [ {name: 'straight-forward', input: 'help sprint example'} ],
   },
   {
-    vocabulary: [ 'help', 'Command', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    vocabulary: [ 'show', 'Command', 'examples' ],
     template: CommandHelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'help sprint examples'} ],
+    examples: [ {name: 'straight-forward', input: 'show sprint examples'} ],
   },
   {
     vocabulary: [ 'show', 'Command', 'example' ],
@@ -86,9 +91,9 @@ export const helpCommands = [
     examples: [ {name: 'straight-forward', input: 'show sprint example'} ],
   },
   {
-    vocabulary: [ 'show', 'Command', 'example' ],
-    template: CommandHelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'show sprint examples'} ],
+    vocabulary: [ 'help', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    template: HelpExamplesTemplate,
+    examples: [ {name: 'straight-forward', input: 'help examples'} ],
   },
   {
     vocabulary: [ 'help', 'example' ],
@@ -96,19 +101,14 @@ export const helpCommands = [
     examples: [ {name: 'straight-forward', input: 'help example'} ],
   },
   {
-    vocabulary: [ 'help', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    vocabulary: [ 'show', 'examples' ],
     template: HelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'help examples'} ],
+    examples: [ {name: 'straight-forward', input: 'show examples'} ],
   },
   {
     vocabulary: [ 'show', 'example' ],
     template: HelpExamplesTemplate,
     examples: [ {name: 'straight-forward', input: 'show example'} ],
-  },
-  {
-    vocabulary: [ 'show', 'example' ],
-    template: HelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'show examples'} ],
   },
   // {
   //   vocabulary: [ 'help', 'COMMAND', 'list' ],

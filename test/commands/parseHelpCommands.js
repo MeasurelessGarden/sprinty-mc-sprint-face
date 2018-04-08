@@ -23,28 +23,28 @@ help [COMMAND]
 \t\`help me create a sprint\` - sprint natural
 
 show example
-\t\`show examples\` - straight-forward
-
-show example
 \t\`show example\` - straight-forward
 
-help examples
-\t\`help examples\` - straight-forward
+show examples
+\t\`show examples\` - straight-forward
 
 help example
 \t\`help example\` - straight-forward
 
-show [COMMAND] example
-\t\`show sprint examples\` - straight-forward
+help examples
+\t\`help examples\` - straight-forward
 
 show [COMMAND] example
 \t\`show sprint example\` - straight-forward
 
-help [COMMAND] examples
-\t\`help sprint examples\` - straight-forward
+show [COMMAND] examples
+\t\`show sprint examples\` - straight-forward
 
 help [COMMAND] example
-\t\`help sprint example\` - straight-forward`)
+\t\`help sprint example\` - straight-forward
+
+help [COMMAND] examples
+\t\`help sprint examples\` - straight-forward`)
     })
 
     it('generates a help message', function(){
@@ -73,28 +73,28 @@ help [COMMAND]
 show example
 \tGet examples.
 
-show example
-\tGet examples.
-
-help examples
+show examples
 \tGet examples.
 
 help example
 \tGet examples.
 
-show [COMMAND] example
-\tCOMMAND - must be one of: sprint
+help examples
 \tGet examples.
 
 show [COMMAND] example
 \tCOMMAND - must be one of: sprint
 \tGet examples.
 
-help [COMMAND] examples
+show [COMMAND] examples
 \tCOMMAND - must be one of: sprint
 \tGet examples.
 
 help [COMMAND] example
+\tCOMMAND - must be one of: sprint
+\tGet examples.
+
+help [COMMAND] examples
 \tCOMMAND - must be one of: sprint
 \tGet examples.`)
     })

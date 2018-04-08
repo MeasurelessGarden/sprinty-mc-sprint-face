@@ -6,6 +6,7 @@
   "author": "Measureless",
   "scripts": {
     "dev": "babel-node --presets es2015 src/bot.js",
+    "bot": "babel-node --presets es2015 src/bot.js",
     "test": "NODE_ENV=test mocha --recursive ./test",
     "format": "find src test -name '*.js' | xargs ./node_modules/.bin/prettier --config .prettierrc.json --write"
   },
