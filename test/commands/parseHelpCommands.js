@@ -8,8 +8,8 @@ import {expect} from 'chai'
 
 describe('Parse Help Command', function(){
   describe('basic help command', function(){
-    it('generates a examples for help', function(){
-      const reply = createObjFromMessage(helpCommands, 'help help example', 0)
+    it('generates examples for help', function(){
+      const reply = createObjFromMessage(helpCommands, 'help example', 0)
       expect(reply).to.be.equals(`help examples:
 
 help
@@ -22,29 +22,15 @@ help [COMMAND]
 \t\`help sprint\` - sprint
 \t\`help me create a sprint\` - sprint natural
 
-show example
-\t\`show example\` - straight-forward
-
-show examples
-\t\`show examples\` - straight-forward
-
-help example
-\t\`help example\` - straight-forward
-
 help examples
 \t\`help examples\` - straight-forward
-
-show [COMMAND] example
-\t\`show sprint example\` - straight-forward
-
-show [COMMAND] examples
-\t\`show sprint examples\` - straight-forward
-
-help [COMMAND] example
-\t\`help sprint example\` - straight-forward
+\t\`help example\` - straight-forward
+\t\`show examples\` - straight-forward
 
 help [COMMAND] examples
-\t\`help sprint examples\` - straight-forward`)
+\t\`help sprint examples\` - straight-forward
+\t\`help sprint example\` - straight-forward
+\t\`show sprint examples\` - straight-forward`)
     })
 
     it('generates a help message', function(){
@@ -64,44 +50,31 @@ Capitalization and punctation don't matter. Not to xem, anyway.
 commands:
 
 help
+halp
 \t(bet you figured out this one!) Please always ask for help in a DM to Sprinty.
 
 help [COMMAND]
+halp [COMMAND]
 \tCOMMAND - must be one of: sprint
 \tGet more info on managing sprints. This command must be in a DM.
 
+help examples
+help example
+show examples
 show example
 \tGet examples.
 
-show examples
-\tGet examples.
-
-help example
-\tGet examples.
-
-help examples
-\tGet examples.
-
+help [COMMAND] examples
+help [COMMAND] example
+show [COMMAND] examples
 show [COMMAND] example
 \tCOMMAND - must be one of: sprint
-\tGet examples.
-
-show [COMMAND] examples
-\tCOMMAND - must be one of: sprint
-\tGet examples.
-
-help [COMMAND] example
-\tCOMMAND - must be one of: sprint
-\tGet examples.
-
-help [COMMAND] examples
-\tCOMMAND - must be one of: sprint
-\tGet examples.`)
+\tGet examples for commands.`)
     })
   })
 
   describe('help sprint command', function(){
-    it('generates a examples for sprints', function(){
+    it('generates examples for sprints', function(){
       const reply = createObjFromMessage(helpCommands, 'help sprint example', 0)
       expect(reply).to.be.equals(`sprint examples:
 
@@ -127,6 +100,7 @@ sprint [START TIME] for [DURATION]
 \t\`sprint 15 for 1.5 minutes\` - deceptive punctuation (interpreted as sprint 15 for 1 and the 5 is nonsense)
 
 sprint at [START TIME] for [DURATION]
+\t\`sprint at 25 for 30?\` - natural inquery
 \t\`sprint at 27 for 10 min\` - 10 minute sprint
 \t\`sprint at 20 for 6 min\` - short and sweet
 \t\`sprint at 30 for 14\` - straight-forward
@@ -146,6 +120,7 @@ sprint [START TIME] to [END TIME]
 
 sprint at [START TIME] to [END TIME]
 \t\`sprint at :15 to :45\` - straight-forward
+\t\`sprint at :15 until :45\` - alternate wording: until
 \t\`sprint at 15 with extra 5 number to 30\` - potentially confusing extra numbers (maybe deceptive)
 \t\`anyone want to sprint at :15 to :45?\` - verbose and natural
 \t\`sprint at 35 to 20\` - wraps to next hour
@@ -165,28 +140,100 @@ sprint [START TIME]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
 
 sprint at [START TIME]
+sprint around [START TIME]
+sprinting at [START TIME]
+sprinting around [START TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
 
 sprint [START TIME] for [DURATION]
+sprinting [START TIME] for [DURATION]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tDURATION (minutes) - must be in the range [1:60]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.
 
 sprint at [START TIME] for [DURATION]
+sprint around [START TIME] for [DURATION]
+sprinting at [START TIME] for [DURATION]
+sprinting around [START TIME] for [DURATION]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tDURATION (minutes) - must be in the range [1:60]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.
 
 sprint [START TIME] to [END TIME]
+sprint [START TIME] until [END TIME]
+sprinting [START TIME] to [END TIME]
+sprinting [START TIME] until [END TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tEND TIME (minutes of hour) - must be in the range [0:59]
 \tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.
 
 sprint at [START TIME] to [END TIME]
+sprint at [START TIME] until [END TIME]
+sprint around [START TIME] to [END TIME]
+sprint around [START TIME] until [END TIME]
+sprinting at [START TIME] to [END TIME]
+sprinting at [START TIME] until [END TIME]
+sprinting around [START TIME] to [END TIME]
+sprinting around [START TIME] until [END TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tEND TIME (minutes of hour) - must be in the range [0:59]
 \tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.`)
     })
   })
+
+  // it('reduces', function(){
+  //   const vocab = [
+  //     [ 'sprint', 'sprinting' ],
+  //     [ 'at', 'around' ],
+  //     [ '[START TIME]' ],
+  //     [ 'to', 'until' ],
+  //     [ '[END TIME]' ],
+  //   ]
+  //   const permutations = [ 1, 1, 1, 2, 1 ]
+  //   // _.reduce(permutations, function(prev, i) {
+  //   //
+  //   //   return _.concat(prev, it)
+  //   // }, [])
+  //   //https://codereview.stackexchange.com/questions/52119/calculate-all-possible-combinations-of-an-array-of-arrays-or-strings
+  //   const combinations = array => {
+  //     if (!array.length) {
+  //       return []
+  //     }
+  //
+  //     // wrap non-array values
+  //     // e.g. ['x',['y','z']] becomes [['x'],['y','z']]
+  //     array = array.map(function(item){
+  //       return item instanceof Array ? item : [ item ]
+  //     })
+  //
+  //     // internal recursive function
+  //     function combine(list){
+  //       var prefixes, combinations
+  //
+  //       if (list.length === 1) {
+  //         return list[0]
+  //       }
+  //
+  //       prefixes = list[0]
+  //       combinations = combine(list.slice(1)) // recurse
+  //
+  //       // produce a flat list of each of the current
+  //       // set of values prepended to each combination
+  //       // of the remaining sets.
+  //       return prefixes.reduce(function(memo, prefix){
+  //         return memo.concat(
+  //           combinations.map(function(combination){
+  //             return [ prefix ].concat(combination)
+  //           })
+  //         )
+  //       }, [])
+  //     }
+  //
+  //     return combine(array)
+  //   }
+  //   console.log(combinations(vocab))
+  //   // console.log(_.unzipWith(vocab, _.concat))
+  //   expect(undefined).to.be.equals('foo')
+  // })
 })

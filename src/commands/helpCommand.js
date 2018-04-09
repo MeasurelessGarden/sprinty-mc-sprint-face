@@ -15,7 +15,7 @@ Sprinty parses many commands out of normally phrased text, so it's important to 
 
 Capitalization and punctation don't matter. Not to xem, anyway.`
 
-const BasicHelpTemplate = {
+export const BasicHelpTemplate = {
   // exact: true, // TODO need to figure out how to test this - for now, it'll just depend on the same matching everything else does
   input: [],
   call: (...args) => {
@@ -58,7 +58,7 @@ const CommandHelpExamplesTemplate = {
     // I guess I could test it with `help help` ....
     return generateExamples('sprint', sprintCommands)
   },
-  additionalHelp: 'Get examples.',
+  additionalHelp: 'Get examples for commands.',
 }
 
 const HelpExamplesTemplate = {
@@ -71,44 +71,22 @@ const HelpExamplesTemplate = {
 
 export const helpCommands = [
   {
-    vocabulary: [ 'help', 'Command', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    vocabulary: [ [ 'help', 'show' ], 'Command', [ 'examples', 'example' ] ],
     template: CommandHelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'help sprint examples'} ],
+    examples: [
+      {name: 'straight-forward', input: 'help sprint examples'},
+      {name: 'straight-forward', input: 'help sprint example'},
+      {name: 'straight-forward', input: 'show sprint examples'},
+    ],
   },
   {
-    vocabulary: [ 'help', 'Command', 'example' ],
-    template: CommandHelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'help sprint example'} ],
-  },
-  {
-    vocabulary: [ 'show', 'Command', 'examples' ],
-    template: CommandHelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'show sprint examples'} ],
-  },
-  {
-    vocabulary: [ 'show', 'Command', 'example' ],
-    template: CommandHelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'show sprint example'} ],
-  },
-  {
-    vocabulary: [ 'help', 'examples' ], // TODO need an 'alternate spelling / phrasing' [examples, example]
+    vocabulary: [ [ 'help', 'show' ], [ 'examples', 'example' ] ],
     template: HelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'help examples'} ],
-  },
-  {
-    vocabulary: [ 'help', 'example' ],
-    template: HelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'help example'} ],
-  },
-  {
-    vocabulary: [ 'show', 'examples' ],
-    template: HelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'show examples'} ],
-  },
-  {
-    vocabulary: [ 'show', 'example' ],
-    template: HelpExamplesTemplate,
-    examples: [ {name: 'straight-forward', input: 'show example'} ],
+    examples: [
+      {name: 'straight-forward', input: 'help examples'},
+      {name: 'straight-forward', input: 'help example'},
+      {name: 'straight-forward', input: 'show examples'},
+    ],
   },
   // {
   //   vocabulary: [ 'help', 'COMMAND', 'list' ],
@@ -116,7 +94,7 @@ export const helpCommands = [
   //   examples: [], // JSUT the commands, in a list, nothing extra // TODO if I do this, I should have more specific types than 'Number' like 'ClockMin' and 'DurationMin' .... or something?
   // },
   {
-    vocabulary: [ 'help', 'Command' ],
+    vocabulary: [ [ 'help', 'halp' ], 'Command' ],
     template: CommandHelpTemplate,
     examples: [
       {
@@ -132,8 +110,7 @@ export const helpCommands = [
     ],
   },
   {
-    vocabulary: [ 'help' ], // TODO basically this is 'help COMMAND' where command defaults to 'help' - need to get a defaults mechanism to make it simpler to list command variations
-    // TODO alternate spelling: halp
+    vocabulary: [ [ [ 'help' ], [ 'halp' ] ] ], // TODO basically this is 'help COMMAND' where command defaults to 'help' - need to get a defaults mechanism to make it simpler to list command variations
     template: BasicHelpTemplate,
     examples: [
       {name: 'basic', input: 'help'},

@@ -77,7 +77,13 @@ const WithDurationDefaultTemplate = {
 export const sprintCommands = [
   // order is used to resolve commands without conflicts
   {
-    vocabulary: [ 'sprint', 'at', 'Number', 'to', 'Number' ],
+    vocabulary: [
+      [ 'sprint', 'sprinting' ],
+      [ 'at', 'around' ],
+      'Number',
+      [ 'to', 'until' ],
+      'Number',
+    ],
     template: WithEndTimeTemplate,
     examples: [
       // TODO test each example against the specific command it belongs to, instead of just the overall command list - otherwise examples could apply to different parsing than they are labeled for! (it's ok if 2 commands parse the same phrase - as long as they parse it the same!)
@@ -85,6 +91,12 @@ export const sprintCommands = [
         // TODO add flag for examples to include in help, and also tests to generate those messages!
         name: 'straight-forward', // TODO flag these help: 'basic'?
         input: 'sprint at :15 to :45',
+        startMin: '15',
+        endMin: '45',
+      },
+      {
+        name: 'alternate wording: until',
+        input: 'sprint at :15 until :45',
         startMin: '15',
         endMin: '45',
       },
@@ -130,7 +142,12 @@ export const sprintCommands = [
     ],
   },
   {
-    vocabulary: [ 'sprint', 'Number', 'to', 'Number' ],
+    vocabulary: [
+      [ 'sprint', 'sprinting' ],
+      'Number',
+      [ 'to', 'until' ],
+      'Number',
+    ],
     template: WithEndTimeTemplate,
     examples: [
       {
@@ -180,9 +197,21 @@ export const sprintCommands = [
     ],
   },
   {
-    vocabulary: [ 'sprint', 'at', 'Number', 'for', 'Number' ],
+    vocabulary: [
+      [ 'sprint', 'sprinting' ],
+      [ 'at', 'around' ],
+      'Number',
+      [ 'for' ],
+      'Number',
+    ],
     template: WithDurationTemplate,
     examples: [
+      {
+        name: 'natural inquery',
+        input: 'sprint at 25 for 30?',
+        startMin: '25',
+        endMin: '55',
+      },
       {
         name: '10 minute sprint',
         input: 'sprint at 27 for 10 min',
@@ -238,7 +267,7 @@ export const sprintCommands = [
     ],
   },
   {
-    vocabulary: [ 'sprint', 'Number', 'for', 'Number' ],
+    vocabulary: [ [ 'sprint', 'sprinting' ], 'Number', [ 'for' ], 'Number' ],
     template: WithDurationTemplate,
     examples: [
       {
@@ -284,7 +313,7 @@ export const sprintCommands = [
     ],
   },
   {
-    vocabulary: [ 'sprint', 'at', 'Number' ],
+    vocabulary: [ [ 'sprint', 'sprinting' ], [ 'at', 'around' ], 'Number' ],
     template: WithDurationDefaultTemplate,
     examples: [
       {
@@ -329,7 +358,7 @@ export const sprintCommands = [
     ],
   },
   {
-    vocabulary: [ 'sprint', 'Number' ],
+    vocabulary: [ [ 'sprint' ], 'Number' ],
     template: WithDurationDefaultTemplate,
     examples: [
       {

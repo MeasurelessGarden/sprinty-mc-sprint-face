@@ -1,6 +1,7 @@
 import {unroll} from '../spec.js'
 import {expect} from 'chai'
 import {
+  substituteVocabularyArgNames,
   substituteInputParamsForHelp,
   generateHelpForCommands,
   generateHelp,
@@ -10,7 +11,7 @@ import {
 } from '../../src/commands/helpUtils.js'
 
 const simpleCommand = {
-  vocabulary: [ 'simple', 'Number' ],
+  vocabulary: [ [ 'simple' ], 'Number' ],
   template: {
     input: [
       {
@@ -35,7 +36,7 @@ const simpleCommand = {
 }
 
 const twoArgCommand = {
-  vocabulary: [ 'simple', 'Number', 'and', 'Number' ],
+  vocabulary: [ [ 'simple' ], 'Number', [ 'and' ], 'Number' ],
   template: {
     input: [
       {
@@ -62,7 +63,41 @@ const twoArgCommand = {
   ],
 }
 
+// const altSpellingCommand = {
+//   vocabulary: [ ['simple', 'alt'], ['Number'], ['and', 'or'], ['Number'] ],
+//   template: {
+//     input: [
+//       {
+//         name: 'big num',
+//         type: 'Number',
+//         units: 'measurement',
+//         description: 'must be at least 100',
+//       },
+//       {
+//         name: 'value',
+//         type: 'Number',
+//         units: 'counts',
+//         description: 'cannot be negative',
+//       },
+//     ],
+//     additionalHelp:
+//       'There are two inputs, with different validation requirements.',
+//   },
+//   examples: [
+//     {
+//       name: 'exact',
+//       input: 'simple 100 and 5', // TODO alt examples...
+//     },
+//   ],
+// }
+
 describe('Help Utils', function(){
+  // describe('substituteVocabularyArgNames', function(){
+  //   it('displays vocabulary options', function() {
+  //     substituteVocabularyArgNames
+  //   })
+  // })
+
   describe('generateHelp', function(){
     it('generates a message with a header', function(){
       const help = generateHelp('Intro Text Here', [
@@ -101,7 +136,10 @@ simple [BIG NUM] and [VALUE]
   describe('substituteInputParamsForHelp', function(){
     it('does not mutate the command', function(){
       substituteInputParamsForHelp(simpleCommand)
-      expect(simpleCommand.vocabulary).to.deep.equals([ 'simple', 'Number' ])
+      expect(simpleCommand.vocabulary).to.deep.equals([
+        [ 'simple' ],
+        'Number',
+      ])
     })
 
     unroll(
