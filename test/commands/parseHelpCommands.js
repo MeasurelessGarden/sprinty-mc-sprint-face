@@ -30,7 +30,8 @@ help examples
 help [COMMAND] examples
 \t\`help sprint examples\` - straight-forward
 \t\`help sprint example\` - straight-forward
-\t\`show sprint examples\` - straight-forward`)
+\t\`show sprint examples\` - straight-forward
+\t\`show me some sprint examples\` - natural`)
     })
 
     it('generates a help message', function(){

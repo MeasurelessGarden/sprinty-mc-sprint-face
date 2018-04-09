@@ -77,6 +77,7 @@ export const helpCommands = [
       {name: 'straight-forward', input: 'help sprint examples'},
       {name: 'straight-forward', input: 'help sprint example'},
       {name: 'straight-forward', input: 'show sprint examples'},
+      {name: 'natural', input: 'show me some sprint examples'},
     ],
   },
   {

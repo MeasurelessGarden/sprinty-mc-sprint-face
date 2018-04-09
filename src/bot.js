@@ -23,9 +23,14 @@ const triggerHelpCommands = (message, timestamp, channel) => {
       if (_.split(help, '\n').length > 40) {
         // can't send ultra-long messages
         const blocks = _.split(help, '\n\n')
-        const splitAt = blocks.length / 2 + 1
-        channel.send(_.join(_.slice(blocks, 0, splitAt), '\n\n'))
-        channel.send(_.join(_.slice(blocks, splitAt), '\n\n'))
+        let block = _.take(blocks, 4)
+        channel.send(_.join(block, '\n\n'))
+        let working = _.slice(blocks, 4) //_.xorWith(blocks, block, _.isEqual)//_.without(blocks, block)
+        while (working.length > 0) {
+          block = _.take(working, 4)
+          channel.send(_.join(block, '\n\n'))
+          working = _.slice(working, 4) //_.without(working, block)
+        }
       }
       else {
         channel.send(help)
