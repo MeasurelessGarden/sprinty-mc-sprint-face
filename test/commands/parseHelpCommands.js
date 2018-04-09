@@ -83,6 +83,10 @@ sprint [START TIME]
 \t\`sprint :15\` - with clock-minute notation
 \t\`sprint -15\` - deceptive negatives
 
+sprint now
+\t\`sprint now\` - straight-forward
+\t\`lets sprint right now!\` - natural
+
 sprint at [START TIME]
 \t\`ANYONE WANT TO SPRINT AT 25?\` - enthusiastic
 \t\`sprinting around 25?\` - alternate wording
@@ -98,6 +102,13 @@ sprint for [DURATION]
 
 sprint now for [DURATION]
 \t\`sprint now for 32\` - straight-forward
+
+sprint now to [END TIME]
+\t\`sprint now until 32\` - straight-forward
+\t\`well i'm sprinting now to :55\` - natural
+
+sprint to [END TIME]
+\t\`sprint until 15\` - straight-forward
 
 sprint [START TIME] for [DURATION]
 \t\`sprint 57 for 32\` - uncommon start and stop time
@@ -158,6 +169,9 @@ sprint [START TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
 
+sprint now
+\tStart a sprint now. Sprints default to 30 min.
+
 sprint at [START TIME]
 sprint around [START TIME]
 sprinting at [START TIME]
@@ -168,12 +182,26 @@ sprinting around [START TIME]
 sprint for [DURATION]
 sprinting for [DURATION]
 \tDURATION (minutes) - must be in the range [1:60]
-\tStart a sprint in a few minutes (up to an hour). Sprints default to 30 min.
+\tStart a sprint now for the specfied number of minutes (up to an hour).
 
 sprint now for [DURATION]
 sprinting now for [DURATION]
 \tDURATION (minutes) - must be in the range [1:60]
-\tStart a sprint in a few minutes (up to an hour). Sprints default to 30 min.
+\tStart a sprint now for the specfied number of minutes (up to an hour).
+
+sprint now to [END TIME]
+sprint now until [END TIME]
+sprinting now to [END TIME]
+sprinting now until [END TIME]
+\tEND TIME (minutes of hour) - must be in the range [0:59]
+\tStart a sprint now until the specified end time.
+
+sprint to [END TIME]
+sprint until [END TIME]
+sprinting to [END TIME]
+sprinting until [END TIME]
+\tEND TIME (minutes of hour) - must be in the range [0:59]
+\tStart a sprint now until the specified end time.
 
 sprint [START TIME] for [DURATION]
 sprinting [START TIME] for [DURATION]

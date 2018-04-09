@@ -4,6 +4,26 @@
   and as such it may not be appropriate to call the result a 'sprint' yet.
 */
 
+export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
+  // TODO write some dang tests for this!
+  // timestamp, a number representing a time
+  // delta, a number between 1 and 60
+  // endMin, a number between 0 and 59
+  const start = new Date(timestamp)
+  start.setMinutes(start.getMinutes() + delta)
+  start.setSeconds(0)
+  start.setMilliseconds(0)
+  const end = new Date(start) // TODO refactor out the common subcomponents for making times
+  end.setMinutes(endMin)
+  if (end <= start) {
+    end.setHours(end.getHours() + 1)
+  }
+  return {
+    start: start,
+    end: end,
+  }
+}
+
 export const generateSprintInDeltaWithDuration = (
   timestamp,
   delta,
@@ -14,14 +34,9 @@ export const generateSprintInDeltaWithDuration = (
   // delta, a number between 1 and 60
   // duration, a number between 1 and 60
   const start = new Date(timestamp)
-  start.setMinutes(start.getMinutes() + delta) // TODO this is the only real change from the older duration func...
+  start.setMinutes(start.getMinutes() + delta)
   start.setSeconds(0)
   start.setMilliseconds(0)
-  // let timeout = start.getTime() - timestamp
-  // if (timeout < 0) {
-  //   start.setHours(start.getHours() + 1)
-  //   timeout = start.getTime() - timestamp
-  // }
   const end = new Date(start)
   end.setMinutes(end.getMinutes() + duration)
   return {

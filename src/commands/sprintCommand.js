@@ -1,6 +1,7 @@
 import {
   generateSprintWithEndTime,
   generateSprintWithDuration,
+  generateSprintInDeltaWithEndTime,
   generateSprintInDeltaWithDuration,
 } from './timeUtils.js'
 
@@ -130,7 +131,31 @@ const WithNowDurationTemplate = {
     return generateSprintInDeltaWithDuration(args[0], 1, args[1])
   },
   additionalHelp:
-    'Start a sprint in a few minutes (up to an hour). Sprints default to 30 min.',
+    'Start a sprint now for the specfied number of minutes (up to an hour).',
+}
+
+const WithNowEndTimeTemplate = {
+  input: [
+    {
+      name: 'end time',
+      type: 'Number',
+      units: 'minutes of hour',
+      description: 'must be in the range [0:59]',
+      checks: [ arg => arg >= 0, arg => arg < 60 ],
+    },
+  ],
+  call: (...args) => {
+    return generateSprintInDeltaWithEndTime(args[0], 1, args[1])
+  },
+  additionalHelp: 'Start a sprint now until the specified end time.',
+}
+
+const WithNowDefaultTemplate = {
+  input: [],
+  call: (...args) => {
+    return generateSprintInDeltaWithDuration(args[0], 1, 30)
+  },
+  additionalHelp: 'Start a sprint now. Sprints default to 30 min.',
 }
 
 export const sprintCommands = [
@@ -434,18 +459,41 @@ export const sprintCommands = [
       },
     ],
   },
-  // {
-  //   vocabulary: [ [ 'sprint', 'sprinting' ], ['now'], [ 'to', 'until' ], 'Number' ],
-  //   template: WithNowEndTimeTemplate,
-  //   examples: [
-  //     {
-  //       name: 'straight-forward',
-  //       input: 'sprint now until 32',
-  //       startMin: '00',
-  //       endMin: '32',
-  //     },
-  //   ],
-  // },
+  {
+    vocabulary: [ [ 'sprint', 'sprinting' ], [ 'to', 'until' ], 'Number' ],
+    template: WithNowEndTimeTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint until 15',
+        startMin: '01',
+        endMin: '15',
+      },
+    ],
+  },
+  {
+    vocabulary: [
+      [ 'sprint', 'sprinting' ],
+      [ 'now' ],
+      [ 'to', 'until' ],
+      'Number',
+    ],
+    template: WithNowEndTimeTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint now until 32',
+        startMin: '01',
+        endMin: '32',
+      },
+      {
+        name: 'natural',
+        input: "well i'm sprinting now to :55",
+        startMin: '01',
+        endMin: '55',
+      },
+    ],
+  },
   {
     vocabulary: [ [ 'sprint', 'sprinting' ], [ 'now' ], [ 'for' ], 'Number' ],
     template: WithNowDurationTemplate,
@@ -524,6 +572,24 @@ export const sprintCommands = [
         startMin: '59',
         endHour: '01',
         endMin: '29',
+      },
+    ],
+  },
+  {
+    vocabulary: [ [ 'sprint' ], [ 'now' ] ],
+    template: WithNowDefaultTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint now',
+        startMin: '01',
+        endMin: '31',
+      },
+      {
+        name: 'natural',
+        input: 'lets sprint right now!',
+        startMin: '01',
+        endMin: '31',
       },
     ],
   },
