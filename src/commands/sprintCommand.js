@@ -107,6 +107,12 @@ export const sprintCommands = [
         endMin: '30',
       },
       {
+        name: 'alternate wording: sprinting around',
+        input: 'sprinting around 15 to 30',
+        startMin: '15',
+        endMin: '30',
+      },
+      {
         name: 'verbose and natural',
         input: 'anyone want to sprint at :15 to :45?', // TODO flag these help: 'verbose'?
         startMin: '15',
@@ -157,6 +163,12 @@ export const sprintCommands = [
         endMin: '45',
       },
       {
+        name: 'alternate wording',
+        input: 'sprinting 40 until 45',
+        startMin: '40',
+        endMin: '45',
+      },
+      {
         name: 'natural, question',
         input: 'sprint from 13 to 29??',
         startMin: '13',
@@ -187,13 +199,6 @@ export const sprintCommands = [
         endHour: '01',
         endMin: '10',
       },
-      // {
-      //   name: '',
-      //   input: ,
-      //   startMin: '',
-      //   endHour: '',
-      //   endMin: '',
-      // },
     ],
   },
   {
@@ -209,6 +214,12 @@ export const sprintCommands = [
       {
         name: 'natural inquery',
         input: 'sprint at 25 for 30?',
+        startMin: '25',
+        endMin: '55',
+      },
+      {
+        name: 'alternate wording',
+        input: 'sprinting around 25 for 30?',
         startMin: '25',
         endMin: '55',
       },
@@ -319,6 +330,12 @@ export const sprintCommands = [
       {
         name: 'enthusiastic',
         input: 'ANYONE WANT TO SPRINT AT 25?',
+        startMin: '25',
+        endMin: '55',
+      },
+      {
+        name: 'alternate wording',
+        input: 'sprinting around 25?',
         startMin: '25',
         endMin: '55',
       },

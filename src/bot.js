@@ -20,7 +20,16 @@ const triggerHelpCommands = (message, timestamp, channel) => {
   if (channel) {
     const help = createObjFromMessage(helpCommands, message, timestamp)
     if (help) {
-      channel.send(help)
+      if (_.split(help, '\n').length > 40) {
+        // can't send ultra-long messages
+        const blocks = _.split(help, '\n\n')
+        const splitAt = blocks.length / 2 + 1
+        channel.send(_.join(_.slice(blocks, 0, splitAt), '\n\n'))
+        channel.send(_.join(_.slice(blocks, splitAt), '\n\n'))
+      }
+      else {
+        channel.send(help)
+      }
     }
   }
 }

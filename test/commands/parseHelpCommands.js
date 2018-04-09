@@ -85,6 +85,7 @@ sprint [START TIME]
 
 sprint at [START TIME]
 \t\`ANYONE WANT TO SPRINT AT 25?\` - enthusiastic
+\t\`sprinting around 25?\` - alternate wording
 \t\`I want to sprint at :45\` - natural
 \t\`sprint at 20\` - straight-forward
 \t\`sprint at 25\` - straight-forward
@@ -101,6 +102,7 @@ sprint [START TIME] for [DURATION]
 
 sprint at [START TIME] for [DURATION]
 \t\`sprint at 25 for 30?\` - natural inquery
+\t\`sprinting around 25 for 30?\` - alternate wording
 \t\`sprint at 27 for 10 min\` - 10 minute sprint
 \t\`sprint at 20 for 6 min\` - short and sweet
 \t\`sprint at 30 for 14\` - straight-forward
@@ -112,6 +114,7 @@ sprint at [START TIME] for [DURATION]
 
 sprint [START TIME] to [END TIME]
 \t\`let's sprint 40 to 45\` - natural
+\t\`sprinting 40 until 45\` - alternate wording
 \t\`sprint from 13 to 29??\` - natural, question
 \t\`sprint 15 to 25\` - straight-forward
 \t\`sprint 15 to :35\` - clock notation
@@ -122,6 +125,7 @@ sprint at [START TIME] to [END TIME]
 \t\`sprint at :15 to :45\` - straight-forward
 \t\`sprint at :15 until :45\` - alternate wording: until
 \t\`sprint at 15 with extra 5 number to 30\` - potentially confusing extra numbers (maybe deceptive)
+\t\`sprinting around 15 to 30\` - alternate wording: sprinting around
 \t\`anyone want to sprint at :15 to :45?\` - verbose and natural
 \t\`sprint at 35 to 20\` - wraps to next hour
 \t\`sprint at 10 to 59\` - to the end of the hour
