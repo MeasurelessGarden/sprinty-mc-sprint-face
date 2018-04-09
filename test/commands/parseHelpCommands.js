@@ -130,7 +130,15 @@ sprint at [START TIME] to [END TIME]
 \t\`sprint at 35 to 20\` - wraps to next hour
 \t\`sprint at 10 to 59\` - to the end of the hour
 \t\`sprint at 10 to 0\` - to the beginning of the next hour
-\t\`sprint at 10 to 00\` - using two digits for minutes`)
+\t\`sprint at 10 to 00\` - using two digits for minutes
+
+sprint in [DELTA]
+\t\`sprint in 15\` - straight-forward
+
+sprint in [DELTA] for [DURATION]
+\t\`sprint in 15 for 20\` - straight-forward
+\t\`sprint in 60 for 15\` - straight-forward
+\t\`sprint in 60 for 60 minutes\` - straight-forward`)
     })
 
     it('generates a help message for sprints', function(){
@@ -182,7 +190,18 @@ sprinting around [START TIME] to [END TIME]
 sprinting around [START TIME] until [END TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tEND TIME (minutes of hour) - must be in the range [0:59]
-\tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.`)
+\tStart and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.
+
+sprint in [DELTA]
+sprinting in [DELTA]
+\tDELTA (minutes) - must be in the range [1:60]
+\tStart a sprint in a few minutes (up to an hour). Sprints default to 30 min.
+
+sprint in [DELTA] for [DURATION]
+sprinting in [DELTA] for [DURATION]
+\tDELTA (minutes) - must be in the range [1:60]
+\tDURATION (minutes) - must be in the range [1:60]
+\tStart a sprint in a few minutes (up to an hour).`)
     })
   })
 })

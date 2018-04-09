@@ -12,13 +12,14 @@ const unrollCommandExamples = _.map(
     })
   }),
   unroll => {
+    const startHour = unroll.ex.startHour ? `${unroll.ex.startHour}` : '00'
     const endHour = unroll.ex.endHour ? `${unroll.ex.endHour}` : '00'
     return [
       unroll.config,
       unroll.ex,
       {
         start: new Date(
-          Date.parse(`2018-04-07T00:${unroll.ex.startMin}:00.000Z`)
+          Date.parse(`2018-04-07T${startHour}:${unroll.ex.startMin}:00.000Z`)
         ),
         end: new Date(
           Date.parse(`2018-04-07T${endHour}:${unroll.ex.endMin}:00.000Z`)

@@ -1,6 +1,7 @@
 import {
   generateSprintWithEndTime,
   generateSprintWithDuration,
+  generateSprintInDeltaWithDuration,
 } from './timeUtils.js'
 
 // TODO main command: 'sprint' --> @Sprinty help sprint
@@ -74,8 +75,100 @@ const WithDurationDefaultTemplate = {
     'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.',
 }
 
+const WithDeltaDurationTemplate = {
+  input: [
+    {
+      name: 'delta',
+      type: 'Number',
+      units: 'minutes',
+      description: 'must be in the range [1:60]',
+      checks: [ arg => arg > 0, arg => arg <= 60 ],
+    },
+    {
+      name: 'duration',
+      type: 'Number',
+      units: 'minutes',
+      description: 'must be in the range [1:60]',
+      checks: [ arg => arg > 0, arg => arg <= 60 ],
+    },
+  ],
+  call: generateSprintInDeltaWithDuration,
+  // call: (...args) => {
+  //   return generateSprintInDeltaWithDuration(...args, 30)
+  // },
+  additionalHelp: 'Start a sprint in a few minutes (up to an hour).',
+}
+const WithDeltaTemplate = {
+  input: [
+    {
+      name: 'delta',
+      type: 'Number',
+      units: 'minutes',
+      description: 'must be in the range [1:60]',
+      checks: [ arg => arg > 0, arg => arg <= 60 ],
+    },
+  ],
+  call: (...args) => {
+    return generateSprintInDeltaWithDuration(...args, 30)
+  },
+  additionalHelp:
+    'Start a sprint in a few minutes (up to an hour). Sprints default to 30 min.',
+}
+
 export const sprintCommands = [
   // order is used to resolve commands without conflicts
+
+  //sprint in 5 minutes (start sprint in DELTA)
+  {
+    vocabulary: [
+      [ 'sprint', 'sprinting' ], // TODO sprint starting in...
+      [ 'in' ],
+      'Number',
+      [ 'for' ],
+      'Number',
+    ],
+    template: WithDeltaDurationTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint in 15 for 20',
+        startMin: '15',
+        endMin: '35',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint in 60 for 15',
+        startMin: '00',
+        startHour: '01',
+        endHour: '01',
+        endMin: '15',
+      },
+      {
+        name: 'straight-forward',
+        input: 'sprint in 60 for 60 minutes',
+        startMin: '00',
+        startHour: '01',
+        endHour: '02',
+        endMin: '00',
+      },
+    ],
+  },
+  {
+    vocabulary: [
+      [ 'sprint', 'sprinting' ], // TODO sprint starting in...
+      [ 'in' ],
+      'Number',
+    ],
+    template: WithDeltaTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint in 15',
+        startMin: '15',
+        endMin: '45',
+      },
+    ],
+  },
   {
     vocabulary: [
       [ 'sprint', 'sprinting' ],
