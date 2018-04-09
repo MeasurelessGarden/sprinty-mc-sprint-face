@@ -1,7 +1,6 @@
 import {unroll} from '../spec.js'
 import {expect} from 'chai'
 import {
-  substituteVocabularyArgNames,
   substituteInputParamsForHelp,
   generateHelpForCommands,
   generateHelp,
@@ -63,7 +62,7 @@ const twoArgCommand = {
   ],
 }
 
-// const altSpellingCommand = {
+// const altSpellingCommand = { // TODO add this + some examples for it to the tests...
 //   vocabulary: [ ['simple', 'alt'], ['Number'], ['and', 'or'], ['Number'] ],
 //   template: {
 //     input: [
@@ -92,12 +91,6 @@ const twoArgCommand = {
 // }
 
 describe('Help Utils', function(){
-  // describe('substituteVocabularyArgNames', function(){
-  //   it('displays vocabulary options', function() {
-  //     substituteVocabularyArgNames
-  //   })
-  // })
-
   describe('generateHelp', function(){
     it('generates a message with a header', function(){
       const help = generateHelp('Intro Text Here', [

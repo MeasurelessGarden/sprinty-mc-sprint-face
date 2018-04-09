@@ -1,49 +1,13 @@
 var _ = require('lodash')
 
+import {combinations} from './combine.js'
+
 // this one has to do with *raw user messages*
 export const preparseMessage = message => {
   // message, a string typed by a user (assumes no @USERNAME)
   return _.toLower(
     _.trim(_.replace(_.replace(message, /[^\w]/g, ' '), /\s\s*/g, ' '))
   )
-}
-
-//https://codereview.stackexchange.com/questions/52119/calculate-all-possible-combinations-of-an-array-of-arrays-or-strings
-const combinations = array => {
-  if (!array.length) {
-    return []
-  }
-
-  // wrap non-array values
-  // e.g. ['x',['y','z']] becomes [['x'],['y','z']]
-  array = array.map(function(item){
-    return item instanceof Array ? item : [ item ]
-  })
-
-  // internal recursive function
-  function combine(list){
-    var prefixes, combinations
-
-    if (list.length === 1) {
-      return list[0]
-    }
-
-    prefixes = list[0]
-    combinations = combine(list.slice(1)) // recurse
-
-    // produce a flat list of each of the current
-    // set of values prepended to each combination
-    // of the remaining sets.
-    return prefixes.reduce(function(memo, prefix){
-      return memo.concat(
-        combinations.map(function(combination){
-          return [ prefix ].concat(combination)
-        })
-      )
-    }, [])
-  }
-
-  return combine(array)
 }
 
 // this is part of the command itself! or at least - how I structure commands TODO ... no I just need a consistent set of terms. command in this context is different than in another...
@@ -106,7 +70,6 @@ export const convertFunctionArgsToNumbers = (message, command) => {
 export const parseMessageToArgs = (message, vocabulary) => {
   // puts preparse, parse, and convertFunctionArgs together
   const result = _.map(combinations(vocabulary), command => {
-    console.log('???', message, command, vocabulary)
     let m = parseMessageToArray(preparseMessage(message), command)
     if (m.length == command.length) {
       let args = convertFunctionArgsToNumbers(m, command)
@@ -123,7 +86,7 @@ const parseCommandArgs = (messageArgs, templateInputs) => {
     messageArgs.messageAsCommand,
     messageArgs.matchingVocabulary
   )
-  // TODO, somehow use templateInputs to fill in defaults!
+  // TODO, would it be better to use templateInputs to fill in defaults here? probably not, but check...
 }
 
 // TODO I should probably put testing around this function directly...
@@ -151,7 +114,6 @@ export const createObjFromMessage = (commands, message, timestamp) => {
     return parseMessageToArgs(message, config.vocabulary) // TODO how to prevent running this twice? do I care? it bugs me, but it's probably fine
   })
   if (config) {
-    console.log('found config', config)
     const commandArgs = parseCommandArgs(
       parseMessageToArgs(message, config.vocabulary),
       config.template.input

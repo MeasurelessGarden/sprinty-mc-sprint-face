@@ -142,12 +142,6 @@ describe('Parse Utils', function(){
           [ 'sprint', 'Number', 'to', 'Number' ],
           [ 'sprint', 0, 'to', 5 ],
         ],
-        // [
-        //   'convert numbers from alternate vocabulary',
-        //   [ 'sprint', '0', 'to', '5' ],
-        //   [ 'sprint', 'sprinting'], ['Number'], ['to', 'until'], ['Number' ]],
-        //   [ 'sprinting', 0, 'until', 5 ],
-        // ],
       ]
     )
   })
