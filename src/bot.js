@@ -109,6 +109,15 @@ client.on('message', message => {
     return
   } // prevent botception
 
+  if (message.content.includes('\n')) {
+    // ignore multiline messages, they are definitely not commands
+    return
+  }
+  if (_.words(message.content).length > 15) {
+    // ignore long messages, they are probably not commands
+    return
+  }
+
   triggerHelpCommands(
     message.content,
     message.createdTimestamp,
