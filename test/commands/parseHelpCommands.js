@@ -92,6 +92,13 @@ sprint at [START TIME]
 \t\`sprint at 30\` - straight-forward
 \t\`sprint at 59\` - end of the hour
 
+sprint for [DURATION]
+\t\`sprint for 32 minutes\` - implies: start now
+\t\`sprint for 12\` - implies: start now
+
+sprint now for [DURATION]
+\t\`sprint now for 32\` - straight-forward
+
 sprint [START TIME] for [DURATION]
 \t\`sprint 57 for 32\` - uncommon start and stop time
 \t\`shall we sprint :20 for about 55 min?\` - natural and verbose, with clock notation
@@ -157,6 +164,16 @@ sprinting at [START TIME]
 sprinting around [START TIME]
 \tSTART TIME (minutes of hour) - must be in the range [0:59]
 \tStart time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.
+
+sprint for [DURATION]
+sprinting for [DURATION]
+\tDURATION (minutes) - must be in the range [1:60]
+\tStart a sprint in a few minutes (up to an hour). Sprints default to 30 min.
+
+sprint now for [DURATION]
+sprinting now for [DURATION]
+\tDURATION (minutes) - must be in the range [1:60]
+\tStart a sprint in a few minutes (up to an hour). Sprints default to 30 min.
 
 sprint [START TIME] for [DURATION]
 sprinting [START TIME] for [DURATION]

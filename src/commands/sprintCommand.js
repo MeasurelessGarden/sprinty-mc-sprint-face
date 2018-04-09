@@ -98,6 +98,7 @@ const WithDeltaDurationTemplate = {
   // },
   additionalHelp: 'Start a sprint in a few minutes (up to an hour).',
 }
+
 const WithDeltaTemplate = {
   input: [
     {
@@ -110,6 +111,23 @@ const WithDeltaTemplate = {
   ],
   call: (...args) => {
     return generateSprintInDeltaWithDuration(...args, 30)
+  },
+  additionalHelp:
+    'Start a sprint in a few minutes (up to an hour). Sprints default to 30 min.',
+}
+
+const WithNowDurationTemplate = {
+  input: [
+    {
+      name: 'duration',
+      type: 'Number',
+      units: 'minutes',
+      description: 'must be in the range [1:60]',
+      checks: [ arg => arg > 0, arg => arg <= 60 ],
+    },
+  ],
+  call: (...args) => {
+    return generateSprintInDeltaWithDuration(args[0], 1, args[1])
   },
   additionalHelp:
     'Start a sprint in a few minutes (up to an hour). Sprints default to 30 min.',
@@ -413,6 +431,48 @@ export const sprintCommands = [
         input: 'sprint 15 for 1.5 minutes',
         startMin: '15',
         endMin: '16',
+      },
+    ],
+  },
+  // {
+  //   vocabulary: [ [ 'sprint', 'sprinting' ], ['now'], [ 'to', 'until' ], 'Number' ],
+  //   template: WithNowEndTimeTemplate,
+  //   examples: [
+  //     {
+  //       name: 'straight-forward',
+  //       input: 'sprint now until 32',
+  //       startMin: '00',
+  //       endMin: '32',
+  //     },
+  //   ],
+  // },
+  {
+    vocabulary: [ [ 'sprint', 'sprinting' ], [ 'now' ], [ 'for' ], 'Number' ],
+    template: WithNowDurationTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint now for 32',
+        startMin: '01',
+        endMin: '33',
+      },
+    ],
+  },
+  {
+    vocabulary: [ [ 'sprint', 'sprinting' ], [ 'for' ], 'Number' ],
+    template: WithNowDurationTemplate,
+    examples: [
+      {
+        name: 'implies: start now',
+        input: 'sprint for 32 minutes',
+        startMin: '01',
+        endMin: '33',
+      },
+      {
+        name: 'implies: start now',
+        input: 'sprint for 12',
+        startMin: '01',
+        endMin: '13',
       },
     ],
   },
