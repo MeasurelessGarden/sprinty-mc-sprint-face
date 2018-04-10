@@ -1,4 +1,4 @@
-import {generateHelp, generateExamples} from './helpUtils.js'
+import {generateHelp, generateExamples} from '../utils/helpUtils.js'
 
 import {sprintIntro, sprintCommands} from './sprintCommand.js'
 
@@ -94,7 +94,7 @@ export const helpCommands = [
   //   template: HelpListTemplate,
   //   examples: [], // JSUT the commands, in a list, nothing extra // TODO if I do this, I should have more specific types than 'Number' like 'ClockMin' and 'DurationMin' .... or something?
   // },
-  {
+  { // TODO a fun alternate would be: tell me about Command
     vocabulary: [ [ 'help', 'halp' ], 'Command' ],
     template: CommandHelpTemplate,
     examples: [

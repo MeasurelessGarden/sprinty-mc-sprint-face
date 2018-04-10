@@ -3,7 +3,7 @@ import {expect} from 'chai'
 import {
   generateSprintWithEndTime,
   generateSprintWithDuration,
-} from '../../src/commands/timeUtils.js'
+} from '../../src/utils/timeUtils.js'
 
 describe('Time Utils', function(){
   describe('generateSprintWithDuration', function(){

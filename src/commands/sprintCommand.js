@@ -3,7 +3,7 @@ import {
   generateSprintWithDuration,
   generateSprintInDeltaWithEndTime,
   generateSprintInDeltaWithDuration,
-} from './timeUtils.js'
+} from '../utils/timeUtils.js'
 
 // TODO main command: 'sprint' --> @Sprinty help sprint
 // @Sprinty help sprint examples

@@ -1,7 +1,7 @@
 var _ = require('lodash')
 import {unroll} from '../spec.js'
 import {helpIntro, helpCommands} from '../../src/commands/helpCommand.js'
-import {createObjFromMessage} from '../../src/commands/parseUtils.js'
+import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
 // TODO unroll based on examples!

@@ -6,7 +6,7 @@ import {
   convertFunctionArgsToNumbers,
   parseMessageToArgs,
   createObjFromMessage,
-} from '../../src/commands/parseUtils.js'
+} from '../../src/utils/parseUtils.js'
 import {BasicHelpTemplate} from '../../src/commands/helpCommand.js'
 import {expect} from 'chai'
 

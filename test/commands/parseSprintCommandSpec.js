@@ -1,7 +1,7 @@
 var _ = require('lodash')
 import {unroll} from '../spec.js'
 import {sprintCommands} from '../../src/commands/sprintCommand.js'
-import {createObjFromMessage} from '../../src/commands/parseUtils.js'
+import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
 // TODO this is probably a convoluted way to create the structure I want to unroll...

@@ -5,9 +5,9 @@ import {
   generateHelpForCommands,
   generateHelp,
   listExamples,
-  generateExamplesForCommands, // TODO
-  generateExamples, // TODO
-} from '../../src/commands/helpUtils.js'
+  generateExamplesForCommands,
+  generateExamples,
+} from '../../src/utils/helpUtils.js'
 
 const simpleCommand = {
   vocabulary: [ [ 'simple' ], 'Number' ],

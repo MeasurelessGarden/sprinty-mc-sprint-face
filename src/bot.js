@@ -1,6 +1,6 @@
 import {sprintCommands} from './commands/sprintCommand.js'
 import {helpCommands} from './commands/helpCommand.js'
-import {createObjFromMessage} from './commands/parseUtils.js'
+import {createObjFromMessage} from './utils/parseUtils.js'
 const Discord = require('discord.js')
 var auth = require('./secret.json')
 var fs = require('fs')
@@ -50,10 +50,11 @@ const endSprint = () => {
 const triggerSprintCommands = (message, timestamp, channel) => {
   const sprint = createObjFromMessage(sprintCommands, message, timestamp)
   if (sprint) {
+    // TODO if I mock out cache, client, and channel, I can move this whole block into a tested method probably
     if (cache.timeout.end) {
       return 'ERR_SPRINT_RUNNING_ALREADY'
     }
-    const timeout = {
+    const timeout = { // TODO move to the sprint object!
       start: sprint.start.getTime() - timestamp,
       end: sprint.end.getTime() - timestamp,
     }
