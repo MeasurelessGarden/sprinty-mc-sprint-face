@@ -3,11 +3,9 @@ import {helpCommands} from './commands/helpCommand.js'
 import {createObjFromMessage} from './commands/parseUtils.js'
 const Discord = require('discord.js')
 var auth = require('./secret.json')
-var yaml = require('js-yaml')
 var fs = require('fs')
 var _ = require('lodash')
 
-let config = yaml.load(fs.readFileSync('./config.yml', {encoding: 'utf-8'}))
 const client = new Discord.Client()
 
 client.on('ready', () => {
