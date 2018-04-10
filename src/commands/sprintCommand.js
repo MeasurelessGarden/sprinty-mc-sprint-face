@@ -13,62 +13,46 @@ export const sprintIntro = `There are many valid ways to start a sprint.`
 /*
 Examples:
 ///should we go at 10?
+// TODO should we go again at 10? (ie: start another)
 */
 
+const MinuteOfHourInput = name => {
+  return {
+    name: name,
+    type: 'Number', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
+    units: 'minutes of hour',
+    description: 'must be in the range [0:59]',
+    checks: [ arg => arg >= 0, arg => arg < 60 ],
+  }
+}
+
+const MinutesInput = name => {
+  // the name 'MinutesInput' does not accurately reflect that it's *up to 60 minutes*
+  return {
+    name: name,
+    type: 'Number',
+    units: 'minutes',
+    description: 'must be in the range [1:60]',
+    checks: [ arg => arg > 0, arg => arg <= 60 ],
+  }
+}
+
 const WithEndTimeTemplate = {
-  input: [
-    {
-      name: 'start time',
-      type: 'Number', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
-      units: 'minutes of hour',
-      description: 'must be in the range [0:59]',
-      checks: [ arg => arg >= 0, arg => arg < 60 ],
-    },
-    {
-      name: 'end time',
-      type: 'Number',
-      units: 'minutes of hour',
-      description: 'must be in the range [0:59]',
-      checks: [ arg => arg >= 0, arg => arg < 60 ],
-    },
-  ],
+  input: [ MinuteOfHourInput('start time'), MinuteOfHourInput('end time') ],
   call: generateSprintWithEndTime,
   additionalHelp:
     'Start and end times are always assumed to be in the future and correctly ordered, so the final result will jump forward by an hour if needed to create a valid sprint.',
 }
 
 const WithDurationTemplate = {
-  input: [
-    {
-      name: 'start time',
-      type: 'Number',
-      units: 'minutes of hour',
-      description: 'must be in the range [0:59]',
-      checks: [ arg => arg >= 0, arg => arg < 60 ],
-    },
-    {
-      name: 'duration',
-      type: 'Number',
-      units: 'minutes',
-      description: 'must be in the range [1:60]',
-      checks: [ arg => arg > 0, arg => arg <= 60 ],
-    },
-  ],
+  input: [ MinuteOfHourInput('start time'), MinutesInput('duration') ],
   call: generateSprintWithDuration,
   additionalHelp:
     'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints cannot be longer than an hour.',
 }
 
 const WithDurationDefaultTemplate = {
-  input: [
-    {
-      name: 'start time',
-      type: 'Number',
-      units: 'minutes of hour',
-      description: 'must be in the range [0:59]',
-      checks: [ arg => arg >= 0, arg => arg < 60 ],
-    },
-  ],
+  input: [ MinuteOfHourInput('start time') ],
   call: (...args) => {
     return generateSprintWithDuration(...args, 30)
   },
@@ -77,39 +61,13 @@ const WithDurationDefaultTemplate = {
 }
 
 const WithDeltaDurationTemplate = {
-  input: [
-    {
-      name: 'delta',
-      type: 'Number',
-      units: 'minutes',
-      description: 'must be in the range [1:60]',
-      checks: [ arg => arg > 0, arg => arg <= 60 ],
-    },
-    {
-      name: 'duration',
-      type: 'Number',
-      units: 'minutes',
-      description: 'must be in the range [1:60]',
-      checks: [ arg => arg > 0, arg => arg <= 60 ],
-    },
-  ],
+  input: [ MinutesInput('delta'), MinutesInput('duration') ],
   call: generateSprintInDeltaWithDuration,
-  // call: (...args) => {
-  //   return generateSprintInDeltaWithDuration(...args, 30)
-  // },
   additionalHelp: 'Start a sprint in a few minutes (up to an hour).',
 }
 
 const WithDeltaTemplate = {
-  input: [
-    {
-      name: 'delta',
-      type: 'Number',
-      units: 'minutes',
-      description: 'must be in the range [1:60]',
-      checks: [ arg => arg > 0, arg => arg <= 60 ],
-    },
-  ],
+  input: [ MinutesInput('delta') ],
   call: (...args) => {
     return generateSprintInDeltaWithDuration(...args, 30)
   },
@@ -118,15 +76,7 @@ const WithDeltaTemplate = {
 }
 
 const WithNowDurationTemplate = {
-  input: [
-    {
-      name: 'duration',
-      type: 'Number',
-      units: 'minutes',
-      description: 'must be in the range [1:60]',
-      checks: [ arg => arg > 0, arg => arg <= 60 ],
-    },
-  ],
+  input: [ MinutesInput('duration') ],
   call: (...args) => {
     return generateSprintInDeltaWithDuration(args[0], 1, args[1])
   },
@@ -135,15 +85,7 @@ const WithNowDurationTemplate = {
 }
 
 const WithNowEndTimeTemplate = {
-  input: [
-    {
-      name: 'end time',
-      type: 'Number',
-      units: 'minutes of hour',
-      description: 'must be in the range [0:59]',
-      checks: [ arg => arg >= 0, arg => arg < 60 ],
-    },
-  ],
+  input: [ MinuteOfHourInput('end time') ],
   call: (...args) => {
     return generateSprintInDeltaWithEndTime(args[0], 1, args[1])
   },
@@ -160,8 +102,6 @@ const WithNowDefaultTemplate = {
 
 export const sprintCommands = [
   // order is used to resolve commands without conflicts
-
-  //sprint in 5 minutes (start sprint in DELTA)
   {
     vocabulary: [
       [ 'sprint', 'sprinting' ], // TODO sprint starting in...
