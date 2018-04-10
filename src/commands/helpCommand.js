@@ -94,7 +94,8 @@ export const helpCommands = [
   //   template: HelpListTemplate,
   //   examples: [], // JSUT the commands, in a list, nothing extra // TODO if I do this, I should have more specific types than 'Number' like 'ClockMin' and 'DurationMin' .... or something?
   // },
-  { // TODO a fun alternate would be: tell me about Command
+  {
+    // TODO a fun alternate would be: tell me about Command
     vocabulary: [ [ 'help', 'halp' ], 'Command' ],
     template: CommandHelpTemplate,
     examples: [

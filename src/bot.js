@@ -54,7 +54,8 @@ const triggerSprintCommands = (message, timestamp, channel) => {
     if (cache.timeout.end) {
       return 'ERR_SPRINT_RUNNING_ALREADY'
     }
-    const timeout = { // TODO move to the sprint object!
+    const timeout = {
+      // TODO move to the sprint object!
       start: sprint.start.getTime() - timestamp,
       end: sprint.end.getTime() - timestamp,
     }
