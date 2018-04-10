@@ -15,6 +15,13 @@ Sprinty parses many commands out of normally phrased text, so it's important to 
 
 Capitalization and punctation don't matter. Not to xem, anyway.`
 
+const CommandInput = {
+  name: 'command',
+  type: 'Command', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
+  description: 'must be one of: sprint', // TODO this has some duplication in parseUtils for anything ever to work (for now)
+  checks: [ arg => arg == 'sprint' ], // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
+}
+
 export const BasicHelpTemplate = {
   // exact: true, // TODO need to figure out how to test this - for now, it'll just depend on the same matching everything else does
   input: [],
@@ -27,14 +34,7 @@ export const BasicHelpTemplate = {
 
 const CommandHelpTemplate = {
   // exact: true,
-  input: [
-    {
-      name: 'command',
-      type: 'Command', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
-      description: 'must be one of: sprint', // TODO this has some duplication in parseUtils for anything ever to work (for now)
-      checks: [ arg => arg == 'sprint' ], // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
-    },
-  ],
+  input: [ CommandInput ],
   call: (...args) => {
     // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
     // I guess I could test it with `help help` ....
@@ -45,14 +45,7 @@ const CommandHelpTemplate = {
 }
 
 const CommandHelpExamplesTemplate = {
-  input: [
-    {
-      name: 'command', // TODO pull out const input shared between commands....
-      type: 'Command',
-      description: 'must be one of: sprint',
-      checks: [ arg => arg == 'sprint' ],
-    },
-  ],
+  input: [ CommandInput ],
   call: (...args) => {
     // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
     // I guess I could test it with `help help` ....
