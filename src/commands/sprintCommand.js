@@ -16,6 +16,9 @@ Examples:
 // TODO should we go again at 10? (ie: start another)
 */
 
+// TODO 'sprint now for 1' did .... *not* behave very well
+// TODO bc 'sprint in 2 for 3' is also zero length? wtf why is that valid? what is happening?
+
 const MinuteOfHourInput = name => {
   return {
     name: name,

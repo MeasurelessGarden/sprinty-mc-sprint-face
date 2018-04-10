@@ -1,6 +1,8 @@
 import {sprintCommands} from './commands/sprintCommand.js'
 import {helpCommands} from './commands/helpCommand.js'
 import {createObjFromMessage} from './utils/parseUtils.js'
+import {runSprintCommand} from './bot/helper.js'
+
 const Discord = require('discord.js')
 var auth = require('./secret.json')
 var fs = require('fs')
@@ -48,39 +50,43 @@ const endSprint = () => {
 }
 
 const triggerSprintCommands = (message, timestamp, channel) => {
-  const sprint = createObjFromMessage(sprintCommands, message, timestamp)
+  // const sprint = createObjFromMessage(sprintCommands, message, timestamp)
+  const sprint = runSprintCommand(message, timestamp)
   if (sprint) {
-    // TODO if I mock out cache, client, and channel, I can move this whole block into a tested method probably
+  //   // TODO if I mock out cache, client, and channel, I can move this whole block into a tested method probably
     if (cache.timeout.end) {
       return 'ERR_SPRINT_RUNNING_ALREADY'
     }
-    const timeout = {
-      // TODO move to the sprint object!
-      start: sprint.start.getTime() - timestamp,
-      end: sprint.end.getTime() - timestamp,
-    }
+  //   const timeout = {
+  //     // TODO move to the sprint object!
+  //     start: sprint.start.getTime() - timestamp,
+  //     end: sprint.end.getTime() - timestamp,
+  //   }
     cache.channel = channel
-    cache.timeout = timeout
-    cache.start = sprint.start
-    cache.end = sprint.end
-    cache.timeout.startId = client.setTimeout(startSprint, timeout.start)
-    cache.timeout.endId = client.setTimeout(endSprint, timeout.end)
+    cache.timeout = sprint.timeout
+    cache.sprint = sprint.sprint
+  //   cache.timeout = timeout
+  //   cache.start = sprint.start
+  //   cache.end = sprint.end
+    cache.timeout.startId = client.setTimeout(startSprint, cache.timeout.start)
+    cache.timeout.endId = client.setTimeout(endSprint, cache.timeout.end)
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
+
   if (message === 'info') {
-    const now = new Date()
+    const now = (new Date()).getTime()
     if (cache.timeout.end) {
       if (cache.start < now) {
-        let until = cache.end.getTime() - now.getTime()
+        let until = cache.sprint.end - now
         until = `${until / 1000 / 60}`
         until = _.replace(until, /\..*/, '')
         channel.send(`There's a sprint right now, for about ${until} minutes.`)
       }
       else {
-        let from = cache.start.getTime() - now.getTime()
+        let from = cache.sprint.start - now
         from = `${from / 1000 / 60}`
         from = _.replace(from, /\..*/, '')
-        let until = cache.end.getTime() - now.getTime()
+        let until = cache.sprint.end - now
         until = `${until / 1000 / 60}`
         until = _.replace(until, /\..*/, '')
         channel.send(
