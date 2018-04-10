@@ -40,7 +40,11 @@ export const generateHelpForCommands = commands => {
 }
 
 export const generateHelp = (intro, commands) => {
-  return [ intro, 'commands:', generateHelpForCommands(commands) ].join('\n\n')
+  // TODO return array instead of join \n\n
+  return _.join(
+    [ intro, 'commands:', generateHelpForCommands(commands) ],
+    '\n\n'
+  )
 }
 
 export const listExamples = command => {
@@ -61,8 +65,9 @@ export const generateExamplesForCommands = commands => {
 }
 
 export const generateExamples = (commandName, commands) => {
-  return [
-    `${commandName} examples:`,
-    generateExamplesForCommands(commands),
-  ].join('\n\n')
+  // TODO return array instead of join \n\n
+  return _.join(
+    [ `${commandName} examples:`, generateExamplesForCommands(commands) ],
+    '\n\n'
+  )
 }

@@ -1,7 +1,7 @@
 import {sprintCommands} from './commands/sprintCommand.js'
 import {helpCommands} from './commands/helpCommand.js'
 import {createObjFromMessage} from './utils/parseUtils.js'
-import {runSprintCommand} from './bot/helper.js'
+import {runSprintCommand, runCancelSprintCommand} from './bot/helper.js'
 
 const Discord = require('discord.js')
 var auth = require('./secret.json')
@@ -21,6 +21,7 @@ const triggerHelpCommands = (message, timestamp, channel) => {
     const help = createObjFromMessage(helpCommands, message, timestamp)
     if (help) {
       if (_.split(help, '\n').length > 40) {
+        // TODO maybe just have help return arrays instead of joining \n\n just to split it again here? then the helper function can make an array of blocks to send
         // can't send ultra-long messages
         const blocks = _.split(help, '\n\n')
         let block = _.take(blocks, 4)
@@ -53,28 +54,20 @@ const triggerSprintCommands = (message, timestamp, channel) => {
   // const sprint = createObjFromMessage(sprintCommands, message, timestamp)
   const sprint = runSprintCommand(message, timestamp)
   if (sprint) {
-  //   // TODO if I mock out cache, client, and channel, I can move this whole block into a tested method probably
+    //   // TODO if I mock out cache, client, and channel, I can move this whole block into a tested method probably
     if (cache.timeout.end) {
       return 'ERR_SPRINT_RUNNING_ALREADY'
     }
-  //   const timeout = {
-  //     // TODO move to the sprint object!
-  //     start: sprint.start.getTime() - timestamp,
-  //     end: sprint.end.getTime() - timestamp,
-  //   }
     cache.channel = channel
     cache.timeout = sprint.timeout
     cache.sprint = sprint.sprint
-  //   cache.timeout = timeout
-  //   cache.start = sprint.start
-  //   cache.end = sprint.end
     cache.timeout.startId = client.setTimeout(startSprint, cache.timeout.start)
     cache.timeout.endId = client.setTimeout(endSprint, cache.timeout.end)
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
 
   if (message === 'info') {
-    const now = (new Date()).getTime()
+    const now = new Date().getTime()
     if (cache.timeout.end) {
       if (cache.start < now) {
         let until = cache.sprint.end - now
@@ -99,13 +92,14 @@ const triggerSprintCommands = (message, timestamp, channel) => {
       return 'NO_SPRINT_TO_INFO'
     }
   }
-  if (message === 'cancel') {
+  if (runCancelSprintCommand(message, timestamp)) {
     if (cache.timeout.end) {
       client.clearTimeout(cache.timeout.startId)
       client.clearTimeout(cache.timeout.endId)
       cache.timeout = {}
       return 'OK_SPRINT_CANCELLED'
     }
+    else return 'NO_SPRINT_TO_INFO'
   }
 }
 
