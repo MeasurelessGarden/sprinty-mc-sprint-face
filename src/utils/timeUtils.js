@@ -4,20 +4,32 @@
   and as such it may not be appropriate to call the result a 'sprint' yet.
 */
 
+const createTimeAtNextMinute = (baseTime, minute) => {
+  const date = new Date(baseTime)
+  date.setMinutes(minute)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
+  if (date <= baseTime) {
+    date.setHours(date.getHours() + 1)
+  }
+  return date
+}
+
+const createTimeWithDelta = (baseTime, minutes) => {
+  const date = new Date(baseTime)
+  date.setMinutes(date.getMinutes() + minutes)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
+  return date
+}
+
 export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
   // TODO write some dang tests for this!
   // timestamp, a number representing a time
   // delta, a number between 1 and 60
   // endMin, a number between 0 and 59
-  const start = new Date(timestamp)
-  start.setMinutes(start.getMinutes() + delta)
-  start.setSeconds(0)
-  start.setMilliseconds(0)
-  const end = new Date(start) // TODO refactor out the common subcomponents for making times
-  end.setMinutes(endMin)
-  if (end <= start) {
-    end.setHours(end.getHours() + 1)
-  }
+  const start = createTimeWithDelta(timestamp, delta)
+  const end = createTimeAtNextMinute(start, endMin)
   return {
     start: start,
     end: end,
@@ -33,12 +45,8 @@ export const generateSprintInDeltaWithDuration = (
   // timestamp, a number representing a time
   // delta, a number between 1 and 60
   // duration, a number between 1 and 60
-  const start = new Date(timestamp)
-  start.setMinutes(start.getMinutes() + delta)
-  start.setSeconds(0)
-  start.setMilliseconds(0)
-  const end = new Date(start)
-  end.setMinutes(end.getMinutes() + duration)
+  const start = createTimeWithDelta(timestamp, delta)
+  const end = createTimeWithDelta(start, duration)
   return {
     start: start,
     end: end,
@@ -49,20 +57,8 @@ export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
   // timestamp, a number representing a time
   // startMin, a number between 0 and 59
   // endMin, a number between 0 and 59
-  const start = new Date(timestamp)
-  start.setMinutes(startMin)
-  start.setSeconds(0)
-  start.setMilliseconds(0)
-  let timeout = start.getTime() - timestamp
-  if (timeout < 0) {
-    start.setHours(start.getHours() + 1)
-    timeout = start.getTime() - timestamp
-  }
-  const end = new Date(start)
-  end.setMinutes(endMin)
-  if (end <= start) {
-    end.setHours(end.getHours() + 1)
-  }
+  const start = createTimeAtNextMinute(timestamp, startMin)
+  const end = createTimeAtNextMinute(start, endMin)
   return {
     start: start,
     end: end,
@@ -73,17 +69,8 @@ export const generateSprintWithDuration = (timestamp, startMin, duration) => {
   // timestamp, a number representing a time
   // start, a number between 0 and 59
   // duration, a number between 1 and 60
-  const start = new Date(timestamp)
-  start.setMinutes(startMin)
-  start.setSeconds(0)
-  start.setMilliseconds(0)
-  let timeout = start.getTime() - timestamp
-  if (timeout < 0) {
-    start.setHours(start.getHours() + 1)
-    timeout = start.getTime() - timestamp
-  }
-  const end = new Date(start)
-  end.setMinutes(end.getMinutes() + duration)
+  const start = createTimeAtNextMinute(timestamp, startMin)
+  const end = createTimeWithDelta(start, duration)
   return {
     start: start,
     end: end,
