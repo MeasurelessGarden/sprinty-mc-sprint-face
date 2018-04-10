@@ -2,22 +2,34 @@ var _ = require('lodash')
 import {unroll} from '../spec.js'
 import {helpIntro, helpCommands} from '../../src/commands/helpCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
-import {expect} from 'chai'
+import {assert, expect} from 'chai'
 
 // TODO unroll based on examples!
-const unrollCommandExamples = _.map(
-  _.flatMap(helpCommands, command => {
-    return _.map(command.examples, example => {
-      return {ex: example, config: command}
-    })
-  }),
-  unroll => {
-    return [ unroll.config, unroll.ex ]
-  }
-)
+// const unrollCommandExamples = _.map(
+//   _.flatMap(helpCommands, command => {
+//     return _.map(command.examples, example => {
+//       return {ex: example, config: command}
+//     })
+//   }),
+//   unroll => {
+//     return [ unroll.config, unroll.ex ]
+//   }
+// )
+
+// const tmp = _.concat([ [ 'command', 'example' ] ], unrollCommandExamples)
+// _.each(tmp, t=> {
+//   // console.log(t)
+//   console.log(t.length)
+//   const help = createObjFromMessage(
+//           helpCommands,
+//           t[1].input,
+//           1523059200000
+//         )
+//   console.log(_.size(help), _.size(_.split(help, '\n\n')))
+// })
 
 describe('Parse Help Command', function(){
-  // TODO I don't get these test failures
+  // TODO generated help example tests are passing now, but are hard to test meaningfully so far....
   // describe('self describing generated tests', function(){
   //   unroll(
   //     'creates help from #example.input',
@@ -27,10 +39,9 @@ describe('Parse Help Command', function(){
   //         args.example.input,
   //         1523059200000
   //       )
-  //       console.log('???', _.head(_.split(help, '\n\n')))
   // expect(help).to.be.a('string') // TODO array
-  // expect( _.head(_.split(help, '\n\n'))).should.be.equals('**Welcome to Sprinty McSprintFace!**')
-  //       expect(_.split(help, '\n\n').length).to.be.equals(11)
+  // // expect( _.size(_.split(help, '\n\n'))).to.be.equal(TODO)
+  // // expect( _.head(_.split(help, '\n\n'))).to.be.equal(TODO)
   //       done()
   //     },
   //     _.concat([ [ 'command', 'example' ] ], unrollCommandExamples)
