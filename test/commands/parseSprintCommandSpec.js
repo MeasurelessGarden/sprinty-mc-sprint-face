@@ -5,13 +5,13 @@ import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
 const exampleDate = (hour, min) => {
-  return new Date(Date.parse(`2018-04-07T${hour}:${min}:00.000Z`))
+  return new Date(Date.parse(`2018-04-07T${hour ? hour : '00'}:${min}:00.000Z`))
 }
 
 const expectedSprint = test => {
   return {
-    start: exampleDate(test.startHour ? test.startHour : '00', test.startMin),
-    end: exampleDate(test.endHour ? test.endHour : '00', test.endMin),
+    start: exampleDate(test.startHour, test.startMin),
+    end: exampleDate(test.endHour, test.endMin),
   }
 }
 
@@ -23,7 +23,7 @@ const unrolledExamples = _.flatMap(sprintCommands, command => {
         command,
         example.tags,
         example.input,
-        exampleDate('00', test.calledAtMin),
+        exampleDate(test.calledAtHour, test.calledAtMin),
         expectedSprint(test),
       ]
     })
