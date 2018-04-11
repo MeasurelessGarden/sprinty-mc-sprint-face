@@ -39,16 +39,6 @@ const unrolledExamplesWithHeader = _.concat(
   unrolledExamples
 )
 
-// console.log('-------------------')
-// console.log('-------------------')
-// console.log('-------------------')
-// _.each(unrolledExamples, ex => {
-//   console.log(ex)
-// })
-// console.log('-------------------')
-// console.log('-------------------')
-// console.log('-------------------')
-
 const unrolledInvalidExamples = _.flatMap(sprintCommands, command => {
   return _.map(command.invalidExamples, invalid => {
     return [ command, invalid ]
@@ -101,6 +91,11 @@ describe('Parse Sprint Command', function(){
           args.calledAt
         )
 
+        /*
+        Verifies that these examples are matching this specific command.
+        Also verifies that even if another command matches it -
+        it produces the same sprint (as long as they parse it the same).
+        */
         expect(sprintFromVocabulary).to.be.equalSprintDefinition(args.expected)
         expect(sprintFromAllSprintCommands).to.be.equalSprintDefinition(
           args.expected

@@ -99,8 +99,6 @@ const WithNowDefaultTemplate = {
   additionalHelp: 'Start a sprint now. Sprints default to 30 min.',
 }
 
-// TODO sprint now for 1, sprint in 2 for 3 .... doesn't work?
-
 export const sprintCommands = [
   // order is used to resolve commands without conflicts
   {
@@ -112,7 +110,6 @@ export const sprintCommands = [
       'Number',
     ],
     template: WithDeltaDurationTemplate,
-    // TODO tag each example (list) - 'basic', 'verbose', 'natural', 'invalid', 'deceptive', 'clock notation', 'long', 'short' - a more formal variation than what's in the name (possibly even generate the name from it?)
     // TODO make tags constants?
     // TODO: ALL TAGS: idk, 'meaning of \'now\'', literal, basic, natural, short long, clock-notation, 'clock behavior', alternate wording,'ambiguous', 'confusing', TODO omg this is horrid: 'clock wrapping hour thing'
     examples: [
@@ -185,20 +182,16 @@ export const sprintCommands = [
       },
     ],
     invalidExamples: [
-      // TODO generate tests from these, as well as more help docs
+      // TODO generate more help docs from these (include explanation if needed?)
       'sprint in 61 for 5',
       'sprint in 15 for 61',
       'sprint in 15 for 0',
       'sprint in 0 for 5',
     ],
-    // ambigulousExamples: [] // TODO these are ones like cancel sprint from 15 to 30 mentinoed elsewhere - go find that and write the example and then also some tests! (test against ALL commands ever)
+    // ambigulousExamples: [] // TODO these are ones like cancel sprint from 15 to 30 mentinoed elsewhere - go find that and write the example and then also some tests! (test against ALL commands ever) - probably not specific to the sprint
   },
   {
-    vocabulary: [
-      [ 'sprint', 'sprinting' ], // TODO sprint starting in...
-      [ 'in' ],
-      'Number',
-    ],
+    vocabulary: [ [ 'sprint', 'sprinting' ], [ 'in' ], 'Number' ],
     template: WithDeltaTemplate,
     examples: [
       {
@@ -207,7 +200,7 @@ export const sprintCommands = [
         tags: [ 'literal', 'basic' ], // TODO use in help (display in general and subset with command)
         tests: [
           {
-            calledAtMin: '00', // TODO generate more complete examples, test that these are matching this exact command, or if there are conflicts (and if those conflicts resolve to the same sprint or not)
+            calledAtMin: '00',
             startMin: '15', // TODO I should probably generate some help docs with all the commands, variations, examples, invalid examples, potential conflicts documented with automated tests (wherever I end up putting those) - and just like 'publish' those, and keep the in-discord help shorter?
             endMin: '45', // TODO following up on above... I need to look over the list of examples and nuke any that are overkill for duplication...
           },
@@ -231,7 +224,6 @@ export const sprintCommands = [
     ],
     template: WithEndTimeTemplate,
     examples: [
-      // TODO test each example against the specific command it belongs to, instead of just the overall command list - otherwise examples could apply to different parsing than they are labeled for! (it's ok if 2 commands parse the same phrase - as long as they parse it the same!)
       {
         // TODO add flag for examples to include in help, and also tests to generate those messages!
         name: 'straight-forward',
@@ -1118,7 +1110,7 @@ export const sprintCommands = [
         tags: [ 'basic' ],
         tests: [
           {
-            calledAtMin: '00', // TODO I'm pretty sure these handful of tests are to test clock-wrapping behavior - if so add more test cases to match
+            calledAtMin: '00',
             startMin: '25',
             endMin: '55',
           },
