@@ -49,7 +49,42 @@ const unrolledExamplesWithHeader = _.concat(
 // console.log('-------------------')
 // console.log('-------------------')
 
+const unrolledInvalidExamples = _.flatMap(sprintCommands, command => {
+  return _.map(command.invalidExamples, invalid => {
+    return [ command, invalid ]
+  })
+})
+
+const unrolledInvalidExamplesWithHeader = _.concat(
+  [ [ 'command', 'input' ] ],
+  unrolledInvalidExamples
+)
+
 describe('Parse Sprint Command', function(){
+  describe('auto-generated invalid input', function(){
+    unroll(
+      'invalid sprint from #input using #command.vocabulary',
+      function(done, args){
+        const sprintFromVocabulary = createObjFromMessage(
+          [ args.command ],
+          args.input,
+          1522815707792
+        )
+
+        const sprintFromAllSprintCommands = createObjFromMessage(
+          sprintCommands,
+          args.input,
+          1522815707792
+        )
+
+        expect(sprintFromVocabulary).to.be.undefined
+        expect(sprintFromAllSprintCommands).to.be.undefined
+        done()
+      },
+      unrolledInvalidExamplesWithHeader
+    )
+  })
+
   describe('auto-generated tests vs single command and all sprint commands', function(){
     unroll(
       'creates sprint from #input using #command.vocabulary, #tags (when called at #calledAt)',
@@ -75,114 +110,4 @@ describe('Parse Sprint Command', function(){
       unrolledExamplesWithHeader
     )
   })
-
-  unroll(
-    'validates a sprint to control length #message - #reason',
-    function(done, args){
-      const sprint = createObjFromMessage(
-        sprintCommands,
-        args.message,
-        1522815707792
-      )
-      if (args.expected) {
-        expect(sprint).to.be.equalSprintDefinition(args.expected)
-      }
-      else {
-        expect(sprint).to.be.undefined
-      }
-      done()
-    },
-    [
-      [ 'reason', 'message', 'expected' ],
-      [
-        'an hour is allowed',
-        'sprint at 10 for 60', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T06:10:00.000Z')),
-        },
-      ],
-      [
-        'sprints cannot be longer than an hour',
-        'sprint at 10 for 61', // TODO add all the undefineds to 'invalid tests'
-        undefined,
-      ],
-      [
-        'sprints of no length make zero sense',
-        'sprint at 10 for 0',
-        undefined,
-      ],
-      [
-        'sprints of 1 minute are ok',
-        'sprint at 10 for 1', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T05:11:00.000Z')),
-        },
-      ],
-      [
-        'sprints of 1 minute can be defined multiple ways',
-        'sprint at 10 to 11', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T05:11:00.000Z')),
-        },
-      ],
-      [
-        'this notation implies an hour',
-        'sprint 10 to 10', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T06:10:00.000Z')),
-        },
-      ],
-      [
-        'sprint at 59 is fine',
-        'sprint at 59', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T04:59:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T05:29:00.000Z')),
-        },
-      ],
-      [
-        'sprint at 60 is nonsense! what does that mean?',
-        'sprint at 60', // TODO make an 'invalid examples' auto section?
-        undefined,
-      ],
-      [
-        'sprint at 70 is weird! - you cannot create sprints that far in the future',
-        'sprint at 71',
-        undefined,
-      ],
-      [
-        'sprint to 89 is also weird! answer is NO',
-        'sprint at 10 to 89',
-        undefined,
-      ],
-      [
-        'sprint to 59 is fine',
-        'sprint at 10 to 59', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T05:59:00.000Z')),
-        },
-      ],
-      [
-        'sprint to 0 is also fine',
-        'sprint at 10 to 0', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T06:00:00.000Z')),
-        },
-      ],
-      [
-        'numbers like :00 do not confuse anything',
-        'sprint at 10 to 00', // in example: check
-        {
-          start: new Date(Date.parse('2018-04-04T05:10:00.000Z')),
-          end: new Date(Date.parse('2018-04-04T06:00:00.000Z')),
-        },
-      ],
-    ]
-  )
 })
