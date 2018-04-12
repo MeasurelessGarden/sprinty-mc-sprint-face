@@ -96,4 +96,8 @@ export class SprintTracker {
       from
     )} until ${this.formatClockString(until)}.`
   }
+
+  clearSprint = () => {
+    this.cache = {}
+  }
 }

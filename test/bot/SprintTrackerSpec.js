@@ -46,8 +46,10 @@ describe('Sprint Tracker', function(){
         'cancel sprint',
         timestamp + 2208
       )
-      // TODO??? expect(sprintTracker.cache).to.be.deep.equals({  })
+      expect(sprintTracker.cache).to.be.deep.equals(defaultSprint)
       expect(result).to.be.equals(RESPONSES.CANCEL_CONFIRMED)
+      sprintTracker.clearSprint()
+      expect(sprintTracker.cache).to.be.deep.equals({})
     })
 
     it('cancels if sprint already configured (after sprint starts)', function(){
@@ -57,8 +59,10 @@ describe('Sprint Tracker', function(){
         'cancel sprint',
         timestamp + 22208
       )
-      // TODO??? expect(sprintTracker.cache).to.be.deep.equals({  })
+      expect(sprintTracker.cache).to.be.deep.equals(defaultSprint)
       expect(result).to.be.equals(RESPONSES.CANCEL_CONFIRMED)
+      sprintTracker.clearSprint()
+      expect(sprintTracker.cache).to.be.deep.equals({})
     })
   })
 
