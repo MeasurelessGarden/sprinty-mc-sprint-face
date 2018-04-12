@@ -5,6 +5,8 @@ import {cancelSprintCommands} from '../../src/commands/cancelSprintCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {assert, expect} from 'chai'
 
+// TODO make a util to do these checks, since the bot needs to do this stuff too - probably part of helper.js?
+
 describe('conflicting and ambiguous commands', function(){
   unroll(
     '#input matches sprint (#sprint) and cancel (#cancel) commands',

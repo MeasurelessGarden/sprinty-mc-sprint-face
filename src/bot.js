@@ -2,6 +2,8 @@ import {sprintCommands} from './commands/sprintCommand.js'
 import {helpCommands} from './commands/helpCommand.js'
 import {createObjFromMessage} from './utils/parseUtils.js'
 import {runSprintCommand, runCancelSprintCommand} from './bot/helper.js'
+// import {SprintTracker} from './bot/SprintTracker.js'
+const SprintTracker = require('./bot/SprintTracker.js').default
 
 const Discord = require('discord.js')
 var auth = require('./secret.json')
@@ -9,7 +11,7 @@ var fs = require('fs')
 var _ = require('lodash')
 
 const client = new Discord.Client()
-
+const sprintTracker = new SprintTracker()
 client.on('ready', () => {
   console.log('I am ready!')
 })
@@ -51,6 +53,7 @@ const endSprint = () => {
 }
 
 const triggerSprintCommands = (message, timestamp, channel) => {
+  sprintTracker.processCommand(message, timestamp)
   // const sprint = createObjFromMessage(sprintCommands, message, timestamp)
   const sprint = runSprintCommand(message, timestamp)
   if (sprint) {
@@ -66,32 +69,32 @@ const triggerSprintCommands = (message, timestamp, channel) => {
     return 'OK_SPRINT_SET' // TODO need constants apparently....
   }
 
-  if (message === 'info') {
-    const now = new Date().getTime()
-    if (cache.timeout.end) {
-      if (cache.start < now) {
-        let until = cache.sprint.end - now
-        until = `${until / 1000 / 60}`
-        until = _.replace(until, /\..*/, '')
-        channel.send(`There's a sprint right now, for about ${until} minutes.`)
-      }
-      else {
-        let from = cache.sprint.start - now
-        from = `${from / 1000 / 60}`
-        from = _.replace(from, /\..*/, '')
-        let until = cache.sprint.end - now
-        until = `${until / 1000 / 60}`
-        until = _.replace(until, /\..*/, '')
-        channel.send(
-          `There's a sprint in about ${from} minutes, something like ${until -
-            from} minutes.`
-        )
-      }
-    }
-    else {
-      return 'NO_SPRINT_TO_INFO'
-    }
-  }
+  // if (runSprintInfoCommand(message, timestamp)) {
+  //   const now = new Date().getTime()
+  //   if (cache.timeout.end) {
+  //     if (cache.start < now) {
+  //       let until = cache.sprint.end - now
+  //       until = `${until / 1000 / 60}`
+  //       until = _.replace(until, /\..*/, '')
+  //       channel.send(`There's a sprint right now, for about ${until} minutes.`)
+  //     }
+  //     else {
+  //       let from = cache.sprint.start - now
+  //       from = `${from / 1000 / 60}`
+  //       from = _.replace(from, /\..*/, '')
+  //       let until = cache.sprint.end - now
+  //       until = `${until / 1000 / 60}`
+  //       until = _.replace(until, /\..*/, '')
+  //       channel.send(
+  //         `There's a sprint in about ${from} minutes, something like ${until -
+  //           from} minutes.`
+  //       )
+  //     }
+  //   }
+  //   else {
+  //     return 'NO_SPRINT_TO_INFO'
+  //   }
+  // }
   if (runCancelSprintCommand(message, timestamp)) {
     if (cache.timeout.end) {
       client.clearTimeout(cache.timeout.startId)
