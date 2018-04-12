@@ -2,8 +2,7 @@ import {sprintCommands} from './commands/sprintCommand.js'
 import {helpCommands} from './commands/helpCommand.js'
 import {createObjFromMessage} from './utils/parseUtils.js'
 import {runSprintCommand, runCancelSprintCommand} from './bot/helper.js'
-// import {SprintTracker} from './bot/SprintTracker.js'
-const SprintTracker = require('./bot/SprintTracker.js').default
+const SprintTracker = require('./bot/SprintTracker.js').default // no idea why it likes this form
 
 const Discord = require('discord.js')
 var auth = require('./secret.json')
