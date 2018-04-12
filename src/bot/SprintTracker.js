@@ -1,14 +1,22 @@
 var _ = require('lodash')
-import {runSprintCommand, runCancelSprintCommand, runSprintInfoCommand} from './helper.js'
+import {
+  runSprintCommand,
+  runCancelSprintCommand,
+  runSprintInfoCommand,
+} from './helper.js'
 
-const COMMANDS = { // TODO test for conflicts by running through each and verifying not-more-than-one
-  RUN_SPRINT: { call: runSprintCommand },
-  CANCEL_SPRINT: { call: runCancelSprintCommand},
-  SPRINT_INFO: { call: runSprintInfoCommand},
+const COMMANDS = {
+  // TODO test for conflicts by running through each and verifying not-more-than-one
+  RUN_SPRINT: {call: runSprintCommand},
+  CANCEL_SPRINT: {call: runCancelSprintCommand},
+  SPRINT_INFO: {call: runSprintInfoCommand},
 }
 
 export const RESPONSES = {
-  SPRING_IS_GO : 'starting sprint'
+  SPRING_IS_GO: 'starting sprint',
+  SPRINT_ALREADY_CONFIGURED: 'sprint already configured',
+  CANCEL_CONFIRMED: 'cancel sprint confirmed',
+  NO_SPRINT: 'no sprint configured to manage',
 }
 
 export class SprintTracker {
@@ -16,21 +24,7 @@ export class SprintTracker {
     this.cache = {}
   }
 
-// const sprint = runSprintCommand(message, timestamp)
-// if (sprint) {
-//   //   // TODO if I mock out cache, client, and channel, I can move this whole block into a tested method probably
-//   if (cache.timeout.end) {
-//     return 'ERR_SPRINT_RUNNING_ALREADY'
-//   }
-//   cache.channel = channel
-//   cache.timeout = sprint.timeout
-//   cache.sprint = sprint.sprint
-//   cache.timeout.startId = client.setTimeout(startSprint, cache.timeout.start)
-//   cache.timeout.endId = client.setTimeout(endSprint, cache.timeout.end)
-//   return 'OK_SPRINT_SET' // TODO need constants apparently....
-// }
-//
-  setSprint = (sprint) => {
+  setSprint = sprint => {
     this.cache.timeout = sprint.timeout
     this.cache.sprint = sprint.sprint
   }
@@ -40,71 +34,66 @@ export class SprintTracker {
   }
 
   processCommand = (message, timestamp) => {
-    const matchingCommand = _.mapValues(COMMANDS, command  => {
+    const matchingCommand = _.mapValues(COMMANDS, command => {
       return command.call(message, timestamp)
     }) // TODO conflicts if more than one value is defined now
-    const commandKey = _.findKey(matchingCommand, it => it )
-    if(commandKey === 'RUN_SPRINT') {
-      // console.log('run sprint', message, timestamp, matchingCommand[commandKey])
-      if(this.isSprintConfigured()) {
-        return SPRINT_RUNNING_ALREADY
+    const commandKey = _.findKey(matchingCommand, it => it)
+
+    if (commandKey === 'RUN_SPRINT') {
+      if (this.isSprintConfigured()) {
+        return RESPONSES.SPRINT_ALREADY_CONFIGURED
       }
       this.setSprint(matchingCommand[commandKey])
       return RESPONSES.SPRING_IS_GO
-    } else if (commandKey === 'CANCEL_SPRINT') {
-        // console.log('cancel sprint', message, timestamp)
-        if(isSprintConfigured()) {
-          // clearSprint() TODO
-          return CANCEL_CONFIRMED
+      // TODO sprint tracker doesn't have access to client to set timeouts
+      //   cache.timeout.startId = client.setTimeout(startSprint, cache.timeout.start)
+      //   cache.timeout.endId = client.setTimeout(endSprint, cache.timeout.end)
+    }
+    else if (commandKey === 'CANCEL_SPRINT') {
+      // console.log('cancel sprint', message, timestamp)
+      if (this.isSprintConfigured()) {
+        // clearSprint() TODO
+        return RESPONSES.CANCEL_CONFIRMED
+      }
+      return RESPONSES.NO_SPRINT
+    }
+    else if (commandKey === 'SPRINT_INFO') {
+      // console.log('info sprint', message, timestamp)
+      if (this.isSprintConfigured()) {
+        if (this.isSprintStarted(timestamp)) {
+          return this.getCurrentSprintMessage(timestamp)
         }
-        return NO_SPRINT
-    }else if (commandKey === 'SPRINT_INFO') {
-        // console.log('info sprint', message, timestamp)
-        if(isSprintConfigured()) {
-          if(isSprintStarted()) {
-            return getCurrentSprintMessage()
-          }
-          return getPendingSprintMessage()
-        }
-        return NO_SPRINT
+        return this.getPendingSprintMessage(timestamp)
+      }
+      return RESPONSES.NO_SPRINT
     }
   }
-  // if (runCancelSprintCommand(message, timestamp)) {
-  //   if (cache.timeout.end) {
-  //     client.clearTimeout(cache.timeout.startId)
-  //     client.clearTimeout(cache.timeout.endId)
-  //     cache.timeout = {}
-  //     return 'OK_SPRINT_CANCELLED'
-  //   }
-  //   else return 'NO_SPRINT_TO_INFO'
-  // }
 
+  isSprintStarted = timestamp => {
+    return this.cache.sprint.start < timestamp // TODO assumes it doesn't need to check end-time, because sprint cache will be cleared
+  }
 
+  formatClockString = datetime => {
+    const minutes = datetime.getMinutes()
+    const seconds = datetime.getSeconds()
+    // TODO I know there's a better way to format numbers as strings with padding.... but this works
+    return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10
+      ? '0' + seconds
+      : seconds}`
+  }
 
-  // if (runSprintInfoCommand(message, timestamp)) {
-  //   const now = new Date().getTime()
-  //   if (cache.timeout.end) {
-  //     if (cache.start < now) {
-  //       let until = cache.sprint.end - now
-  //       until = `${until / 1000 / 60}`
-  //       until = _.replace(until, /\..*/, '')
-  //       channel.send(`There's a sprint right now, for about ${until} minutes.`)
-  //     }
-  //     else {
-  //       let from = cache.sprint.start - now
-  //       from = `${from / 1000 / 60}`
-  //       from = _.replace(from, /\..*/, '')
-  //       let until = cache.sprint.end - now
-  //       until = `${until / 1000 / 60}`
-  //       until = _.replace(until, /\..*/, '')
-  //       channel.send(
-  //         `There's a sprint in about ${from} minutes, something like ${until -
-  //           from} minutes.`
-  //       )
-  //     }
-  //   }
-  //   else {
-  //     return 'NO_SPRINT_TO_INFO'
-  //   }
-  // }
+  getCurrentSprintMessage = timestamp => {
+    const until = new Date(this.cache.sprint.end - timestamp)
+    return `Currently running a sprint. ${this.formatClockString(
+      until
+    )} remaining.`
+  }
+
+  getPendingSprintMessage = timestamp => {
+    const from = new Date(this.cache.sprint.start - timestamp)
+    const until = new Date(this.cache.sprint.end - timestamp)
+    return `There's a sprint from ${this.formatClockString(
+      from
+    )} until ${this.formatClockString(until)}.`
+  }
 }
