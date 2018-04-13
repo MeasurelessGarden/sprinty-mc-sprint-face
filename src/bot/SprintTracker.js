@@ -29,6 +29,14 @@ export class SprintTracker {
     this.cache.sprint = sprint.sprint
   }
 
+  getStartTimeout = () => {
+    return this.cache.timeout.start
+  }
+
+  getEndTimeout = () => {
+    return this.cache.timeout.end
+  }
+
   isSprintConfigured = () => {
     return this.cache.timeout && this.cache.timeout.end
   }
@@ -75,26 +83,38 @@ export class SprintTracker {
 
   formatClockString = datetime => {
     const minutes = datetime.getMinutes()
+    // const seconds = datetime.getSeconds()
+    // TODO I know there's a better way to format numbers as strings with padding.... but this works
+    // return `${minutes < 10 ? '0' + minutes : minutes} min ${seconds < 10
+    //   ? '0' + seconds
+    //   : seconds} sec`
+    return `:${minutes < 10 ? '0' + minutes : minutes}`
+  }
+
+  formatTimeRemainingString = datetime => {
+    const minutes = datetime.getMinutes()
     const seconds = datetime.getSeconds()
     // TODO I know there's a better way to format numbers as strings with padding.... but this works
-    return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10
-      ? '0' + seconds
-      : seconds}`
+    // return `${minutes < 10 ? '0' + minutes : minutes} min ${seconds < 10
+    //   ? '0' + seconds
+    //   : seconds} sec`
+    return `${minutes} min ${seconds} sec`
   }
 
   getCurrentSprintMessage = timestamp => {
-    const until = new Date(this.cache.sprint.end - timestamp)
-    return `Currently running a sprint. ${this.formatClockString(
-      until
-    )} remaining.`
+    const left = this.formatTimeRemainingString(
+      new Date(this.cache.sprint.end - timestamp)
+    )
+    return `Currently running a sprint. ${left} remaining.`
   }
 
   getPendingSprintMessage = timestamp => {
-    const from = new Date(this.cache.sprint.start - timestamp)
-    const until = new Date(this.cache.sprint.end - timestamp)
-    return `There's a sprint from ${this.formatClockString(
-      from
-    )} until ${this.formatClockString(until)}.`
+    const from = this.formatClockString(new Date(this.cache.sprint.start))
+    const until = this.formatClockString(new Date(this.cache.sprint.end))
+    const remaining = this.formatTimeRemainingString(
+      new Date(this.cache.sprint.start - timestamp)
+    )
+    return `There's a sprint from ${from} until ${until} (starts in ${remaining}).`
   }
 
   clearSprint = () => {

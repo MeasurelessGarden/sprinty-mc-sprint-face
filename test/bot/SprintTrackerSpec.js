@@ -77,13 +77,17 @@ describe('Sprint Tracker', function(){
       sprintTracker.processCommand('sprint now', timestamp)
       expect(sprintTracker.cache).to.be.deep.equals(defaultSprint)
       const result = sprintTracker.processCommand('info', timestamp + 2208)
-      expect(result).to.be.equals("There's a sprint from 00:10 until 30:10.")
+      expect(result).to.be.equals(
+        "There's a sprint from :22 until :52 (starts in 0 min 10 sec)."
+      )
     })
 
     it('replies with message about pending sprint (clock wrapping behavior)', function(){
       sprintTracker.processCommand('sprint in 45', timestamp)
       const result = sprintTracker.processCommand('info', timestamp + 2208)
-      expect(result).to.be.equals("There's a sprint from 44:10 until 14:10.")
+      expect(result).to.be.equals(
+        "There's a sprint from :06 until :36 (starts in 44 min 10 sec)."
+      )
     })
 
     it('replies with message about running sprint just after it started', function(){
@@ -91,7 +95,7 @@ describe('Sprint Tracker', function(){
       expect(sprintTracker.cache).to.be.deep.equals(defaultSprint)
       const result = sprintTracker.processCommand('info', timestamp + 22208)
       expect(result).to.be.equals(
-        'Currently running a sprint. 29:50 remaining.'
+        'Currently running a sprint. 29 min 50 sec remaining.'
       )
     })
 
@@ -100,7 +104,7 @@ describe('Sprint Tracker', function(){
       expect(sprintTracker.cache).to.be.deep.equals(defaultSprint)
       const result = sprintTracker.processCommand('info', timestamp + 1811208)
       expect(result).to.be.equals(
-        'Currently running a sprint. 00:01 remaining.'
+        'Currently running a sprint. 0 min 1 sec remaining.'
       )
     })
   })
