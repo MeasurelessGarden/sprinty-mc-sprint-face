@@ -23,15 +23,6 @@ export const generate = (commandName, generateFunction) => {
   return generateFunction(commandName, command.intro, command.commands)
 }
 
-// export const help = commandName => {
-//   return generateHelp(command.intro, command.commands)
-// }
-//
-// export const examples = commandName => {
-//   const command = COMMAND_LOOKUP[commandName]
-//   return generateExamples(commandName, command.commands)
-// }
-
 // export const runHelpCommand = (message, timestamp) => {
 //   return createObjFromMessage(helpCommands, message, timestamp)
 // }

@@ -5,6 +5,12 @@ import {
   generate,
 } from '../utils/commandUtils.js'
 
+export const TESTS = {
+  SPRINT: 17,
+  ADMIN: 3,
+  HELP: 6,
+}
+
 // TODO replace client id 430905454961623060 with a var
 export const helpIntro = `**Welcome to Sprinty McSprintFace!**
 
@@ -63,37 +69,37 @@ export const helpCommands = [
         name: 'straight-forward',
         input: 'help sprint examples',
         tags: [ 'basic' ],
-        tests: [ {instructions: 16} ],
+        tests: [ {instructions: TESTS.SPRINT - 1} ],
       },
       {
         name: 'straight-forward',
         input: 'help sprint example',
         tags: [ 'basic', 'alternate wording' ],
-        tests: [ {instructions: 16} ],
+        tests: [ {instructions: TESTS.SPRINT - 1} ],
       },
       {
         name: 'straight-forward',
         input: 'show sprint examples',
         tags: [ 'basic', 'alternate wording' ],
-        tests: [ {instructions: 16} ],
+        tests: [ {instructions: TESTS.SPRINT - 1} ],
       },
       {
         name: 'natural',
         input: 'show me some sprint examples',
         tags: [ 'natural' ],
-        tests: [ {instructions: 16} ],
+        tests: [ {instructions: TESTS.SPRINT - 1} ],
       },
       {
         name: 'admin examples',
         input: 'show me some admin examples',
         tags: [ 'natural' ],
-        tests: [ {instructions: 2} ],
+        tests: [ {instructions: TESTS.ADMIN - 1} ],
       },
       {
         name: 'admin examples',
         input: 'help admin example',
         tags: [ 'basic' ],
-        tests: [ {instructions: 2} ],
+        tests: [ {instructions: TESTS.ADMIN - 1} ],
       },
     ],
   },
@@ -105,19 +111,19 @@ export const helpCommands = [
         name: 'straight-forward',
         input: 'help examples',
         tags: [ 'basic' ],
-        tests: [ {instructions: 5} ],
+        tests: [ {instructions: TESTS.HELP - 1} ],
       },
       {
         name: 'straight-forward',
         input: 'help example',
         tags: [ 'basic', 'alternate wording' ],
-        tests: [ {instructions: 5} ],
+        tests: [ {instructions: TESTS.HELP - 1} ],
       },
       {
         name: 'straight-forward',
         input: 'show examples',
         tags: [ 'basic', 'alternate wording' ],
-        tests: [ {instructions: 5} ],
+        tests: [ {instructions: TESTS.HELP - 1} ],
       },
     ],
   },
@@ -136,19 +142,19 @@ export const helpCommands = [
         name: 'sprint',
         input: 'help sprint',
         tags: [ 'basic' ],
-        tests: [ {instructions: 17} ],
+        tests: [ {instructions: TESTS.SPRINT} ],
       },
       {
         name: 'sprint natural',
         input: 'help me create a sprint',
         tags: [ 'natural' ],
-        tests: [ {instructions: 17} ],
+        tests: [ {instructions: TESTS.SPRINT} ],
       },
       {
         name: 'admin',
         input: 'help admin',
         tags: [ 'basic' ],
-        tests: [ {instructions: 3} ],
+        tests: [ {instructions: TESTS.ADMIN} ],
       },
       // TODO invalid: help with sprints
     ],
@@ -161,20 +167,24 @@ export const helpCommands = [
         name: 'basic',
         input: 'help',
         tags: [ 'basic' ],
-        tests: [ {instructions: 6} ],
+        tests: [ {instructions: TESTS.HELP} ],
       },
       {
         name: 'natural inquery',
         input: 'will u help me?',
         tags: [ 'natural' ],
-        tests: [ {instructions: 6} ],
+        tests: [ {instructions: TESTS.HELP} ],
       },
-      {name: 'natural', input: 'help me plz', tests: [ {instructions: 6} ]},
+      {
+        name: 'natural',
+        input: 'help me plz',
+        tests: [ {instructions: TESTS.HELP} ],
+      },
       {
         name: 'natural insistant',
         input: 'YO HELP',
         tags: [ 'natural' ],
-        tests: [ {instructions: 6} ],
+        tests: [ {instructions: TESTS.HELP} ],
       },
     ],
   },

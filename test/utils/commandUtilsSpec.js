@@ -8,6 +8,7 @@ import {
 } from '../../src/utils/commandUtils.js'
 
 import {generateHelp, generateExamples} from '../../src/utils/helpUtils.js'
+import {TESTS} from '../../src/commands/helpCommand.js'
 
 describe('Command Utils', function(){
   describe('isValidCommandName', function(){
@@ -45,9 +46,9 @@ describe('Command Utils', function(){
       },
       [
         [ 'name', 'help', 'examples' ],
-        [ 'sprint', 17, 16 ],
-        [ 'admin', 3, 2 ],
-      ] // TODO put these counts in constants somewhere - I use the same values in numerous tests...
+        [ 'sprint', TESTS.SPRINT, TESTS.SPRINT - 1 ],
+        [ 'admin', TESTS.ADMIN, TESTS.ADMIN - 1 ],
+      ]
     )
   })
 })
