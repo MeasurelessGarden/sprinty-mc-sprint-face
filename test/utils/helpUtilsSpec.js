@@ -94,7 +94,7 @@ const twoArgCommand = {
 describe('Help Utils', function(){
   describe('generateHelp', function(){
     it('generates a message with a header', function(){
-      const help = generateHelp('Intro Text Here', [
+      const help = generateHelp(null, 'Intro Text Here', [
         twoArgCommand,
         simpleCommand,
       ])
@@ -168,7 +168,7 @@ simple [BIG NUM] and [VALUE]
 
   describe('generateExamples', function(){
     it('generates examples for all the commands', function(){
-      const help = generateExamples('command name', [
+      const help = generateExamples('command name', null, [
         twoArgCommand,
         simpleCommand,
       ])

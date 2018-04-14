@@ -2,7 +2,7 @@ import {generateHelp, generateExamples} from '../utils/helpUtils.js'
 import {
   isValidCommandName,
   validCommandsString,
-  lookupCommand,
+  generate,
 } from '../utils/commandUtils.js'
 
 // TODO replace client id 430905454961623060 with a var
@@ -29,9 +29,7 @@ const CommandInput = {
 export const BasicHelpTemplate = {
   // exact: true, // TODO need to figure out how to test this - for now, it'll just depend on the same matching everything else does
   input: [],
-  call: (...args) => {
-    return generateHelp(helpIntro, helpCommands)
-  },
+  call: (...args) => generateHelp('help', helpIntro, helpCommands),
   additionalHelp:
     '(bet you figured out this one!) Please always ask for help in a DM to Sprinty.',
 }
@@ -39,28 +37,20 @@ export const BasicHelpTemplate = {
 const CommandHelpTemplate = {
   // exact: true,
   input: [ CommandInput ],
-  call: (...args) => {
-    const command = lookupCommand(args[1])
-    return generateHelp(command.intro, command.commands)
-  },
+  call: (...args) => generate(args[1], generateHelp),
   additionalHelp:
     'Get more info on running commands. This command must be in a DM.',
 }
 
 const CommandHelpExamplesTemplate = {
   input: [ CommandInput ],
-  call: (...args) => {
-    const command = lookupCommand(args[1])
-    return generateExamples(args[1], command.commands)
-  },
+  call: (...args) => generate(args[1], generateExamples),
   additionalHelp: 'Get examples for commands. This command must be in a DM.',
 }
 
 const HelpExamplesTemplate = {
   input: [],
-  call: (...args) => {
-    return generateExamples('help', helpCommands)
-  },
+  call: (...args) => generateExamples('help', helpIntro, helpCommands),
   additionalHelp: 'Get examples. This command must be in a DM.',
 }
 

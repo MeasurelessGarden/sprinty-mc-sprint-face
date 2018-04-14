@@ -39,7 +39,7 @@ export const generateHelpForCommands = commands => {
   )
 }
 
-export const generateHelp = (intro, commands) => {
+export const generateHelp = (commandName, intro, commands) => {
   return _.concat([ intro, 'commands:' ], generateHelpForCommands(commands))
 }
 
@@ -60,7 +60,7 @@ export const generateExamplesForCommands = commands => {
   )
 }
 
-export const generateExamples = (commandName, commands) => {
+export const generateExamples = (commandName, intro, commands) => {
   return _.concat(
     [ `${commandName} examples:` ],
     generateExamplesForCommands(commands)

@@ -4,8 +4,10 @@ import {expect} from 'chai'
 import {
   isValidCommandName,
   validCommandsString,
-  lookupCommand,
+  generate,
 } from '../../src/utils/commandUtils.js'
+
+import {generateHelp, generateExamples} from '../../src/utils/helpUtils.js'
 
 describe('Command Utils', function(){
   describe('isValidCommandName', function(){
@@ -31,16 +33,21 @@ describe('Command Utils', function(){
     })
   })
 
-  describe('lookupCommand', function(){
+  describe('generate', function(){
     unroll(
-      '#name has an intro and commands',
+      '#name is able to generate #help help and #examples example messages',
       function(done, args){
-        const command = lookupCommand(args.name)
-        expect(_.has(command, 'intro')).to.be.true
-        expect(_.has(command, 'commands')).to.be.true
+        const help = generate(args.name, generateHelp)
+        const examples = generate(args.name, generateExamples)
+        expect(help.length).to.be.equals(args.help)
+        expect(examples.length).to.be.equals(args.examples)
         done()
       },
-      [ [ 'name' ], [ 'sprint' ], [ 'admin' ] ]
+      [
+        [ 'name', 'help', 'examples' ],
+        [ 'sprint', 17, 16 ],
+        [ 'admin', 3, 2 ],
+      ] // TODO put these counts in constants somewhere - I use the same values in numerous tests...
     )
   })
 })
