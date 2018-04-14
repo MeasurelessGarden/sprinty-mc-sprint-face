@@ -36,15 +36,11 @@ export const generateHelpForCommands = commands => {
     _.map(commands, command => {
       return substituteInputParamsForHelp(command).join('\n\t')
     })
-  ).join('\n\n')
+  )
 }
 
 export const generateHelp = (intro, commands) => {
-  // TODO return array instead of join \n\n
-  return _.join(
-    [ intro, 'commands:', generateHelpForCommands(commands) ],
-    '\n\n'
-  )
+  return _.concat([ intro, 'commands:' ], generateHelpForCommands(commands))
 }
 
 export const listExamples = command => {
@@ -61,13 +57,12 @@ export const generateExamplesForCommands = commands => {
     _.map(commands, command => {
       return listExamples(command).join('\n\t')
     })
-  ).join('\n\n')
+  )
 }
 
 export const generateExamples = (commandName, commands) => {
-  // TODO return array instead of join \n\n
-  return _.join(
-    [ `${commandName} examples:`, generateExamplesForCommands(commands) ],
-    '\n\n'
+  return _.concat(
+    [ `${commandName} examples:` ],
+    generateExamplesForCommands(commands)
   )
 }

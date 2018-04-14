@@ -1,5 +1,6 @@
 var _ = require('lodash')
 import {SprintTracker, RESPONSES} from './SprintTracker.js'
+import {runHelpCommand} from './helper.js'
 
 export class Bot {
   constructor(client) {
@@ -44,6 +45,22 @@ export class Bot {
     return response
   }
 
+  triggerHelpCommands = (message, timestamp) => {
+    const help = runHelpCommand(message, timestamp)
+    if (help) {
+      const messages = []
+      let block = _.take(help, 4)
+      let working = _.slice(help, 4)
+      messages.push(_.join(block, '\n\n'))
+      while (working.length > 0) {
+        block = _.take(working, 4)
+        messages.push(_.join(block, '\n\n'))
+        working = _.slice(working, 4)
+      }
+      return messages
+    }
+  }
+
   onMessage = message => {
     // console.log(message)
     if (message.author.bot) {
@@ -59,36 +76,42 @@ export class Bot {
       return
     }
 
-    // TODO triggerHelpCommands(
-    //   message.content,
-    //   message.createdTimestamp,
+    // TODO mentions @ Sprinty
     //   _.find(message.mentions.users.array(), userMention => {
     //     return userMention.id == auth.clientId
     //   })
-    //     ? message.author
-    //     : message.channel.type == 'dm' ? message.channel : null
-    // )
 
-    let result = this.triggerSprintCommands(
-      message.content,
-      message.createdTimestamp
-    )
+    if (message.channel.type == 'dm') {
+      const helpMessages = this.triggerHelpCommands(
+        message.content,
+        message.createdTimestamp
+      )
+      _.each(helpMessages, helpMessage => {
+        message.channel.send(helpMessage)
+      })
+    }
+    else {
+      let result = this.triggerSprintCommands(
+        message.content,
+        message.createdTimestamp
+      )
 
-    if (result === RESPONSES.SPRINT_ALREADY_CONFIGURED) {
-      message.react('😦')
-    }
-    else if (result === RESPONSES.SPRING_IS_GO) {
-      this.channel = message.channel // TODO until it's configurable
-      message.react('💯')
-    }
-    else if (result === RESPONSES.CANCEL_CONFIRMED) {
-      message.react('👍')
-    }
-    else if (result === RESPONSES.NO_SPRINT) {
-      message.react('🤖')
-    }
-    else if (result) {
-      message.channel.send(result)
+      if (result === RESPONSES.SPRINT_ALREADY_CONFIGURED) {
+        message.react('😦')
+      }
+      else if (result === RESPONSES.SPRING_IS_GO) {
+        this.channel = message.channel // TODO until it's configurable
+        message.react('💯')
+      }
+      else if (result === RESPONSES.CANCEL_CONFIRMED) {
+        message.react('👍')
+      }
+      else if (result === RESPONSES.NO_SPRINT) {
+        message.react('🤖')
+      }
+      else if (result) {
+        message.channel.send(result)
+      }
     }
   }
 }

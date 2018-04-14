@@ -51,7 +51,7 @@ describe('Parse Help Command', function(){
   describe('basic help command', function(){
     it('generates examples for help', function(){
       const reply = createObjFromMessage(helpCommands, 'help example', 0)
-      expect(reply).to.be.equals(`help examples:
+      expect(_.join(reply, '\n\n')).to.be.equals(`help examples:
 
 help
 \t\`help\` - basic
@@ -94,7 +94,8 @@ help cancel [COMMAND] examples
 
     it('generates a help message', function(){
       const reply = createObjFromMessage(helpCommands, 'help', 0)
-      expect(reply).to.be.equals(`**Welcome to Sprinty McSprintFace!**
+      expect(_.join(reply, '\n\n')).to.be
+        .equals(`**Welcome to Sprinty McSprintFace!**
 
 First up: typing '<@430905454961623060> help' or 'help <@430905454961623060>' will make this goofy bot try to help you!
 
@@ -166,7 +167,7 @@ show stop [COMMAND] example
         'help cancel sprint example',
         0
       )
-      expect(reply).to.be.equals(`cancel sprint examples:
+      expect(_.join(reply, '\n\n')).to.be.equals(`cancel sprint examples:
 
 cancel sprint
 \t\`cancel sprint\` - straight-forward
@@ -175,7 +176,7 @@ cancel sprint
     })
     it('generates a help message for cancelling sprints', function(){
       const reply = createObjFromMessage(helpCommands, 'help cancel sprint', 0)
-      expect(reply).to.be.equals(`Stop an existing sprint.
+      expect(_.join(reply, '\n\n')).to.be.equals(`Stop an existing sprint.
 
 commands:
 
@@ -192,7 +193,7 @@ stop sprint
         'help sprint info example',
         0
       )
-      expect(reply).to.be.equals(`sprint info examples:
+      expect(_.join(reply, '\n\n')).to.be.equals(`sprint info examples:
 
 sprint info
 \t\`sprint info\` - straight-forward
@@ -200,7 +201,8 @@ sprint info
     })
     it('generates a help message for getting info on current sprint', function(){
       const reply = createObjFromMessage(helpCommands, 'help sprint info', 0)
-      expect(reply).to.be.equals(`Query what sprint is configured.
+      expect(_.join(reply, '\n\n')).to.be
+        .equals(`Query what sprint is configured.
 
 commands:
 
@@ -212,7 +214,7 @@ sprint info
   describe('help sprint command', function(){
     it('generates examples for sprints', function(){
       const reply = createObjFromMessage(helpCommands, 'help sprint example', 0)
-      expect(reply).to.be.equals(`sprint examples:
+      expect(_.join(reply, '\n\n')).to.be.equals(`sprint examples:
 
 sprint [START TIME]
 \t\`sprint 15\` - straight-forward
@@ -297,7 +299,8 @@ sprint in [DELTA] for [DURATION]
 
     it('generates a help message for sprints', function(){
       const reply = createObjFromMessage(helpCommands, 'help sprint', 0)
-      expect(reply).to.be.equals(`There are many valid ways to start a sprint.
+      expect(_.join(reply, '\n\n')).to.be
+        .equals(`There are many valid ways to start a sprint.
 
 commands:
 

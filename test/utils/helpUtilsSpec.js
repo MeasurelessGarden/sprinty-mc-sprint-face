@@ -1,3 +1,4 @@
+var _ = require('lodash')
 import {unroll} from '../spec.js'
 import {expect} from 'chai'
 import {
@@ -97,7 +98,7 @@ describe('Help Utils', function(){
         twoArgCommand,
         simpleCommand,
       ])
-      expect(help).to.be.equals(`Intro Text Here
+      expect(_.join(help, '\n\n')).to.be.equals(`Intro Text Here
 
 commands:
 
@@ -115,7 +116,7 @@ simple [BIG NUM] and [VALUE]
   describe('generateHelpForCommands', function(){
     it('generates a formatted help message', function(){
       const help = generateHelpForCommands([ twoArgCommand, simpleCommand ])
-      expect(help).to.be.equals(`simple [INPUT NUM]
+      expect(_.join(help, '\n\n')).to.be.equals(`simple [INPUT NUM]
 \tINPUT NUM (minutes) - cannot be negative
 \tadditional info
 
@@ -171,7 +172,7 @@ simple [BIG NUM] and [VALUE]
         twoArgCommand,
         simpleCommand,
       ])
-      expect(help).to.be.equals(`command name examples:
+      expect(_.join(help, '\n\n')).to.be.equals(`command name examples:
 
 simple [INPUT NUM]
 \t\`simple 3\` - exact
@@ -185,7 +186,7 @@ simple [BIG NUM] and [VALUE]
   describe('generateExamplesForCommands', function(){
     it('generates a formatted help message', function(){
       const help = generateExamplesForCommands([ twoArgCommand, simpleCommand ])
-      expect(help).to.be.equals(`simple [INPUT NUM]
+      expect(_.join(help, '\n\n')).to.be.equals(`simple [INPUT NUM]
 \t\`simple 3\` - exact
 \t\`a simple example with num 3\` - verbose
 
