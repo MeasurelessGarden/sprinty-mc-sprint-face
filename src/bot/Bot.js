@@ -1,6 +1,6 @@
 var _ = require('lodash')
 import {SprintTracker, RESPONSES} from './SprintTracker.js'
-import {runHelpCommand} from './helper.js'
+import {run} from '../utils/commandRunner.js'
 
 const Discord = require('discord.js') // TODO make this temporary! or something.
 export class Bot {
@@ -47,7 +47,7 @@ export class Bot {
   }
 
   triggerHelpCommands = (message, timestamp) => {
-    const help = runHelpCommand(message, timestamp)
+    const help = run('help', message, timestamp)
     if (help) {
       const messages = []
       let block = _.take(help, 4)

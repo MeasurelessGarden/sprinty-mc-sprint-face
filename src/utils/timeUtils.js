@@ -23,6 +23,21 @@ const createTimeWithDelta = (baseTime, minutes) => {
   return date
 }
 
+const createSprint = (timestamp, start, end) => {
+  return {
+    sprint: {
+      // TODO rename absolute?
+      start: start,
+      end: end,
+    },
+    timeout: {
+      // TODO rename relative?
+      start: start - timestamp,
+      end: end - timestamp,
+    },
+  }
+}
+
 export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
   // TODO write some dang tests for this!
   // timestamp, a number representing a time
@@ -30,10 +45,7 @@ export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
   // endMin, a number between 0 and 59
   const start = createTimeWithDelta(timestamp, delta)
   const end = createTimeAtNextMinute(start, endMin)
-  return {
-    start: start,
-    end: end,
-  }
+  return createSprint(timestamp, start.getTime(), end.getTime())
 }
 
 export const generateSprintInDeltaWithDuration = (
@@ -47,10 +59,7 @@ export const generateSprintInDeltaWithDuration = (
   // duration, a number between 1 and 60
   const start = createTimeWithDelta(timestamp, delta)
   const end = createTimeWithDelta(start, duration)
-  return {
-    start: start,
-    end: end,
-  }
+  return createSprint(timestamp, start.getTime(), end.getTime())
 }
 
 export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
@@ -59,10 +68,7 @@ export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
   // endMin, a number between 0 and 59
   const start = createTimeAtNextMinute(timestamp, startMin)
   const end = createTimeAtNextMinute(start, endMin)
-  return {
-    start: start,
-    end: end,
-  }
+  return createSprint(timestamp, start.getTime(), end.getTime())
 }
 
 export const generateSprintWithDuration = (timestamp, startMin, duration) => {
@@ -71,8 +77,5 @@ export const generateSprintWithDuration = (timestamp, startMin, duration) => {
   // duration, a number between 1 and 60
   const start = createTimeAtNextMinute(timestamp, startMin)
   const end = createTimeWithDelta(start, duration)
-  return {
-    start: start,
-    end: end,
-  }
+  return createSprint(timestamp, start.getTime(), end.getTime())
 }

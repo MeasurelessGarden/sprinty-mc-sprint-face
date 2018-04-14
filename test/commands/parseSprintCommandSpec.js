@@ -4,12 +4,12 @@ import {sprintCommands} from '../../src/commands/sprintCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
+const exampleDateString = (hour, min, sec) => {
+  return `${hour ? hour : '00'}:${min}:${sec ? sec : '00.000'}`
+}
+
 const exampleDate = (hour, min, sec) => {
-  return new Date(
-    Date.parse(
-      `2018-04-07T${hour ? hour : '00'}:${min}:${sec ? sec : '00.000'}Z`
-    )
-  )
+  return Date.parse(`2018-04-07T${exampleDateString(hour, min, sec)}Z`)
 }
 
 const expectedSprint = test => {
@@ -28,6 +28,11 @@ const unrolledExamples = _.flatMap(sprintCommands, command => {
         example.tags,
         example.input,
         exampleDate(test.calledAtHour, test.calledAtMin, test.calledAtSec),
+        exampleDateString(
+          test.calledAtHour,
+          test.calledAtMin,
+          test.calledAtSec
+        ),
         expectedSprint(test),
       ]
     })
@@ -35,7 +40,7 @@ const unrolledExamples = _.flatMap(sprintCommands, command => {
 })
 
 const unrolledExamplesWithHeader = _.concat(
-  [ [ 'command', 'tags', 'input', 'calledAt', 'expected' ] ],
+  [ [ 'command', 'tags', 'input', 'calledAt', 'calledAtLabel', 'expected' ] ],
   unrolledExamples
 )
 
@@ -128,7 +133,7 @@ describe('Parse Sprint Command', function(){
 
   describe('auto-generated tests vs single command and all sprint commands', function(){
     unroll(
-      'creates sprint from #input using #command.vocabulary, #tags (when called at #calledAt)',
+      'creates sprint from #input using #command.vocabulary, #tags (when called at #calledAtLabel)',
       function(done, args){
         const sprintFromVocabulary = createObjFromMessage(
           [ args.command ],

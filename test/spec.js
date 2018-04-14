@@ -34,10 +34,29 @@ chai.Assertion.addChainableMethod('equalSprintDefinition', function(
     expectedSprint._type,
     actualSprint._type
   )
-  this.assert(_.has(actualSprint, 'start'), 'expected sprint to have start')
-  this.assert(_.has(actualSprint, 'end'), 'expected sprint to have end')
-  equalDateTime(expectedSprint.start, actualSprint.start)
-  equalDateTime(expectedSprint.end, actualSprint.end)
+  this.assert(
+    _.has(actualSprint, 'sprint'),
+    'expected definition to have sprint block'
+  )
+  this.assert(
+    _.has(actualSprint, 'timeout'),
+    'expected definition to have timeout block'
+  )
+  this.assert(
+    _.has(actualSprint.sprint, 'start'),
+    'expected sprint to have start'
+  )
+  this.assert(_.has(actualSprint.sprint, 'end'), 'expected sprint to have end')
+  this.assert(
+    _.has(actualSprint.timeout, 'start'),
+    'expected timeout to have start'
+  )
+  this.assert(
+    _.has(actualSprint.timeout, 'end'),
+    'expected timeout to have end'
+  )
+  expect(actualSprint.sprint.start).to.be.equals(expectedSprint.start)
+  expect(actualSprint.sprint.end).to.be.equals(expectedSprint.end)
 })
 
 before(function(){
