@@ -5,7 +5,7 @@
   "main": "bot.js",
   "author": "Measureless",
   "scripts": {
-    "bot": "NODE_ENV=test babel-node src/bot.js",
+    "bot": "NODE_ENV=test babel-node src/main.js",
     "test": "NODE_ENV=test mocha --recursive ./test",
     "format": "find src test -name '*.js' | xargs ./node_modules/.bin/prettier --config .prettierrc.json --write"
   },
