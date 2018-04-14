@@ -1,8 +1,9 @@
+var _ = require('lodash')
 import {generateHelp, generateExamples} from '../utils/helpUtils.js'
 import {sprintIntro, sprintCommands} from './sprintCommand.js'
 import {adminIntro, adminCommands} from './adminCommand.js'
 
-const COMMAND_LOOKUP = {
+export const COMMAND_LOOKUP = {
   sprint: {intro: sprintIntro, commands: sprintCommands},
   admin: {intro: adminIntro, commands: adminCommands},
 }
@@ -23,8 +24,9 @@ Capitalization and punctation don't matter. Not to xem, anyway.`
 const CommandInput = {
   name: 'command',
   type: 'Command', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
-  description: 'must be one of: sprint, admin', // TODO this has some duplication in parseUtils for anything ever to work (for now)
-  checks: [ arg => arg == 'sprint' || arg == 'admin' ], // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
+  description: 'must be one of: ' + _.join(_.keys(COMMAND_LOOKUP).sort(), ', '), // TODO this has some duplication in parseUtils for anything ever to work (for now)
+  checks: [ arg => COMMAND_LOOKUP[arg] ], //
+  // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
 }
 
 export const BasicHelpTemplate = {

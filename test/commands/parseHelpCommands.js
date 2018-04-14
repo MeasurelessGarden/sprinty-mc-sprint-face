@@ -54,7 +54,7 @@ halp
 
 help [COMMAND]
 halp [COMMAND]
-\tCOMMAND - must be one of: sprint, admin
+\tCOMMAND - must be one of: admin, sprint
 \tGet more info on running commands. This command must be in a DM.
 
 help examples
@@ -67,7 +67,7 @@ help [COMMAND] examples
 help [COMMAND] example
 show [COMMAND] examples
 show [COMMAND] example
-\tCOMMAND - must be one of: sprint, admin
+\tCOMMAND - must be one of: admin, sprint
 \tGet examples for commands. This command must be in a DM.`
 
 const helpExamplesMessage = `help examples:
@@ -284,7 +284,7 @@ cancel sprint
 \t\`cancel sprint now\` - careful!
 \t\`cancel sprint info now\` - careful!`
 
-const helpAdminMessage = `Configure Sprinty.
+const helpAdminMessage = `Configure Sprinty. You must have permission to manage channels to use these commands!
 
 commands:
 

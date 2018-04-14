@@ -1,4 +1,5 @@
-export const adminIntro = 'Configure Sprinty.'
+export const adminIntro =
+  'Configure Sprinty. You must have permission to manage channels to use these commands!'
 
 const configureSprintChannelTemplate = {
   input: [],
