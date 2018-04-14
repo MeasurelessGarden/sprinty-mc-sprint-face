@@ -1,7 +1,7 @@
 var _ = require('lodash')
 
 import {combinations} from './combine.js'
-import {COMMAND_LOOKUP} from '../commands/helpCommand.js' // TODO move command lookup to a util
+import {isValidCommandName} from '../utils/commandUtils.js'
 
 // this one has to do with *raw user messages*
 export const preparseMessage = message => {
@@ -22,12 +22,8 @@ export const parseMessageToArray = (message, command) => {
       return Number(value) >= 0 // TODO note that the removal of punctuation means negative numbers cannot happen anyway
     }
     if (_.isEqual(arg, 'Command')) {
-      // TODO validCommands should come from the template
-      const validCommands = _.keys(COMMAND_LOOKUP) // even though I'm not strictly doing validation here, otherwise I'm overmatching weirdly (TODO might not be an issue if I make exact flag work....)
-      return _.find(validCommands, cmd => {
-        return _.isEqual(value, cmd)
-      }) // this doesn't do validation yet - any string looks like a valid command
-      // TODO although if we did validation here, it might be good....
+      return isValidCommandName(value)
+      // TODO if we did validation here (in general), it might be good....
     }
     return _.isEqual(value, arg)
   }

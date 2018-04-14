@@ -1,12 +1,9 @@
-var _ = require('lodash')
 import {generateHelp, generateExamples} from '../utils/helpUtils.js'
-import {sprintIntro, sprintCommands} from './sprintCommand.js'
-import {adminIntro, adminCommands} from './adminCommand.js'
-
-export const COMMAND_LOOKUP = {
-  sprint: {intro: sprintIntro, commands: sprintCommands},
-  admin: {intro: adminIntro, commands: adminCommands},
-}
+import {
+  isValidCommandName,
+  validCommandsString,
+  lookupCommand,
+} from '../utils/commandUtils.js'
 
 // TODO replace client id 430905454961623060 with a var
 export const helpIntro = `**Welcome to Sprinty McSprintFace!**
@@ -24,8 +21,8 @@ Capitalization and punctation don't matter. Not to xem, anyway.`
 const CommandInput = {
   name: 'command',
   type: 'Command', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
-  description: 'must be one of: ' + _.join(_.keys(COMMAND_LOOKUP).sort(), ', '), // TODO this has some duplication in parseUtils for anything ever to work (for now)
-  checks: [ arg => COMMAND_LOOKUP[arg] ], //
+  description: `must be one of: ${validCommandsString}`, // TODO this has some duplication in parseUtils for anything ever to work (for now)
+  checks: [ arg => isValidCommandName(arg) ], //
   // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
 }
 
@@ -43,9 +40,7 @@ const CommandHelpTemplate = {
   // exact: true,
   input: [ CommandInput ],
   call: (...args) => {
-    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
-    // I guess I could test it with `help help` ....
-    const command = COMMAND_LOOKUP[args[1]]
+    const command = lookupCommand(args[1])
     return generateHelp(command.intro, command.commands)
   },
   additionalHelp:
@@ -55,9 +50,7 @@ const CommandHelpTemplate = {
 const CommandHelpExamplesTemplate = {
   input: [ CommandInput ],
   call: (...args) => {
-    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
-    // I guess I could test it with `help help` ....
-    const command = COMMAND_LOOKUP[args[1]]
+    const command = lookupCommand(args[1])
     return generateExamples(args[1], command.commands)
   },
   additionalHelp: 'Get examples for commands. This command must be in a DM.',
