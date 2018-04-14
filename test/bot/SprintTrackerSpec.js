@@ -1,4 +1,3 @@
-// const SprintTracker = require('../../src/bot/SprintTracker.js').default // no idea why it likes this form
 import {expect} from 'chai'
 import {SprintTracker, RESPONSES} from '../../src/bot/SprintTracker.js'
 

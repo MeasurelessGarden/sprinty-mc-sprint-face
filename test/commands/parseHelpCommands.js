@@ -63,6 +63,9 @@ help [COMMAND]
 \t\`help sprint\` - sprint
 \t\`help me create a sprint\` - sprint natural
 
+help [COMMAND] info
+\t\`help sprint info\` - straight-forward
+
 help cancel [COMMAND]
 \t\`help cancel sprint\` - straight-forward
 \t\`halp stop sprint\` - straight-forward
@@ -77,6 +80,10 @@ help [COMMAND] examples
 \t\`help sprint example\` - straight-forward
 \t\`show sprint examples\` - straight-forward
 \t\`show me some sprint examples\` - natural
+
+help [COMMAND] info examples
+\t\`help sprint info examples\` - straight-forward
+\t\`show me some sprint info examples\` - natural
 
 help cancel [COMMAND] examples
 \t\`help cancel sprint examples\` - straight-forward
@@ -110,6 +117,10 @@ halp [COMMAND]
 \tCOMMAND - must be one of: sprint
 \tGet more info on starting sprints. This command must be in a DM.
 
+help [COMMAND] info
+\tCOMMAND - must be one of: sprint
+\tGet more info on examining current sprint. This command must be in a DM.
+
 help cancel [COMMAND]
 help stop [COMMAND]
 \tCOMMAND - must be one of: sprint
@@ -127,6 +138,13 @@ show [COMMAND] examples
 show [COMMAND] example
 \tCOMMAND - must be one of: sprint
 \tGet examples for commands. This command must be in a DM.
+
+help [COMMAND] info examples
+help [COMMAND] info example
+show [COMMAND] info examples
+show [COMMAND] info example
+\tCOMMAND - must be one of: sprint
+\tGet examples for examining current sprint. This command must be in a DM.
 
 help cancel [COMMAND] examples
 help cancel [COMMAND] example
@@ -164,6 +182,30 @@ commands:
 cancel sprint
 stop sprint
 \tThere's not much to cancelling sprints.`)
+    })
+  })
+
+  describe('help sprint info command', function(){
+    it('generates examples for getting info on current sprint', function(){
+      const reply = createObjFromMessage(
+        helpCommands,
+        'help sprint info example',
+        0
+      )
+      expect(reply).to.be.equals(`sprint info examples:
+
+sprint info
+\t\`sprint info\` - straight-forward
+\t\`gimme the sprint info plz~!!\` - natural`)
+    })
+    it('generates a help message for getting info on current sprint', function(){
+      const reply = createObjFromMessage(helpCommands, 'help sprint info', 0)
+      expect(reply).to.be.equals(`Query what sprint is configured.
+
+commands:
+
+sprint info
+\tGet the current sprint information.`)
     })
   })
 

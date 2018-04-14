@@ -2,6 +2,7 @@ import {generateHelp, generateExamples} from '../utils/helpUtils.js'
 
 import {sprintIntro, sprintCommands} from './sprintCommand.js'
 import {cancelSprintIntro, cancelSprintCommands} from './cancelSprintCommand.js'
+import {sprintInfoIntro, sprintInfoCommands} from './sprintInfoCommand.js'
 
 // TODO replace client id 430905454961623060 with a var
 export const helpIntro = `**Welcome to Sprinty McSprintFace!**
@@ -45,6 +46,18 @@ const CancelCommandHelpTemplate = {
     'Get more info on cancelling sprints. This command must be in a DM.', // TODO this message is sprint specific too - will need to change for when there are more commands supported
 }
 
+const InfoCommandHelpTemplate = {
+  input: [ CommandInput ],
+  call: (...args) => {
+    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
+    // I guess I could test it with `help help` ....
+    return generateHelp(sprintInfoIntro, sprintInfoCommands)
+  },
+  // TODO make it so it actually *does* have to be in a DM
+  additionalHelp:
+    'Get more info on examining current sprint. This command must be in a DM.', // TODO this message is sprint specific too - will need to change for when there are more commands supported
+}
+
 const CommandHelpTemplate = {
   // exact: true,
   input: [ CommandInput ],
@@ -65,6 +78,16 @@ const CancelCommandHelpExamplesTemplate = {
   },
   additionalHelp:
     'Get examples for cancelling commands. This command must be in a DM.',
+}
+
+const InfoCommandHelpExamplesTemplate = {
+  input: [ CommandInput ],
+  call: (...args) => {
+    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
+    return generateExamples('sprint info', sprintInfoCommands)
+  },
+  additionalHelp:
+    'Get examples for examining current sprint. This command must be in a DM.',
 }
 
 const CommandHelpExamplesTemplate = {
@@ -102,6 +125,19 @@ export const helpCommands = [
     ],
   },
   {
+    vocabulary: [
+      [ 'help', 'show' ],
+      'Command',
+      [ 'info' ],
+      [ 'examples', 'example' ],
+    ],
+    template: InfoCommandHelpExamplesTemplate,
+    examples: [
+      {name: 'straight-forward', input: 'help sprint info examples'},
+      {name: 'natural', input: 'show me some sprint info examples'},
+    ],
+  },
+  {
     vocabulary: [ [ 'help', 'show' ], 'Command', [ 'examples', 'example' ] ],
     template: CommandHelpExamplesTemplate,
     examples: [
@@ -133,6 +169,11 @@ export const helpCommands = [
       {name: 'straight-forward', input: 'help cancel sprint'},
       {name: 'straight-forward', input: 'halp stop sprint'},
     ],
+  },
+  {
+    vocabulary: [ [ 'help' ], 'Command', 'info' ],
+    template: InfoCommandHelpTemplate,
+    examples: [ {name: 'straight-forward', input: 'help sprint info'} ],
   },
   {
     // TODO a fun alternate would be: tell me about Command

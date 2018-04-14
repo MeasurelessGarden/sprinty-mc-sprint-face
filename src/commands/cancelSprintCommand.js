@@ -1,4 +1,4 @@
-export const cancelSprintIntro = `Stop an existing sprint.`
+export const cancelSprintIntro = 'Stop an existing sprint.'
 
 const CancelSprintTemplate = {
   input: [],
