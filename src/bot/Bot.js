@@ -62,24 +62,16 @@ export class Bot {
     }
   }
 
+  triggerAdminCommands = (message, timestamp) => {
+    const admin = run('admin', message, timestamp)
+    if (admin) {
+      // TODO assumes all admin commands are the same thing (which is true.... for now)
+      return 'CONFIGURE'
+    }
+  }
+
   onMessage = message => {
     // console.log(message)
-
-    // TODO roles check breaks in a DM!!
-    // _.each(message.member.roles.array(), role => {
-    //   const permission = new Discord.Permissions(
-    //     message.member,
-    //     role.permissions
-    //   )
-    //   console.log(
-    //     'admin?',
-    //     permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR)
-    //   )
-    //   console.log(
-    //     'manage channels?',
-    //     permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
-    //   )
-    // })
 
     if (message.author.bot) {
       return
@@ -109,26 +101,55 @@ export class Bot {
       })
     }
     else {
-      let result = this.triggerSprintCommands(
-        message.content,
-        message.createdTimestamp
-      )
+      const isBotAdmin = _.find(message.member.roles.array(), role => {
+        const permission = new Discord.Permissions(
+          message.member,
+          role.permissions
+        )
+        // console.log(
+        //   'admin?',
+        //   permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR)
+        // )
+        // console.log(
+        //   'manage channels?',
+        //   permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
+        // )
+        return (
+          permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR) ||
+          permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
+        )
+      })
+      if (
+        isBotAdmin &&
+        this.triggerAdminCommands(message.content, message.createdTimestamp) ==
+          'CONFIGURE'
+      ) {
+        this.sprintChannel = message.channel
+        message.react('👍')// '<U+1F44D>' // TODO get more emojis...
+      }
 
-      if (result === RESPONSES.SPRINT_ALREADY_CONFIGURED) {
-        message.react('😦')
-      }
-      else if (result === RESPONSES.SPRINT_IS_GO) {
-        this.channel = message.channel // TODO until it's configurable
-        message.react('💯')
-      }
-      else if (result === RESPONSES.CANCEL_CONFIRMED) {
-        message.react('👍')
-      }
-      else if (result === RESPONSES.NO_SPRINT) {
-        message.react('🤖')
-      }
-      else if (result) {
-        message.channel.send(result)
+      if (message.channel == this.sprintChannel) {
+        let result = this.triggerSprintCommands(
+          message.content,
+          message.createdTimestamp
+        )
+
+        if (result === RESPONSES.SPRINT_ALREADY_CONFIGURED) {
+          message.react('😦')
+        }
+        else if (result === RESPONSES.SPRINT_IS_GO) {
+          this.channel = message.channel // TODO until it's configurable
+          message.react('💯')
+        }
+        else if (result === RESPONSES.CANCEL_CONFIRMED) {
+          message.react('👍')
+        }
+        else if (result === RESPONSES.NO_SPRINT) {
+          message.react('🤖')
+        }
+        else if (result) {
+          message.channel.send(result)
+        }
       }
     }
   }
