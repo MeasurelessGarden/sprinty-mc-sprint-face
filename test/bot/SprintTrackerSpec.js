@@ -17,7 +17,7 @@ describe('Sprint Tracker', function(){
     it('configures sprint if none already', function(){
       const result = sprintTracker.processCommand('sprint now', timestamp)
       expect(sprintTracker.cache).to.be.deep.equals(defaultSprint)
-      expect(result).to.be.equals(RESPONSES.SPRING_IS_GO)
+      expect(result).to.be.equals(RESPONSES.SPRINT_IS_GO)
     })
 
     it('responds if sprint already configured', function(){

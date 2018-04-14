@@ -1,8 +1,5 @@
 import {generateHelp, generateExamples} from '../utils/helpUtils.js'
-
 import {sprintIntro, sprintCommands} from './sprintCommand.js'
-import {cancelSprintIntro, cancelSprintCommands} from './cancelSprintCommand.js'
-import {sprintInfoIntro, sprintInfoCommands} from './sprintInfoCommand.js'
 
 // TODO replace client id 430905454961623060 with a var
 export const helpIntro = `**Welcome to Sprinty McSprintFace!**
@@ -201,6 +198,5 @@ export const helpCommands = [
       {name: 'natural', input: 'help me plz'},
       {name: 'natural insistant', input: 'YO HELP'},
     ],
-    // examples: []
   },
 ]

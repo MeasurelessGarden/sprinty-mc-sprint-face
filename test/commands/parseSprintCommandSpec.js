@@ -39,6 +39,27 @@ const unrolledExamplesWithHeader = _.concat(
   unrolledExamples
 )
 
+const unrollCommandExamplesWithoutTests = _.filter(
+  _.flatMap(sprintCommands, command => {
+    return _.map(command.examples, example => {
+      if (!example.tests) {
+        const expected = command.template.additionalHelp.includes('cancel')
+          ? 'cancel'
+          : command.template.additionalHelp.includes('info')
+            ? 'info'
+            : undefined
+        return [ command, example.input, expected ]
+      }
+    })
+  }),
+  it => it
+)
+
+const unrollCommandExamplesWithoutTestsWithHeader = _.concat(
+  [ [ 'command', 'input', 'expected' ] ],
+  unrollCommandExamplesWithoutTests
+)
+
 const unrolledInvalidExamples = _.flatMap(sprintCommands, command => {
   return _.map(command.invalidExamples, invalid => {
     return [ command, invalid ]
@@ -51,6 +72,36 @@ const unrolledInvalidExamplesWithHeader = _.concat(
 )
 
 describe('Parse Sprint Command', function(){
+  describe('auto-generated commands with no automatic tests', function(){
+    unroll(
+      'creates a command from #input - expects #expected',
+      function(done, args){
+        const sprintFromVocabulary = createObjFromMessage(
+          // TODO sprintFromVocabulary is weird bc it's not a sprint, it's a sprintCommandResolved or something, but whatever
+          [ args.command ],
+          args.input,
+          1523059200000
+        )
+
+        const sprintFromAllSprintCommands = createObjFromMessage(
+          sprintCommands,
+          args.input,
+          1523059200000
+        )
+
+        /*
+        Verifies that these examples are matching this specific command.
+        Also verifies that even if another command matches it -
+        it produces the same sprint (as long as they parse it the same).
+        */
+        expect(sprintFromVocabulary).to.be.equals(args.expected)
+        expect(sprintFromAllSprintCommands).to.be.equals(args.expected)
+        done()
+      },
+      unrollCommandExamplesWithoutTestsWithHeader
+    )
+  })
+
   describe('auto-generated invalid input', function(){
     unroll(
       'invalid sprint from #input using #command.vocabulary',

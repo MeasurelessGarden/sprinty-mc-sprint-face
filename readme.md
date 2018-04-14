@@ -12,7 +12,7 @@
 # Run the bot locally
 
 1. npm install
-1. npm run dev
+1. npm run bot
 
 # Development commands
 

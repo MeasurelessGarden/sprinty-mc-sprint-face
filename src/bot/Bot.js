@@ -2,6 +2,7 @@ var _ = require('lodash')
 import {SprintTracker, RESPONSES} from './SprintTracker.js'
 import {runHelpCommand} from './helper.js'
 
+const Discord = require('discord.js') // TODO make this temporary! or something.
 export class Bot {
   constructor(client) {
     this.client = client
@@ -27,7 +28,7 @@ export class Bot {
   triggerSprintCommands = (message, timestamp) => {
     const response = this.sprintTracker.processCommand(message, timestamp)
 
-    if (response === RESPONSES.SPRING_IS_GO) {
+    if (response === RESPONSES.SPRINT_IS_GO) {
       this.start = this.client.setTimeout(
         this.startSprint,
         this.sprintTracker.getStartTimeout()
@@ -63,6 +64,21 @@ export class Bot {
 
   onMessage = message => {
     // console.log(message)
+    _.each(message.member.roles.array(), role => {
+      const permission = new Discord.Permissions(
+        message.member,
+        role.permissions
+      )
+      console.log(
+        'admin?',
+        permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR)
+      )
+      console.log(
+        'manage channels?',
+        permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
+      )
+    })
+
     if (message.author.bot) {
       return
     } // prevent botception
@@ -99,7 +115,7 @@ export class Bot {
       if (result === RESPONSES.SPRINT_ALREADY_CONFIGURED) {
         message.react('😦')
       }
-      else if (result === RESPONSES.SPRING_IS_GO) {
+      else if (result === RESPONSES.SPRINT_IS_GO) {
         this.channel = message.channel // TODO until it's configurable
         message.react('💯')
       }

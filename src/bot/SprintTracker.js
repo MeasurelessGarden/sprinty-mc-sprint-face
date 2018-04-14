@@ -1,19 +1,8 @@
 var _ = require('lodash')
-import {
-  runSprintCommand,
-  runCancelSprintCommand,
-  runSprintInfoCommand,
-} from './helper.js'
-
-const COMMANDS = {
-  // TODO test for conflicts by running through each and verifying not-more-than-one
-  RUN_SPRINT: {call: runSprintCommand},
-  CANCEL_SPRINT: {call: runCancelSprintCommand},
-  SPRINT_INFO: {call: runSprintInfoCommand},
-}
+import {runSprintCommand} from './helper.js'
 
 export const RESPONSES = {
-  SPRING_IS_GO: 'starting sprint',
+  SPRINT_IS_GO: 'starting sprint',
   SPRINT_ALREADY_CONFIGURED: 'sprint already configured',
   CANCEL_CONFIRMED: 'cancel sprint confirmed',
   NO_SPRINT: 'no sprint configured to manage',
@@ -42,31 +31,14 @@ export class SprintTracker {
   }
 
   processCommand = (message, timestamp) => {
-    const matchingCommand = _.mapValues(COMMANDS, command => {
-      return command.call(message, timestamp)
-    }) // TODO conflicts if more than one value is defined now
-    const commandKey = _.findKey(matchingCommand, it => it)
-
-    if (commandKey === 'RUN_SPRINT') {
+    const command = runSprintCommand(message, timestamp)
+    if (command === 'cancel') {
       if (this.isSprintConfigured()) {
-        return RESPONSES.SPRINT_ALREADY_CONFIGURED
-      }
-      this.setSprint(matchingCommand[commandKey])
-      return RESPONSES.SPRING_IS_GO
-      // TODO sprint tracker doesn't have access to client to set timeouts
-      //   cache.timeout.startId = client.setTimeout(startSprint, cache.timeout.start)
-      //   cache.timeout.endId = client.setTimeout(endSprint, cache.timeout.end)
-    }
-    else if (commandKey === 'CANCEL_SPRINT') {
-      // console.log('cancel sprint', message, timestamp)
-      if (this.isSprintConfigured()) {
-        // clearSprint() TODO
         return RESPONSES.CANCEL_CONFIRMED
       }
       return RESPONSES.NO_SPRINT
     }
-    else if (commandKey === 'SPRINT_INFO') {
-      // console.log('info sprint', message, timestamp)
+    else if (command === 'info') {
       if (this.isSprintConfigured()) {
         if (this.isSprintStarted(timestamp)) {
           return this.getCurrentSprintMessage(timestamp)
@@ -74,6 +46,13 @@ export class SprintTracker {
         return this.getPendingSprintMessage(timestamp)
       }
       return RESPONSES.NO_SPRINT
+    }
+    else if (command) {
+      if (this.isSprintConfigured()) {
+        return RESPONSES.SPRINT_ALREADY_CONFIGURED
+      }
+      this.setSprint(command)
+      return RESPONSES.SPRINT_IS_GO
     }
   }
 
@@ -83,7 +62,6 @@ export class SprintTracker {
 
   formatClockString = datetime => {
     const minutes = datetime.getMinutes()
-    // const seconds = datetime.getSeconds()
     // TODO I know there's a better way to format numbers as strings with padding.... but this works
     // return `${minutes < 10 ? '0' + minutes : minutes} min ${seconds < 10
     //   ? '0' + seconds
@@ -94,10 +72,6 @@ export class SprintTracker {
   formatTimeRemainingString = datetime => {
     const minutes = datetime.getMinutes()
     const seconds = datetime.getSeconds()
-    // TODO I know there's a better way to format numbers as strings with padding.... but this works
-    // return `${minutes < 10 ? '0' + minutes : minutes} min ${seconds < 10
-    //   ? '0' + seconds
-    //   : seconds} sec`
     return `${minutes} min ${seconds} sec`
   }
 

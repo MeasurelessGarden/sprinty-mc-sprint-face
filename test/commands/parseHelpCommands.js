@@ -160,57 +160,6 @@ show stop [COMMAND] example
     })
   })
 
-  describe('help cancel sprint command', function(){
-    it('generates examples for cancelling sprints', function(){
-      const reply = createObjFromMessage(
-        helpCommands,
-        'help cancel sprint example',
-        0
-      )
-      expect(_.join(reply, '\n\n')).to.be.equals(`cancel sprint examples:
-
-cancel sprint
-\t\`cancel sprint\` - straight-forward
-\t\`stop sprint\` - straight-forward
-\t\`plz stop the sprint i can't take it!!!\` - natural`)
-    })
-    it('generates a help message for cancelling sprints', function(){
-      const reply = createObjFromMessage(helpCommands, 'help cancel sprint', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(`Stop an existing sprint.
-
-commands:
-
-cancel sprint
-stop sprint
-\tThere's not much to cancelling sprints.`)
-    })
-  })
-
-  describe('help sprint info command', function(){
-    it('generates examples for getting info on current sprint', function(){
-      const reply = createObjFromMessage(
-        helpCommands,
-        'help sprint info example',
-        0
-      )
-      expect(_.join(reply, '\n\n')).to.be.equals(`sprint info examples:
-
-sprint info
-\t\`sprint info\` - straight-forward
-\t\`gimme the sprint info plz~!!\` - natural`)
-    })
-    it('generates a help message for getting info on current sprint', function(){
-      const reply = createObjFromMessage(helpCommands, 'help sprint info', 0)
-      expect(_.join(reply, '\n\n')).to.be
-        .equals(`Query what sprint is configured.
-
-commands:
-
-sprint info
-\tGet the current sprint information.`)
-    })
-  })
-
   describe('help sprint command', function(){
     it('generates examples for sprints', function(){
       const reply = createObjFromMessage(helpCommands, 'help sprint example', 0)
@@ -294,13 +243,25 @@ sprint in [DELTA]
 sprint in [DELTA] for [DURATION]
 \t\`sprint in 15 for 20\` - straight-forward
 \t\`sprint in 60 for 15\` - straight-forward
-\t\`sprint in 60 for 60 minutes\` - straight-forward`)
+\t\`sprint in 60 for 60 minutes\` - straight-forward
+
+sprint info
+\t\`sprint info\` - straight-forward
+\t\`gimme the sprint info plz~!!\` - natural
+\t\`sprint info now\` - careful!
+
+cancel sprint
+\t\`cancel sprint\` - straight-forward
+\t\`stop sprint\` - straight-forward
+\t\`plz stop the sprint i can't take it!!!\` - natural
+\t\`cancel sprint now\` - careful!
+\t\`cancel sprint info now\` - careful!`)
     })
 
     it('generates a help message for sprints', function(){
       const reply = createObjFromMessage(helpCommands, 'help sprint', 0)
       expect(_.join(reply, '\n\n')).to.be
-        .equals(`There are many valid ways to start a sprint.
+        .equals(`There are many valid ways to manage a sprint.
 
 commands:
 
@@ -385,7 +346,14 @@ sprint in [DELTA] for [DURATION]
 sprinting in [DELTA] for [DURATION]
 \tDELTA (minutes) - must be in the range [1:60]
 \tDURATION (minutes) - must be in the range [1:60]
-\tStart a sprint in a few minutes (up to an hour).`)
+\tStart a sprint in a few minutes (up to an hour).
+
+sprint info
+\tGet information on the configured sprint.
+
+cancel sprint
+stop sprint
+\tThere's not much to cancelling sprints.`)
     })
   })
 })

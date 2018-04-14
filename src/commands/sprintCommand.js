@@ -7,7 +7,7 @@ import {
 
 // TODO main command: 'sprint' --> @Sprinty help sprint
 // @Sprinty help sprint examples
-export const sprintIntro = `There are many valid ways to start a sprint.`
+export const sprintIntro = 'There are many valid ways to manage a sprint.'
 
 /*
 Examples:
@@ -99,8 +99,80 @@ const WithNowDefaultTemplate = {
   additionalHelp: 'Start a sprint now. Sprints default to 30 min.',
 }
 
+const CancelSprintTemplate = {
+  input: [],
+  call: (...args) => {
+    return 'cancel' // TODO I need a const, probably
+  },
+  additionalHelp: "There's not much to cancelling sprints.",
+}
+
+const SprintInfoTemplate = {
+  input: [],
+  call: (...args) => {
+    return 'info' // TODO I need a const, probably
+  },
+  additionalHelp: 'Get information on the configured sprint.',
+}
+
 export const sprintCommands = [
   // order is used to resolve commands without conflicts
+  {
+    vocabulary: [
+      [ 'cancel', 'stop' ],
+      [ 'sprint' ],
+      // TODO note, regardless of overall command order, 'stop sprint at 30' is ambiguous..... maybe I need a thing to resolve if different commands respond to the same trigger, (or diff vocab results within the same command....)
+    ],
+    template: CancelSprintTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'cancel sprint',
+        tags: [ 'literal', 'basic' ],
+      },
+      {
+        name: 'straight-forward',
+        input: 'stop sprint',
+        tags: [ 'literal', 'basic', 'alternate wording' ],
+      },
+      {
+        name: 'natural',
+        input: "plz stop the sprint i can't take it!!!",
+        tags: [ 'natural' ],
+      },
+      {
+        name: 'careful!',
+        input: 'cancel sprint now',
+        tags: [ 'ambiguous', 'confusing' ],
+      },
+      {
+        name: 'careful!',
+        input: 'cancel sprint info now',
+        tags: [ 'ambiguous', 'confusing' ],
+      },
+    ],
+  },
+  {
+    vocabulary: [ [ 'sprint' ], [ 'info' ] ],
+    template: SprintInfoTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'sprint info',
+        tags: [ 'literal', 'basic' ],
+      },
+      {
+        name: 'natural',
+        input: 'gimme the sprint info plz~!!',
+        tags: [ 'natural' ],
+      },
+      {
+        name: 'careful!',
+        input: 'sprint info now',
+        tags: [ 'ambiguous', 'confusing' ],
+      },
+    ],
+  },
   {
     vocabulary: [
       [ 'sprint', 'sprinting' ], // TODO sprint starting in...
