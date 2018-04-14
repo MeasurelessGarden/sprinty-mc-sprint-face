@@ -64,20 +64,22 @@ export class Bot {
 
   onMessage = message => {
     // console.log(message)
-    _.each(message.member.roles.array(), role => {
-      const permission = new Discord.Permissions(
-        message.member,
-        role.permissions
-      )
-      console.log(
-        'admin?',
-        permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR)
-      )
-      console.log(
-        'manage channels?',
-        permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
-      )
-    })
+
+    // TODO roles check breaks in a DM!!
+    // _.each(message.member.roles.array(), role => {
+    //   const permission = new Discord.Permissions(
+    //     message.member,
+    //     role.permissions
+    //   )
+    //   console.log(
+    //     'admin?',
+    //     permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR)
+    //   )
+    //   console.log(
+    //     'manage channels?',
+    //     permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
+    //   )
+    // })
 
     if (message.author.bot) {
       return

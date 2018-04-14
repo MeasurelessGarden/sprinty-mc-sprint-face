@@ -4,49 +4,56 @@ import {helpIntro, helpCommands} from '../../src/commands/helpCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {assert, expect} from 'chai'
 
-// TODO unroll based on examples!
-// const unrollCommandExamples = _.map(
-//   _.flatMap(helpCommands, command => {
-//     return _.map(command.examples, example => {
-//       return {ex: example, config: command}
-//     })
-//   }),
-//   unroll => {
-//     return [ unroll.config, unroll.ex ]
-//   }
-// )
+const unrolledExamples = _.flatMap(helpCommands, command => {
+  return _.flatMap(command.examples, example => {
+    return _.map(example.tests, test => {
+      return [
+        // calledAt date is the zeroth hour of the day, to make the startHour, endHour easy to predict from example definitions
+        command,
+        example.tags,
+        example.input,
+        test.instructions,
+      ]
+    })
+  })
+})
 
-// const tmp = _.concat([ [ 'command', 'example' ] ], unrollCommandExamples)
-// _.each(tmp, t=> {
-//   // console.log(t)
-//   console.log(t.length)
-//   const help = createObjFromMessage(
-//           helpCommands,
-//           t[1].input,
-//           1523059200000
-//         )
-//   console.log(_.size(help), _.size(_.split(help, '\n\n')))
-// })
+const unrolledExamplesWithHeader = _.concat(
+  [ [ 'command', 'tags', 'input', 'expected' ] ],
+  unrolledExamples
+)
+
+const unrollUntestedExamples = _.filter(
+  _.flatMap(helpCommands, command => {
+    return _.map(command.examples, example => {
+      if (!example.tests) {
+        return [ command, example.input ]
+      }
+    })
+  }),
+  it => it
+)
 
 describe('Parse Help Command', function(){
-  // TODO generated help example tests are passing now, but are hard to test meaningfully so far....
-  // describe('self describing generated tests', function(){
-  //   unroll(
-  //     'creates help from #example.input',
-  //     function(done, args){
-  //       const help = createObjFromMessage(
-  //         helpCommands,
-  //         args.example.input,
-  //         1523059200000
-  //       )
-  // expect(help).to.be.a('string') // TODO array
-  // // expect( _.size(_.split(help, '\n\n'))).to.be.equal(TODO)
-  // // expect( _.head(_.split(help, '\n\n'))).to.be.equal(TODO)
-  //       done()
-  //     },
-  //     _.concat([ [ 'command', 'example' ] ], unrollCommandExamples)
-  //   )
-  // })
+  describe('self describing generated tests', function(){
+    it('has no untested examples', function(){
+      expect(unrollUntestedExamples.length).to.be.equal(0)
+    })
+
+    unroll(
+      'creates help from #input - expects #expected instructions',
+      function(done, args){
+        const help = createObjFromMessage(
+          helpCommands,
+          args.input,
+          1523059200000
+        )
+        expect(help.length).to.be.equal(args.expected)
+        done()
+      },
+      unrolledExamplesWithHeader
+    )
+  })
 
   describe('basic help command', function(){
     it('generates examples for help', function(){
@@ -63,13 +70,6 @@ help [COMMAND]
 \t\`help sprint\` - sprint
 \t\`help me create a sprint\` - sprint natural
 
-help [COMMAND] info
-\t\`help sprint info\` - straight-forward
-
-help cancel [COMMAND]
-\t\`help cancel sprint\` - straight-forward
-\t\`halp stop sprint\` - straight-forward
-
 help examples
 \t\`help examples\` - straight-forward
 \t\`help example\` - straight-forward
@@ -79,17 +79,7 @@ help [COMMAND] examples
 \t\`help sprint examples\` - straight-forward
 \t\`help sprint example\` - straight-forward
 \t\`show sprint examples\` - straight-forward
-\t\`show me some sprint examples\` - natural
-
-help [COMMAND] info examples
-\t\`help sprint info examples\` - straight-forward
-\t\`show me some sprint info examples\` - natural
-
-help cancel [COMMAND] examples
-\t\`help cancel sprint examples\` - straight-forward
-\t\`help stop sprint example\` - straight-forward
-\t\`show stop sprint examples\` - straight-forward
-\t\`show me some cancel sprint examples\` - natural`)
+\t\`show me some sprint examples\` - natural`)
     })
 
     it('generates a help message', function(){
@@ -116,16 +106,7 @@ halp
 help [COMMAND]
 halp [COMMAND]
 \tCOMMAND - must be one of: sprint
-\tGet more info on starting sprints. This command must be in a DM.
-
-help [COMMAND] info
-\tCOMMAND - must be one of: sprint
-\tGet more info on examining current sprint. This command must be in a DM.
-
-help cancel [COMMAND]
-help stop [COMMAND]
-\tCOMMAND - must be one of: sprint
-\tGet more info on cancelling sprints. This command must be in a DM.
+\tGet more info on running commands. This command must be in a DM.
 
 help examples
 help example
@@ -138,25 +119,7 @@ help [COMMAND] example
 show [COMMAND] examples
 show [COMMAND] example
 \tCOMMAND - must be one of: sprint
-\tGet examples for commands. This command must be in a DM.
-
-help [COMMAND] info examples
-help [COMMAND] info example
-show [COMMAND] info examples
-show [COMMAND] info example
-\tCOMMAND - must be one of: sprint
-\tGet examples for examining current sprint. This command must be in a DM.
-
-help cancel [COMMAND] examples
-help cancel [COMMAND] example
-help stop [COMMAND] examples
-help stop [COMMAND] example
-show cancel [COMMAND] examples
-show cancel [COMMAND] example
-show stop [COMMAND] examples
-show stop [COMMAND] example
-\tCOMMAND - must be one of: sprint
-\tGet examples for cancelling commands. This command must be in a DM.`)
+\tGet examples for commands. This command must be in a DM.`)
     })
   })
 

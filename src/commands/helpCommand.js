@@ -31,30 +31,6 @@ export const BasicHelpTemplate = {
     '(bet you figured out this one!) Please always ask for help in a DM to Sprinty.',
 }
 
-const CancelCommandHelpTemplate = {
-  input: [ CommandInput ],
-  call: (...args) => {
-    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
-    // I guess I could test it with `help help` ....
-    return generateHelp(cancelSprintIntro, cancelSprintCommands)
-  },
-  // TODO make it so it actually *does* have to be in a DM
-  additionalHelp:
-    'Get more info on cancelling sprints. This command must be in a DM.', // TODO this message is sprint specific too - will need to change for when there are more commands supported
-}
-
-const InfoCommandHelpTemplate = {
-  input: [ CommandInput ],
-  call: (...args) => {
-    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
-    // I guess I could test it with `help help` ....
-    return generateHelp(sprintInfoIntro, sprintInfoCommands)
-  },
-  // TODO make it so it actually *does* have to be in a DM
-  additionalHelp:
-    'Get more info on examining current sprint. This command must be in a DM.', // TODO this message is sprint specific too - will need to change for when there are more commands supported
-}
-
 const CommandHelpTemplate = {
   // exact: true,
   input: [ CommandInput ],
@@ -64,27 +40,7 @@ const CommandHelpTemplate = {
     return generateHelp(sprintIntro, sprintCommands)
   },
   additionalHelp:
-    'Get more info on starting sprints. This command must be in a DM.', // TODO this message is sprint specific too - will need to change for when there are more commands supported
-}
-
-const CancelCommandHelpExamplesTemplate = {
-  input: [ CommandInput ],
-  call: (...args) => {
-    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
-    return generateExamples('cancel sprint', cancelSprintCommands)
-  },
-  additionalHelp:
-    'Get examples for cancelling commands. This command must be in a DM.',
-}
-
-const InfoCommandHelpExamplesTemplate = {
-  input: [ CommandInput ],
-  call: (...args) => {
-    // TODO once we have more commands, this will have to look at arg[1] (arg[0] is timestamp) and switch on which intro/commands to put into the function.
-    return generateExamples('sprint info', sprintInfoCommands)
-  },
-  additionalHelp:
-    'Get examples for examining current sprint. This command must be in a DM.',
+    'Get more info on running commands. This command must be in a DM.',
 }
 
 const CommandHelpExamplesTemplate = {
@@ -106,51 +62,68 @@ const HelpExamplesTemplate = {
 }
 
 export const helpCommands = [
-  {
-    vocabulary: [
-      [ 'help', 'show' ],
-      [ 'cancel', 'stop' ],
-      'Command',
-      [ 'examples', 'example' ],
-    ],
-    template: CancelCommandHelpExamplesTemplate,
-    examples: [
-      {name: 'straight-forward', input: 'help cancel sprint examples'},
-      {name: 'straight-forward', input: 'help stop sprint example'},
-      {name: 'straight-forward', input: 'show stop sprint examples'},
-      {name: 'natural', input: 'show me some cancel sprint examples'},
-    ],
-  },
-  {
-    vocabulary: [
-      [ 'help', 'show' ],
-      'Command',
-      [ 'info' ],
-      [ 'examples', 'example' ],
-    ],
-    template: InfoCommandHelpExamplesTemplate,
-    examples: [
-      {name: 'straight-forward', input: 'help sprint info examples'},
-      {name: 'natural', input: 'show me some sprint info examples'},
-    ],
-  },
+  //   examples: [
+  //     {name: 'straight-forward', input: 'help cancel sprint examples'},
+  //     {name: 'straight-forward', input: 'help stop sprint example'},
+  //     {name: 'straight-forward', input: 'show stop sprint examples'},
+  //     {name: 'natural', input: 'show me some cancel sprint examples'},
+  //   ],
+  //   examples: [
+  //     {name: 'straight-forward', input: 'help sprint info examples'},
+  //     {name: 'natural', input: 'show me some sprint info examples'},
   {
     vocabulary: [ [ 'help', 'show' ], 'Command', [ 'examples', 'example' ] ],
     template: CommandHelpExamplesTemplate,
     examples: [
-      {name: 'straight-forward', input: 'help sprint examples'},
-      {name: 'straight-forward', input: 'help sprint example'},
-      {name: 'straight-forward', input: 'show sprint examples'},
-      {name: 'natural', input: 'show me some sprint examples'},
+      {
+        name: 'straight-forward',
+        input: 'help sprint examples',
+        tags: [ 'basic' ],
+        tests: [ {instructions: 16} ],
+      },
+      {
+        name: 'straight-forward',
+        input: 'help sprint example',
+        tags: [ 'basic', 'alternate wording' ],
+        tests: [ {instructions: 16} ],
+      },
+      {
+        name: 'straight-forward',
+        input: 'show sprint examples',
+        tags: [ 'basic', 'alternate wording' ],
+        tests: [ {instructions: 16} ],
+      },
+      {
+        name: 'natural',
+        input: 'show me some sprint examples',
+        tags: [ 'natural' ],
+        tests: [ {instructions: 16} ],
+      },
+      // TODO {name: 'natural', input: 'show me some admin examples', tests: [ {instructions: 12}},
     ],
   },
   {
     vocabulary: [ [ 'help', 'show' ], [ 'examples', 'example' ] ],
     template: HelpExamplesTemplate,
     examples: [
-      {name: 'straight-forward', input: 'help examples'},
-      {name: 'straight-forward', input: 'help example'},
-      {name: 'straight-forward', input: 'show examples'},
+      {
+        name: 'straight-forward',
+        input: 'help examples',
+        tags: [ 'basic' ],
+        tests: [ {instructions: 5} ],
+      },
+      {
+        name: 'straight-forward',
+        input: 'help example',
+        tags: [ 'basic', 'alternate wording' ],
+        tests: [ {instructions: 5} ],
+      },
+      {
+        name: 'straight-forward',
+        input: 'show examples',
+        tags: [ 'basic', 'alternate wording' ],
+        tests: [ {instructions: 5} ],
+      },
     ],
   },
   // {
@@ -159,19 +132,11 @@ export const helpCommands = [
   //   examples: [], // JSUT the commands, in a list, nothing extra // TODO if I do this, I should have more specific types than 'Number' like 'ClockMin' and 'DurationMin' .... or something?
   // },
 
-  {
-    vocabulary: [ [ 'help' ], [ 'cancel', 'stop' ], 'Command' ],
-    template: CancelCommandHelpTemplate,
-    examples: [
-      {name: 'straight-forward', input: 'help cancel sprint'},
-      {name: 'straight-forward', input: 'halp stop sprint'},
-    ],
-  },
-  {
-    vocabulary: [ [ 'help' ], 'Command', 'info' ],
-    template: InfoCommandHelpTemplate,
-    examples: [ {name: 'straight-forward', input: 'help sprint info'} ],
-  },
+  //   examples: [
+  //     {name: 'straight-forward', input: 'help cancel sprint'},
+  //     {name: 'straight-forward', input: 'halp stop sprint'},
+  //   ],
+  //   examples: [ {name: 'straight-forward', input: 'help sprint info'} ],
   {
     // TODO a fun alternate would be: tell me about Command
     vocabulary: [ [ 'help', 'halp' ], 'Command' ],
@@ -179,12 +144,15 @@ export const helpCommands = [
     examples: [
       {
         name: 'sprint',
-        // TODO flag these help: 'basic'?
         input: 'help sprint',
+        tags: [ 'basic' ],
+        tests: [ {instructions: 17} ],
       },
       {
         name: 'sprint natural',
         input: 'help me create a sprint',
+        tags: [ 'natural' ],
+        tests: [ {instructions: 17} ],
       },
       // TODO invalid: help with sprints
     ],
@@ -193,10 +161,25 @@ export const helpCommands = [
     vocabulary: [ [ [ 'help' ], [ 'halp' ] ] ], // TODO basically this is 'help COMMAND' where command defaults to 'help' - need to get a defaults mechanism to make it simpler to list command variations
     template: BasicHelpTemplate,
     examples: [
-      {name: 'basic', input: 'help'},
-      {name: 'natural inquery', input: 'will u help me?'},
-      {name: 'natural', input: 'help me plz'},
-      {name: 'natural insistant', input: 'YO HELP'},
+      {
+        name: 'basic',
+        input: 'help',
+        tags: [ 'basic' ],
+        tests: [ {instructions: 6} ],
+      },
+      {
+        name: 'natural inquery',
+        input: 'will u help me?',
+        tags: [ 'natural' ],
+        tests: [ {instructions: 6} ],
+      },
+      {name: 'natural', input: 'help me plz', tests: [ {instructions: 6} ]},
+      {
+        name: 'natural insistant',
+        input: 'YO HELP',
+        tags: [ 'natural' ],
+        tests: [ {instructions: 6} ],
+      },
     ],
   },
 ]

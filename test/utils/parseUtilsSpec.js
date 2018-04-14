@@ -36,7 +36,7 @@ describe('Parse Utils', function(){
         'help',
         0
       )
-      expect(result.length).to.be.equals(10) // 10 parts to the response
+      expect(result.length).to.be.equals(6) // 6 parts to the response
     })
   })
   describe('preparseMessage', function(){
