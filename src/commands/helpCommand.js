@@ -62,15 +62,6 @@ const HelpExamplesTemplate = {
 }
 
 export const helpCommands = [
-  //   examples: [
-  //     {name: 'straight-forward', input: 'help cancel sprint examples'},
-  //     {name: 'straight-forward', input: 'help stop sprint example'},
-  //     {name: 'straight-forward', input: 'show stop sprint examples'},
-  //     {name: 'natural', input: 'show me some cancel sprint examples'},
-  //   ],
-  //   examples: [
-  //     {name: 'straight-forward', input: 'help sprint info examples'},
-  //     {name: 'natural', input: 'show me some sprint info examples'},
   {
     vocabulary: [ [ 'help', 'show' ], 'Command', [ 'examples', 'example' ] ],
     template: CommandHelpExamplesTemplate,
@@ -132,11 +123,6 @@ export const helpCommands = [
   //   examples: [], // JSUT the commands, in a list, nothing extra // TODO if I do this, I should have more specific types than 'Number' like 'ClockMin' and 'DurationMin' .... or something?
   // },
 
-  //   examples: [
-  //     {name: 'straight-forward', input: 'help cancel sprint'},
-  //     {name: 'straight-forward', input: 'halp stop sprint'},
-  //   ],
-  //   examples: [ {name: 'straight-forward', input: 'help sprint info'} ],
   {
     // TODO a fun alternate would be: tell me about Command
     vocabulary: [ [ 'help', 'halp' ], 'Command' ],
