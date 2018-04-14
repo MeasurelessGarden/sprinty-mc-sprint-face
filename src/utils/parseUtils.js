@@ -22,7 +22,7 @@ export const parseMessageToArray = (message, command) => {
     }
     if (_.isEqual(arg, 'Command')) {
       // TODO validCommands should come from the template
-      const validCommands = [ 'sprint' ] // even though I'm not strictly doing validation here, otherwise I'm overmatching weirdly (TODO might not be an issue if I make exact flag work....)
+      const validCommands = [ 'sprint', 'admin' ] // even though I'm not strictly doing validation here, otherwise I'm overmatching weirdly (TODO might not be an issue if I make exact flag work....)
       return _.find(validCommands, cmd => {
         return _.isEqual(value, cmd)
       }) // this doesn't do validation yet - any string looks like a valid command

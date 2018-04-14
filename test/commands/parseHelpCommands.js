@@ -34,58 +34,7 @@ const unrollUntestedExamples = _.filter(
   it => it
 )
 
-describe('Parse Help Command', function(){
-  describe('self describing generated tests', function(){
-    it('has no untested examples', function(){
-      expect(unrollUntestedExamples.length).to.be.equal(0)
-    })
-
-    unroll(
-      'creates help from #input - expects #expected instructions',
-      function(done, args){
-        const help = createObjFromMessage(
-          helpCommands,
-          args.input,
-          1523059200000
-        )
-        expect(help.length).to.be.equal(args.expected)
-        done()
-      },
-      unrolledExamplesWithHeader
-    )
-  })
-
-  describe('basic help command', function(){
-    it('generates examples for help', function(){
-      const reply = createObjFromMessage(helpCommands, 'help example', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(`help examples:
-
-help
-\t\`help\` - basic
-\t\`will u help me?\` - natural inquery
-\t\`help me plz\` - natural
-\t\`YO HELP\` - natural insistant
-
-help [COMMAND]
-\t\`help sprint\` - sprint
-\t\`help me create a sprint\` - sprint natural
-
-help examples
-\t\`help examples\` - straight-forward
-\t\`help example\` - straight-forward
-\t\`show examples\` - straight-forward
-
-help [COMMAND] examples
-\t\`help sprint examples\` - straight-forward
-\t\`help sprint example\` - straight-forward
-\t\`show sprint examples\` - straight-forward
-\t\`show me some sprint examples\` - natural`)
-    })
-
-    it('generates a help message', function(){
-      const reply = createObjFromMessage(helpCommands, 'help', 0)
-      expect(_.join(reply, '\n\n')).to.be
-        .equals(`**Welcome to Sprinty McSprintFace!**
+const helpMessage = `**Welcome to Sprinty McSprintFace!**
 
 First up: typing '<@430905454961623060> help' or 'help <@430905454961623060>' will make this goofy bot try to help you!
 
@@ -105,7 +54,7 @@ halp
 
 help [COMMAND]
 halp [COMMAND]
-\tCOMMAND - must be one of: sprint
+\tCOMMAND - must be one of: sprint, admin
 \tGet more info on running commands. This command must be in a DM.
 
 help examples
@@ -118,113 +67,36 @@ help [COMMAND] examples
 help [COMMAND] example
 show [COMMAND] examples
 show [COMMAND] example
-\tCOMMAND - must be one of: sprint
-\tGet examples for commands. This command must be in a DM.`)
-    })
-  })
+\tCOMMAND - must be one of: sprint, admin
+\tGet examples for commands. This command must be in a DM.`
 
-  describe('help sprint command', function(){
-    it('generates examples for sprints', function(){
-      const reply = createObjFromMessage(helpCommands, 'help sprint example', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(`sprint examples:
+const helpExamplesMessage = `help examples:
 
-sprint [START TIME]
-\t\`sprint 15\` - straight-forward
-\t\`sprint :15\` - with clock-minute notation
-\t\`sprint -15\` - deceptive negatives
+help
+\t\`help\` - basic
+\t\`will u help me?\` - natural inquery
+\t\`help me plz\` - natural
+\t\`YO HELP\` - natural insistant
 
-sprint now
-\t\`sprint now\` - straight-forward
-\t\`lets sprint right now!\` - natural
+help [COMMAND]
+\t\`help sprint\` - sprint
+\t\`help me create a sprint\` - sprint natural
+\t\`help admin\` - admin
 
-sprint at [START TIME]
-\t\`ANYONE WANT TO SPRINT AT 25?\` - enthusiastic
-\t\`sprinting around 25?\` - alternate wording
-\t\`I want to sprint at :45\` - natural
-\t\`sprint at 20\` - straight-forward
-\t\`sprint at 25\` - straight-forward
-\t\`sprint at 30\` - straight-forward
-\t\`sprint at 59\` - end of the hour
+help examples
+\t\`help examples\` - straight-forward
+\t\`help example\` - straight-forward
+\t\`show examples\` - straight-forward
 
-sprint for [DURATION]
-\t\`sprint for 32 minutes\` - implies: start now
-\t\`sprint for 12\` - implies: start now
+help [COMMAND] examples
+\t\`help sprint examples\` - straight-forward
+\t\`help sprint example\` - straight-forward
+\t\`show sprint examples\` - straight-forward
+\t\`show me some sprint examples\` - natural
+\t\`show me some admin examples\` - admin examples
+\t\`help admin example\` - admin examples`
 
-sprint now for [DURATION]
-\t\`sprint now for 32\` - straight-forward
-
-sprint now to [END TIME]
-\t\`sprint now until 32\` - straight-forward
-\t\`well i'm sprinting now to :55\` - natural
-
-sprint to [END TIME]
-\t\`sprint until 15\` - straight-forward
-
-sprint [START TIME] for [DURATION]
-\t\`sprint 57 for 32\` - uncommon start and stop time
-\t\`shall we sprint :20 for about 55 min?\` - natural and verbose, with clock notation
-\t\`sprint 30 for 34 minutes\` - simple
-\t\`sprint 30 for 1 hour\` - confusing (deceptive), the word hour is ignored
-\t\`sprint 15 for 20\` - straight-forward
-\t\`sprint 15 for 1.5 minutes\` - deceptive punctuation (interpreted as sprint 15 for 1 and the 5 is nonsense)
-
-sprint at [START TIME] for [DURATION]
-\t\`sprint at 25 for 30?\` - natural inquery
-\t\`sprinting around 25 for 30?\` - alternate wording
-\t\`sprint at 27 for 10 min\` - 10 minute sprint
-\t\`sprint at 20 for 6 min\` - short and sweet
-\t\`sprint at 30 for 14\` - straight-forward
-\t\`sprint at 35 for 14\` - straight-forward
-\t\`sprint at 55 for 55\` - long running
-\t\`sprint at 30 for 34 minutes\` - slightly longer than default
-\t\`sprint at 10 for 60\` - maximum length sprint
-\t\`sprint at 10 for 1\` - very short sprint
-
-sprint [START TIME] to [END TIME]
-\t\`let's sprint 40 to 45\` - natural
-\t\`sprinting 40 until 45\` - alternate wording
-\t\`sprint from 13 to 29??\` - natural, question
-\t\`sprint 15 to 25\` - straight-forward
-\t\`sprint 15 to :35\` - clock notation
-\t\`sprint at 10 to 11\` - very short
-\t\`sprint 10 to 10\` - implied hour
-
-sprint at [START TIME] to [END TIME]
-\t\`sprint at :15 to :45\` - straight-forward
-\t\`sprint at :15 until :45\` - alternate wording: until
-\t\`sprint at 15 with extra 5 number to 30\` - potentially confusing extra numbers (maybe deceptive)
-\t\`sprinting around 15 to 30\` - alternate wording: sprinting around
-\t\`anyone want to sprint at :15 to :45?\` - verbose and natural
-\t\`sprint at 35 to 20\` - wraps to next hour
-\t\`sprint at 10 to 59\` - to the end of the hour
-\t\`sprint at 10 to 0\` - to the beginning of the next hour
-\t\`sprint at 10 to 00\` - using two digits for minutes
-
-sprint in [DELTA]
-\t\`sprint in 15\` - straight-forward
-
-sprint in [DELTA] for [DURATION]
-\t\`sprint in 15 for 20\` - straight-forward
-\t\`sprint in 60 for 15\` - straight-forward
-\t\`sprint in 60 for 60 minutes\` - straight-forward
-
-sprint info
-\t\`sprint info\` - straight-forward
-\t\`gimme the sprint info plz~!!\` - natural
-\t\`sprint info now\` - careful!
-
-cancel sprint
-\t\`cancel sprint\` - straight-forward
-\t\`stop sprint\` - straight-forward
-\t\`plz stop the sprint i can't take it!!!\` - natural
-\t\`cancel sprint now\` - careful!
-\t\`cancel sprint info now\` - careful!`)
-    })
-
-    it('generates a help message for sprints', function(){
-      const reply = createObjFromMessage(helpCommands, 'help sprint', 0)
-      expect(_.join(reply, '\n\n')).to.be
-        .equals(`There are many valid ways to manage a sprint.
+const helpSprintMessage = `There are many valid ways to manage a sprint.
 
 commands:
 
@@ -316,7 +188,171 @@ sprint info
 
 cancel sprint
 stop sprint
-\tThere's not much to cancelling sprints.`)
+\tThere's not much to cancelling sprints.`
+
+const helpSprintExamplesMessage = `sprint examples:
+
+sprint [START TIME]
+\t\`sprint 15\` - straight-forward
+\t\`sprint :15\` - with clock-minute notation
+\t\`sprint -15\` - deceptive negatives
+
+sprint now
+\t\`sprint now\` - straight-forward
+\t\`lets sprint right now!\` - natural
+
+sprint at [START TIME]
+\t\`ANYONE WANT TO SPRINT AT 25?\` - enthusiastic
+\t\`sprinting around 25?\` - alternate wording
+\t\`I want to sprint at :45\` - natural
+\t\`sprint at 20\` - straight-forward
+\t\`sprint at 25\` - straight-forward
+\t\`sprint at 30\` - straight-forward
+\t\`sprint at 59\` - end of the hour
+
+sprint for [DURATION]
+\t\`sprint for 32 minutes\` - implies: start now
+\t\`sprint for 12\` - implies: start now
+
+sprint now for [DURATION]
+\t\`sprint now for 32\` - straight-forward
+
+sprint now to [END TIME]
+\t\`sprint now until 32\` - straight-forward
+\t\`well i'm sprinting now to :55\` - natural
+
+sprint to [END TIME]
+\t\`sprint until 15\` - straight-forward
+
+sprint [START TIME] for [DURATION]
+\t\`sprint 57 for 32\` - uncommon start and stop time
+\t\`shall we sprint :20 for about 55 min?\` - natural and verbose, with clock notation
+\t\`sprint 30 for 34 minutes\` - simple
+\t\`sprint 30 for 1 hour\` - confusing (deceptive), the word hour is ignored
+\t\`sprint 15 for 20\` - straight-forward
+\t\`sprint 15 for 1.5 minutes\` - deceptive punctuation (interpreted as sprint 15 for 1 and the 5 is nonsense)
+
+sprint at [START TIME] for [DURATION]
+\t\`sprint at 25 for 30?\` - natural inquery
+\t\`sprinting around 25 for 30?\` - alternate wording
+\t\`sprint at 27 for 10 min\` - 10 minute sprint
+\t\`sprint at 20 for 6 min\` - short and sweet
+\t\`sprint at 30 for 14\` - straight-forward
+\t\`sprint at 35 for 14\` - straight-forward
+\t\`sprint at 55 for 55\` - long running
+\t\`sprint at 30 for 34 minutes\` - slightly longer than default
+\t\`sprint at 10 for 60\` - maximum length sprint
+\t\`sprint at 10 for 1\` - very short sprint
+
+sprint [START TIME] to [END TIME]
+\t\`let's sprint 40 to 45\` - natural
+\t\`sprinting 40 until 45\` - alternate wording
+\t\`sprint from 13 to 29??\` - natural, question
+\t\`sprint 15 to 25\` - straight-forward
+\t\`sprint 15 to :35\` - clock notation
+\t\`sprint at 10 to 11\` - very short
+\t\`sprint 10 to 10\` - implied hour
+
+sprint at [START TIME] to [END TIME]
+\t\`sprint at :15 to :45\` - straight-forward
+\t\`sprint at :15 until :45\` - alternate wording: until
+\t\`sprint at 15 with extra 5 number to 30\` - potentially confusing extra numbers (maybe deceptive)
+\t\`sprinting around 15 to 30\` - alternate wording: sprinting around
+\t\`anyone want to sprint at :15 to :45?\` - verbose and natural
+\t\`sprint at 35 to 20\` - wraps to next hour
+\t\`sprint at 10 to 59\` - to the end of the hour
+\t\`sprint at 10 to 0\` - to the beginning of the next hour
+\t\`sprint at 10 to 00\` - using two digits for minutes
+
+sprint in [DELTA]
+\t\`sprint in 15\` - straight-forward
+
+sprint in [DELTA] for [DURATION]
+\t\`sprint in 15 for 20\` - straight-forward
+\t\`sprint in 60 for 15\` - straight-forward
+\t\`sprint in 60 for 60 minutes\` - straight-forward
+
+sprint info
+\t\`sprint info\` - straight-forward
+\t\`gimme the sprint info plz~!!\` - natural
+\t\`sprint info now\` - careful!
+
+cancel sprint
+\t\`cancel sprint\` - straight-forward
+\t\`stop sprint\` - straight-forward
+\t\`plz stop the sprint i can't take it!!!\` - natural
+\t\`cancel sprint now\` - careful!
+\t\`cancel sprint info now\` - careful!`
+
+const helpAdminMessage = `Configure Sprinty.
+
+commands:
+
+define sprint channel
+set sprint channel
+\tAdmins can set the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.`
+
+const helpAdminExamplesMessage = `admin examples:
+
+define sprint channel
+\t\`define sprint channel\` - straight-forward
+\t\`set the sprint channel here\` - natural
+\t\`this is set as Sprinty's sprint channel\` - natural`
+
+describe('Parse Help Command', function(){
+  describe('self describing generated tests', function(){
+    it('has no untested examples', function(){
+      expect(unrollUntestedExamples.length).to.be.equal(0)
+    })
+
+    unroll(
+      'creates help from #input - expects #expected instructions',
+      function(done, args){
+        const help = createObjFromMessage(
+          helpCommands,
+          args.input,
+          1523059200000
+        )
+        expect(help.length).to.be.equal(args.expected)
+        done()
+      },
+      unrolledExamplesWithHeader
+    )
+  })
+
+  describe('basic help command', function(){
+    it('generates examples for help', function(){
+      const reply = createObjFromMessage(helpCommands, 'help example', 0)
+      expect(_.join(reply, '\n\n')).to.be.equals(helpExamplesMessage)
+    })
+
+    it('generates a help message', function(){
+      const reply = createObjFromMessage(helpCommands, 'help', 0)
+      expect(_.join(reply, '\n\n')).to.be.equals(helpMessage)
+    })
+  })
+
+  describe('help sprint command', function(){
+    it('generates examples for sprints', function(){
+      const reply = createObjFromMessage(helpCommands, 'help sprint example', 0)
+      expect(_.join(reply, '\n\n')).to.be.equals(helpSprintExamplesMessage)
+    })
+
+    it('generates a help message for sprints', function(){
+      const reply = createObjFromMessage(helpCommands, 'help sprint', 0)
+      expect(_.join(reply, '\n\n')).to.be.equals(helpSprintMessage)
+    })
+  })
+
+  describe('help admin command', function(){
+    it('generates examples for admin commands', function(){
+      const reply = createObjFromMessage(helpCommands, 'help admin example', 0)
+      expect(_.join(reply, '\n\n')).to.be.equals(helpAdminExamplesMessage)
+    })
+
+    it('generates a help message for admin commands', function(){
+      const reply = createObjFromMessage(helpCommands, 'help admin', 0)
+      expect(_.join(reply, '\n\n')).to.be.equals(helpAdminMessage)
     })
   })
 })
