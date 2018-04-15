@@ -15,12 +15,12 @@ export class Bot {
   }
 
   startSprint = () => {
-    this.channel.send(':ghost:')
+    this.sprintChannel.send(':ghost:')
     this.client.clearTimeout(this.start)
   }
 
   endSprint = () => {
-    this.channel.send('STOP')
+    this.sprintChannel.send('STOP')
     this.client.clearTimeout(this.end)
     this.sprintTracker.clearSprint()
   }
@@ -66,7 +66,7 @@ export class Bot {
     const admin = run('admin', message, timestamp)
     if (admin) {
       // TODO assumes all admin commands are the same thing (which is true.... for now)
-      return 'CONFIGURE'
+      return admin
     }
   }
 
@@ -106,26 +106,30 @@ export class Bot {
           message.member,
           role.permissions
         )
-        // console.log(
-        //   'admin?',
-        //   permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR)
-        // )
-        // console.log(
-        //   'manage channels?',
-        //   permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
-        // )
         return (
           permission.has(Discord.Permissions.FLAGS.ADMINISTRATOR) ||
           permission.has(Discord.Permissions.FLAGS.MANAGE_CHANNELS)
         )
       })
-      if (
-        isBotAdmin &&
-        this.triggerAdminCommands(message.content, message.createdTimestamp) ==
-          'CONFIGURE'
-      ) {
-        this.sprintChannel = message.channel
-        message.react('👍')// '<U+1F44D>' // TODO get more emojis...
+      if (isBotAdmin) {
+        const adminCommand = this.triggerAdminCommands(
+          message.content,
+          message.createdTimestamp
+        )
+        if (adminCommand === 'configure') {
+          this.sprintChannel = message.channel
+          message.react('👍') // '<U+1F44D>' // TODO get more emojis...
+        }
+        else if (adminCommand === 'show') {
+          if (this.sprintChannel) {
+            message.channel.send(
+              `The current sprint channel is: "${this.sprintChannel.name}"`
+            )
+          }
+          else {
+            message.react('🤖')
+          }
+        }
       }
 
       if (message.channel == this.sprintChannel) {
@@ -138,7 +142,6 @@ export class Bot {
           message.react('😦')
         }
         else if (result === RESPONSES.SPRINT_IS_GO) {
-          this.channel = message.channel // TODO until it's configurable
           message.react('💯')
         }
         else if (result === RESPONSES.CANCEL_CONFIRMED) {
@@ -148,7 +151,7 @@ export class Bot {
           message.react('🤖')
         }
         else if (result) {
-          message.channel.send(result)
+          this.sprintChannel.send(result)
         }
       }
     }

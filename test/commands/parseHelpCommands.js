@@ -290,14 +290,26 @@ commands:
 
 define sprint channel
 set sprint channel
-\tAdmins can set the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.`
+configure sprint channel
+\tAdmins can configure the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.
+
+show sprint channel
+what sprint channel
+which sprint channel
+\tAdmins can show the current sprint channel.`
 
 const helpAdminExamplesMessage = `admin examples:
 
 define sprint channel
 \t\`define sprint channel\` - straight-forward
 \t\`set the sprint channel here\` - natural
-\t\`this is set as Sprinty's sprint channel\` - natural`
+\t\`this is set as Sprinty's sprint channel\` - natural
+
+show sprint channel
+\t\`show sprint channel\` - straight-forward
+\t\`which channel is the sprint channel?\` - natural
+\t\`what is the sprint channel?\` - natural
+\t\`show me the sprint channel\` - natural`
 
 describe('Parse Help Command', function(){
   describe('self describing generated tests', function(){

@@ -1,19 +1,53 @@
 export const adminIntro =
   'Configure Sprinty. You must have permission to manage channels to use these commands!'
 
+const showSprintChannelTemplate = {
+  input: [],
+  call: (...args) => 'show',
+  additionalHelp: 'Admins can show the current sprint channel.',
+}
+
 const configureSprintChannelTemplate = {
   input: [],
-  call: (...args) => {
-    return 'configure' // TODO need some CONSTS for these!!
-  },
+  call: (...args) => 'configure', // TODO need some CONSTS for these!!
   additionalHelp:
-    'Admins can set the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.',
+    'Admins can configure the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.',
 }
 
 export const adminCommands = [
   // order is used to resolve commands without conflicts
   {
-    vocabulary: [ [ 'define', 'set' ], [ 'sprint' ], [ 'channel' ] ],
+    vocabulary: [ [ 'show', 'what', 'which' ], [ 'sprint' ], [ 'channel' ] ],
+    template: showSprintChannelTemplate,
+    examples: [
+      {
+        name: 'straight-forward',
+        input: 'show sprint channel',
+        tags: [ 'basic' ],
+      },
+      {
+        name: 'natural',
+        input: 'which channel is the sprint channel?',
+        tags: [ 'natural', 'alternate wording' ],
+      },
+      {
+        name: 'natural',
+        input: 'what is the sprint channel?',
+        tags: [ 'natural' ],
+      },
+      {
+        name: 'natural',
+        input: 'show me the sprint channel',
+        tags: [ 'natural' ],
+      },
+    ],
+  },
+  {
+    vocabulary: [
+      [ 'define', 'set', 'configure' ],
+      [ 'sprint' ],
+      [ 'channel' ],
+    ],
     template: configureSprintChannelTemplate,
     examples: [
       {

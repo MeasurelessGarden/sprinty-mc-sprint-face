@@ -6,7 +6,12 @@ import {expect} from 'chai'
 
 const unrollCommandExamples = _.flatMap(adminCommands, command => {
   return _.map(command.examples, example => {
-    return [ command, example.input, 'configure' ]
+    const expected = command.template.additionalHelp.includes('show')
+      ? 'show'
+      : command.template.additionalHelp.includes('configure')
+        ? 'configure'
+        : undefined
+    return [ command, example.input, expected ]
   })
 })
 
