@@ -146,6 +146,11 @@ export const sprintCommands = [
         tags: [ 'ambiguous', 'confusing' ],
       },
       {
+        name: 'oops! just like that, actually',
+        input: 'how do i cancel a sprint?',
+        tags: [ 'ambiguous', 'confusing' ],
+      },
+      {
         name: 'careful!',
         input: 'cancel sprint info now',
         tags: [ 'ambiguous', 'confusing' ],

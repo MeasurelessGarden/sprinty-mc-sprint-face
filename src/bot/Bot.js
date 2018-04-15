@@ -68,14 +68,6 @@ export class Bot {
     }
   }
 
-  triggerAdminCommands = (message, timestamp) => {
-    const admin = run('admin', message, timestamp)
-    if (admin) {
-      // TODO assumes all admin commands are the same thing (which is true.... for now)
-      return admin
-    }
-  }
-
   onMessage = message => {
     // console.log(message)
 
@@ -119,7 +111,9 @@ export class Bot {
         )
       })
       if (isBotAdmin) {
-        const adminCommand = this.triggerAdminCommands(
+        // as in, an admin of the *bot*
+        const adminCommand = run(
+          'admin',
           message.content,
           message.createdTimestamp
         )

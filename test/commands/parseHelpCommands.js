@@ -282,6 +282,7 @@ cancel sprint
 \t\`stop sprint\` - straight-forward
 \t\`plz stop the sprint i can't take it!!!\` - natural
 \t\`cancel sprint now\` - careful!
+\t\`how do i cancel a sprint?\` - oops! just like that, actually
 \t\`cancel sprint info now\` - careful!`
 
 const helpAdminMessage = `Configure Sprinty. You must have permission to manage channels to use these commands!
