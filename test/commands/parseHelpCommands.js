@@ -293,6 +293,7 @@ define sprint channel
 set sprint channel
 configure sprint channel
 \tAdmins can configure the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.
+\t**Important:** You can pin this message, so the next time Sprinty loads, xe will reuse it. If more than one message is pinned, xe'll use the most recent one.
 
 show sprint channel
 what sprint channel
