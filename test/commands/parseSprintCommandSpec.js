@@ -1,6 +1,6 @@
 var _ = require('lodash')
 import {unroll} from '../spec.js'
-import {sprintCommands} from '../../src/commands/sprintCommand.js'
+import {sprintCommands as testCommands} from '../../src/commands/sprintCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
@@ -20,7 +20,7 @@ const expectedSprint = test => {
   }
 }
 
-const unrolledExamples = _.flatMap(sprintCommands, command => {
+const unrolledExamples = _.flatMap(testCommands, command => {
   return _.flatMap(command.examples, example => {
     return _.map(example.tests, test => {
       return [
@@ -46,7 +46,7 @@ const unrolledExamplesWithHeader = _.concat(
 )
 
 const unrollCommandExamplesWithoutTests = _.filter(
-  _.flatMap(sprintCommands, command => {
+  _.flatMap(testCommands, command => {
     return _.map(command.examples, example => {
       if (!example.tests) {
         const expected = command.template.additionalHelp.includes('cancel')
@@ -66,7 +66,7 @@ const unrollCommandExamplesWithoutTestsWithHeader = _.concat(
   unrollCommandExamplesWithoutTests
 )
 
-const unrolledInvalidExamples = _.flatMap(sprintCommands, command => {
+const unrolledInvalidExamples = _.flatMap(testCommands, command => {
   return _.map(command.invalidExamples, invalid => {
     return [ command, invalid ]
   })
@@ -82,15 +82,15 @@ describe('Parse Sprint Command', function(){
     unroll(
       'creates a command from #input - expects #expected',
       function(done, args){
-        const sprintFromVocabulary = createObjFromMessage(
-          // TODO sprintFromVocabulary is weird bc it's not a sprint, it's a sprintCommandResolved or something, but whatever
+        const resultFromVocabulary = createObjFromMessage(
+          // TODO resultFromVocabulary is weird bc it's not a sprint, it's a sprintCommandResolved or something, but whatever
           [ args.command ],
           args.input,
           1523059200000
         )
 
-        const sprintFromAllSprintCommands = createObjFromMessage(
-          sprintCommands,
+        const resultFromAllCommands = createObjFromMessage(
+          testCommands,
           args.input,
           1523059200000
         )
@@ -98,10 +98,10 @@ describe('Parse Sprint Command', function(){
         /*
         Verifies that these examples are matching this specific command.
         Also verifies that even if another command matches it -
-        it produces the same sprint (as long as they parse it the same).
+        it produces the same result (as long as they parse it the same).
         */
-        expect(sprintFromVocabulary).to.be.equals(args.expected)
-        expect(sprintFromAllSprintCommands).to.be.equals(args.expected)
+        expect(resultFromVocabulary).to.be.equals(args.expected)
+        expect(resultFromAllCommands).to.be.equals(args.expected)
         done()
       },
       unrollCommandExamplesWithoutTestsWithHeader
@@ -112,20 +112,20 @@ describe('Parse Sprint Command', function(){
     unroll(
       'invalid sprint from #input using #command.vocabulary',
       function(done, args){
-        const sprintFromVocabulary = createObjFromMessage(
+        const resultFromVocabulary = createObjFromMessage(
           [ args.command ],
           args.input,
           1522815707792
         )
 
-        const sprintFromAllSprintCommands = createObjFromMessage(
-          sprintCommands,
+        const resultFromAllCommands = createObjFromMessage(
+          testCommands,
           args.input,
           1522815707792
         )
 
-        expect(sprintFromVocabulary).to.be.undefined
-        expect(sprintFromAllSprintCommands).to.be.undefined
+        expect(resultFromVocabulary).to.be.undefined
+        expect(resultFromAllCommands).to.be.undefined
         done()
       },
       unrolledInvalidExamplesWithHeader
@@ -136,14 +136,14 @@ describe('Parse Sprint Command', function(){
     unroll(
       'creates sprint from #input using #command.vocabulary, #tags (when called at #calledAtLabel)',
       function(done, args){
-        const sprintFromVocabulary = createObjFromMessage(
+        const resultFromVocabulary = createObjFromMessage(
           [ args.command ],
           args.input,
           args.calledAt
         )
 
-        const sprintFromAllSprintCommands = createObjFromMessage(
-          sprintCommands,
+        const resultFromAllCommands = createObjFromMessage(
+          testCommands,
           args.input,
           args.calledAt
         )
@@ -153,10 +153,8 @@ describe('Parse Sprint Command', function(){
         Also verifies that even if another command matches it -
         it produces the same sprint (as long as they parse it the same).
         */
-        expect(sprintFromVocabulary).to.be.equalSprintDefinition(args.expected)
-        expect(sprintFromAllSprintCommands).to.be.equalSprintDefinition(
-          args.expected
-        )
+        expect(resultFromVocabulary).to.be.equalSprintDefinition(args.expected)
+        expect(resultFromAllCommands).to.be.equalSprintDefinition(args.expected)
         done()
       },
       unrolledExamplesWithHeader

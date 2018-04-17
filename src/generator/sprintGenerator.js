@@ -4,8 +4,6 @@
   and as such it may not be appropriate to call the result a 'sprint' yet.
 */
 
-// TODO rename to sprint generator, since this thing generates the actual "sprint" objects?
-
 const createTimeAtNextMinute = (baseTime, minute) => {
   const date = new Date(baseTime)
   date.setMinutes(minute)
@@ -25,19 +23,18 @@ const createTimeWithDelta = (baseTime, minutes) => {
   return date
 }
 
-const createSprint = (timestamp, start, end) => {
-  // TODO change to new Sprint(x,y,z)?
-  return {
-    sprint: {
+class Sprint {
+  constructor(timestamp, start, end) {
+    this.sprint = {
       // TODO rename absolute?
       start: start,
       end: end,
-    },
-    timeout: {
+    }
+    this.timeout = {
       // TODO rename relative?
       start: start - timestamp,
       end: end - timestamp,
-    },
+    }
   }
 }
 
@@ -48,7 +45,7 @@ export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
   // endMin, a number between 0 and 59
   const start = createTimeWithDelta(timestamp, delta)
   const end = createTimeAtNextMinute(start, endMin)
-  return createSprint(timestamp, start.getTime(), end.getTime())
+  return new Sprint(timestamp, start.getTime(), end.getTime())
 }
 
 export const generateSprintInDeltaWithDuration = (
@@ -62,7 +59,7 @@ export const generateSprintInDeltaWithDuration = (
   // duration, a number between 1 and 60
   const start = createTimeWithDelta(timestamp, delta)
   const end = createTimeWithDelta(start, duration)
-  return createSprint(timestamp, start.getTime(), end.getTime())
+  return new Sprint(timestamp, start.getTime(), end.getTime())
 }
 
 export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
@@ -71,7 +68,7 @@ export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
   // endMin, a number between 0 and 59
   const start = createTimeAtNextMinute(timestamp, startMin)
   const end = createTimeAtNextMinute(start, endMin)
-  return createSprint(timestamp, start.getTime(), end.getTime())
+  return new Sprint(timestamp, start.getTime(), end.getTime())
 }
 
 export const generateSprintWithDuration = (timestamp, startMin, duration) => {
@@ -80,5 +77,5 @@ export const generateSprintWithDuration = (timestamp, startMin, duration) => {
   // duration, a number between 1 and 60
   const start = createTimeAtNextMinute(timestamp, startMin)
   const end = createTimeWithDelta(start, duration)
-  return createSprint(timestamp, start.getTime(), end.getTime())
+  return new Sprint(timestamp, start.getTime(), end.getTime())
 }

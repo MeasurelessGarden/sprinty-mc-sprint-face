@@ -1,13 +1,6 @@
 var _ = require('lodash')
 import {run} from '../utils/commandRunner.js'
 
-// export const RESPONSES = {
-//   SPRINT_IS_GO: 'starting sprint',
-//   SPRINT_ALREADY_CONFIGURED: 'sprint already configured',
-//   CANCEL_CONFIRMED: 'cancel sprint confirmed',
-//   NO_SPRINT: 'no sprint configured to manage',
-// }
-
 export class CountTracker {
   constructor() {
     this.cache = {}
@@ -15,28 +8,6 @@ export class CountTracker {
 
   processCommand = (user, message, timestamp) => {
     const command = run('count', message, timestamp)
-    // if (command === 'cancel') {
-    //   if (this.isSprintConfigured()) {
-    //     return RESPONSES.CANCEL_CONFIRMED
-    //   }
-    //   return RESPONSES.NO_SPRINT
-    // }
-    // else if (command === 'info') {
-    //   if (this.isSprintConfigured()) {
-    //     if (this.isSprintStarted(timestamp)) {
-    //       return this.getCurrentSprintMessage(timestamp)
-    //     }
-    //     return this.getPendingSprintMessage(timestamp)
-    //   }
-    //   return RESPONSES.NO_SPRINT
-    // }
-    // else if (command) {
-    //   if (this.isSprintConfigured()) {
-    //     return RESPONSES.SPRINT_ALREADY_CONFIGURED
-    //   }
-    //   this.setSprint(command)
-    //   return RESPONSES.SPRINT_IS_GO
-    // }
     if (command) {
       if (command.set) {
         const message = this.countChangeMessage(

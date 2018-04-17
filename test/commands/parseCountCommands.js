@@ -1,6 +1,6 @@
 var _ = require('lodash')
 import {unroll} from '../spec.js'
-import {countCommands} from '../../src/commands/countCommand.js'
+import {countCommands as testCommands} from '../../src/commands/countCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
@@ -19,7 +19,7 @@ const expectedCount = test => {
   }
 }
 
-const unrolledExamples = _.flatMap(countCommands, command => {
+const unrolledExamples = _.flatMap(testCommands, command => {
   return _.flatMap(command.examples, example => {
     return _.map(example.tests, test => {
       return [
@@ -45,7 +45,7 @@ const unrolledExamplesWithHeader = _.concat(
 )
 
 const unrollUntestedExamples = _.filter(
-  _.flatMap(countCommands, command => {
+  _.flatMap(testCommands, command => {
     // TODO import as testCommands or something ....
     return _.map(command.examples, example => {
       if (!example.tests) {
@@ -66,15 +66,15 @@ describe('Parse Count Command', function(){
     unroll(
       'creates a command from #input - expects #expected',
       function(done, args){
-        const countFromVocabulary = createObjFromMessage(
+        const resultFromVocabulary = createObjFromMessage(
           // TODO sprintFromVocabulary is weird bc it's not a sprint, it's a sprintCommandResolved or something, but whatever
           [ args.command ],
           args.input,
           1523059200000
         )
 
-        const countFromAllCommands = createObjFromMessage(
-          countCommands,
+        const resultFromAllCommands = createObjFromMessage(
+          testCommands,
           args.input,
           1523059200000
         )
@@ -84,8 +84,8 @@ describe('Parse Count Command', function(){
         Also verifies that even if another command matches it -
         it produces the same result (as long as they parse it the same).
         */
-        expect(countFromVocabulary).to.be.deep.equals(args.expected)
-        expect(countFromAllCommands).to.be.deep.equals(args.expected)
+        expect(resultFromVocabulary).to.be.deep.equals(args.expected)
+        expect(resultFromAllCommands).to.be.deep.equals(args.expected)
         done()
       },
       unrolledExamplesWithHeader

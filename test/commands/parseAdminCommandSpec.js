@@ -1,10 +1,10 @@
 var _ = require('lodash')
 import {unroll} from '../spec.js'
-import {adminCommands} from '../../src/commands/adminCommand.js'
+import {adminCommands as testCommands} from '../../src/commands/adminCommand.js'
 import {createObjFromMessage} from '../../src/utils/parseUtils.js'
 import {expect} from 'chai'
 
-const unrollCommandExamples = _.flatMap(adminCommands, command => {
+const unrollCommandExamples = _.flatMap(testCommands, command => {
   return _.map(command.examples, example => {
     const expected = command.template.additionalHelp.includes('show')
       ? 'show'
@@ -22,7 +22,7 @@ const unrollCommandExamplesWithHeader = _.concat(
 
 // technically all admin commands are "untested" because there's really no input to test - it's all determined by the weird test logic above that assumes from the template what the result should be
 // const unrollUntestedExamples = _.filter(
-//   _.flatMap(adminCommands, command => {
+//   _.flatMap(testCommands, command => {
 //     return _.map(command.examples, example => {
 //       if (!example.tests) {
 //         return [ command, example.input ]
@@ -48,7 +48,7 @@ describe('Parse Admin Command', function(){
         )
 
         const resultFromAllCommands = createObjFromMessage(
-          adminCommands,
+          testCommands,
           args.input,
           1523059200000
         )

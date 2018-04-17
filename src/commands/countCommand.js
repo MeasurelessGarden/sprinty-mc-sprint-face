@@ -1,4 +1,4 @@
-import {SetCount} from '../utils/countGenerator.js'
+import {SetCount} from '../generator/countGenerator.js'
 export const countIntro = 'Track wordcounts.'
 
 /*

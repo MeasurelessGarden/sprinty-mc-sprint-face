@@ -3,9 +3,9 @@ import {expect} from 'chai'
 import {
   generateSprintWithEndTime,
   generateSprintWithDuration,
-} from '../../src/utils/timeUtils.js'
+} from '../../src/generator/sprintGenerator.js'
 
-describe('Time Utils', function(){
+describe('Sprint Generator', function(){
   describe('generateSprintWithDuration', function(){
     unroll(
       `generates a sprint from #now starting at #startMin with duration #duration - #reason`,
