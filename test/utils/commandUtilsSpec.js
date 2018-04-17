@@ -30,7 +30,7 @@ describe('Command Utils', function(){
 
   describe('validCommandsString', function(){
     it('is a string of valid commands', function(){
-      expect(validCommandsString).to.be.equals('admin, sprint')
+      expect(validCommandsString).to.be.equals('admin, count, sprint')
     })
   })
 

@@ -54,7 +54,7 @@ halp
 
 help [COMMAND]
 halp [COMMAND]
-\tCOMMAND - must be one of: admin, sprint
+\tCOMMAND - must be one of: admin, count, sprint
 \tGet more info on running commands. This command must be in a DM.
 
 help examples
@@ -67,7 +67,7 @@ help [COMMAND] examples
 help [COMMAND] example
 show [COMMAND] examples
 show [COMMAND] example
-\tCOMMAND - must be one of: admin, sprint
+\tCOMMAND - must be one of: admin, count, sprint
 \tGet examples for commands. This command must be in a DM.`
 
 const helpExamplesMessage = `help examples:
@@ -80,6 +80,7 @@ help
 
 help [COMMAND]
 \t\`help sprint\` - sprint
+\t\`help me with my word count\` - word count
 \t\`help me create a sprint\` - sprint natural
 \t\`help admin\` - admin
 
@@ -94,7 +95,8 @@ help [COMMAND] examples
 \t\`show sprint examples\` - straight-forward
 \t\`show me some sprint examples\` - natural
 \t\`show me some admin examples\` - admin examples
-\t\`help admin example\` - admin examples`
+\t\`help admin example\` - admin examples
+\t\`show me word count examples\` - word count examples`
 
 const helpSprintMessage = `There are many valid ways to manage a sprint.
 
@@ -313,6 +315,21 @@ show sprint channel
 \t\`what is the sprint channel?\` - natural
 \t\`show me the sprint channel\` - natural`
 
+const helpCountMessage = `Track wordcounts.
+
+commands:
+
+wc [WORD COUNT]
+\tWORD COUNT (words) - must be >= 0
+\tSet your current word count.`
+
+const helpCountExamplesMessage = `count examples:
+
+wc [WORD COUNT]
+\t\`wc 230\` - straight-forward
+\t\`I think my wc is 400 rn\` - natural
+\t\`I think my wc should be 200 actually\` - natural`
+
 describe('Parse Help Command', function(){
   describe('self describing generated tests', function(){
     it('has no untested examples', function(){
@@ -334,39 +351,25 @@ describe('Parse Help Command', function(){
     )
   })
 
-  describe('basic help command', function(){
-    it('generates examples for help', function(){
-      const reply = createObjFromMessage(helpCommands, 'help example', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(helpExamplesMessage)
-    })
-
-    it('generates a help message', function(){
-      const reply = createObjFromMessage(helpCommands, 'help', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(helpMessage)
-    })
-  })
-
-  describe('help sprint command', function(){
-    it('generates examples for sprints', function(){
-      const reply = createObjFromMessage(helpCommands, 'help sprint example', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(helpSprintExamplesMessage)
-    })
-
-    it('generates a help message for sprints', function(){
-      const reply = createObjFromMessage(helpCommands, 'help sprint', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(helpSprintMessage)
-    })
-  })
-
-  describe('help admin command', function(){
-    it('generates examples for admin commands', function(){
-      const reply = createObjFromMessage(helpCommands, 'help admin example', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(helpAdminExamplesMessage)
-    })
-
-    it('generates a help message for admin commands', function(){
-      const reply = createObjFromMessage(helpCommands, 'help admin', 0)
-      expect(_.join(reply, '\n\n')).to.be.equals(helpAdminMessage)
-    })
+  describe('help messages', function(){
+    unroll(
+      'generates the correct message for #input',
+      function(done, args){
+        const reply = createObjFromMessage(helpCommands, args.input, 0)
+        expect(_.join(reply, '\n\n')).to.be.equals(args.message)
+        done()
+      },
+      [
+        [ 'input', 'message' ],
+        [ 'help', helpMessage ],
+        [ 'help example', helpExamplesMessage ],
+        [ 'help sprint', helpSprintMessage ],
+        [ 'help sprint example', helpSprintExamplesMessage ],
+        [ 'help admin', helpAdminMessage ],
+        [ 'help admin example', helpAdminExamplesMessage ],
+        [ 'help count', helpCountMessage ],
+        [ 'help count example', helpCountExamplesMessage ],
+      ]
+    )
   })
 })

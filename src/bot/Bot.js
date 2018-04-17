@@ -1,5 +1,6 @@
 var _ = require('lodash')
 import {SprintTracker, RESPONSES} from './SprintTracker.js'
+import {CountTracker} from './CountTracker.js'
 import {SprintChannelConfigurator} from './SprintChannelConfigurator.js'
 import {run} from '../utils/commandRunner.js'
 
@@ -8,6 +9,7 @@ export class Bot {
   constructor(client) {
     this.client = client
     this.sprintTracker = new SprintTracker()
+    this.countTracker = new CountTracker()
     this.sprintChannelConfigurator = new SprintChannelConfigurator()
 
     this.client.on('message', this.onMessage)
@@ -29,6 +31,10 @@ export class Bot {
     this.sprintChannelConfigurator.send('STOP')
     this.client.clearTimeout(this.end)
     this.sprintTracker.clearSprint()
+  }
+
+  triggerCountCommands = (user, message, timestamp) => {
+    return this.countTracker.processCommand(user, message, timestamp)
   }
 
   triggerSprintCommands = (message, timestamp) => {
@@ -154,6 +160,17 @@ export class Bot {
         }
         else if (result) {
           this.sprintChannelConfigurator.send(result)
+        }
+
+        result = this.triggerCountCommands(
+          message.author,
+          message.content,
+          message.createdTimestamp
+        )
+
+        if (result) {
+          message.react('👍')
+          message.author.send(result)
         }
       }
     }

@@ -8,6 +8,7 @@ import {
 export const TESTS = {
   SPRINT: 17,
   ADMIN: 4,
+  COUNT: 3,
   HELP: 6,
 }
 
@@ -101,6 +102,12 @@ export const helpCommands = [
         tags: [ 'basic' ],
         tests: [ {instructions: TESTS.ADMIN - 1} ],
       },
+      {
+        name: 'word count examples',
+        input: 'show me word count examples',
+        tags: [ 'natural' ],
+        tests: [ {instructions: TESTS.COUNT - 1} ],
+      },
     ],
   },
   {
@@ -143,6 +150,12 @@ export const helpCommands = [
         input: 'help sprint',
         tags: [ 'basic' ],
         tests: [ {instructions: TESTS.SPRINT} ],
+      },
+      {
+        name: 'word count',
+        input: 'help me with my word count',
+        tags: [ 'natural' ],
+        tests: [ {instructions: TESTS.COUNT} ],
       },
       {
         name: 'sprint natural',

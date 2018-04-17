@@ -70,17 +70,24 @@ export const countCommands = [
       },
       {
         name: 'natural',
-        input: 'I think my wc is 400 rn',
+        input: 'I think my wc is 400 rn', // I think my wc should be 200 actually
         tags: [ 'natural' ],
         tests: [
           {
             // previousCount: undefined,
             wordCount: 400,
           },
+        ],
+      },
+      {
+        name: 'natural',
+        input: 'I think my wc should be 200 actually',
+        tags: [ 'natural' ],
+        tests: [
           {
-            // previousCount: 1000,
-            wordCount: 400,
-            // diff: -600,
+            // previousCount: 300,
+            wordCount: 200,
+            // diff: -100,
           },
         ],
       },

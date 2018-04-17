@@ -1,10 +1,12 @@
 var _ = require('lodash')
 import {sprintIntro, sprintCommands} from '../commands/sprintCommand.js' // TODO rename to sprint.js?
 import {adminIntro, adminCommands} from '../commands/adminCommand.js'
+import {countIntro, countCommands} from '../commands/countCommand.js'
 
 const COMMAND_LOOKUP = {
   sprint: {intro: sprintIntro, commands: sprintCommands},
   admin: {intro: adminIntro, commands: adminCommands},
+  count: {intro: countIntro, commands: countCommands},
 }
 
 export const isValidCommandName = arg => {
