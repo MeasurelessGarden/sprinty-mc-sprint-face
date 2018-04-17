@@ -20,8 +20,24 @@ const unrollCommandExamplesWithHeader = _.concat(
   unrollCommandExamples
 )
 
+// technically all admin commands are "untested" because there's really no input to test - it's all determined by the weird test logic above that assumes from the template what the result should be
+// const unrollUntestedExamples = _.filter(
+//   _.flatMap(adminCommands, command => {
+//     return _.map(command.examples, example => {
+//       if (!example.tests) {
+//         return [ command, example.input ]
+//       }
+//     })
+//   }),
+//   it => it
+// )
+
 describe('Parse Admin Command', function(){
   describe('auto-generated commands', function(){
+    // it('has no untested examples', function(){
+    //   expect(unrollUntestedExamples.length).to.be.equal(0)
+    // })
+
     unroll(
       'creates a command from #input - expects #expected',
       function(done, args){
@@ -40,7 +56,7 @@ describe('Parse Admin Command', function(){
         /*
         Verifies that these examples are matching this specific command.
         Also verifies that even if another command matches it -
-        it produces the same sprint (as long as they parse it the same).
+        it produces the same result (as long as they parse it the same).
         */
         expect(resultFromVocabulary).to.be.equals(args.expected)
         expect(resultFromAllCommands).to.be.equals(args.expected)

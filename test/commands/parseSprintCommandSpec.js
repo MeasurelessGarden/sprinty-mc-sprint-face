@@ -14,6 +14,7 @@ const exampleDate = (hour, min, sec) => {
 
 const expectedSprint = test => {
   return {
+    // TODO use new Sprint(x,y,z)???
     start: exampleDate(test.startHour, test.startMin),
     end: exampleDate(test.endHour, test.endMin),
   }

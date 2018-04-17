@@ -4,6 +4,8 @@
   and as such it may not be appropriate to call the result a 'sprint' yet.
 */
 
+// TODO rename to sprint generator, since this thing generates the actual "sprint" objects?
+
 const createTimeAtNextMinute = (baseTime, minute) => {
   const date = new Date(baseTime)
   date.setMinutes(minute)
@@ -24,6 +26,7 @@ const createTimeWithDelta = (baseTime, minutes) => {
 }
 
 const createSprint = (timestamp, start, end) => {
+  // TODO change to new Sprint(x,y,z)?
   return {
     sprint: {
       // TODO rename absolute?
