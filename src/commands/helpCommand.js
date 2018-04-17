@@ -8,7 +8,7 @@ import {
 export const TESTS = {
   SPRINT: 17,
   ADMIN: 4,
-  COUNT: 3,
+  COUNT: 5,
   HELP: 6,
 }
 

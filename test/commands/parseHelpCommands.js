@@ -320,15 +320,42 @@ const helpCountMessage = `Track wordcounts.
 commands:
 
 wc [WORD COUNT]
+total [WORD COUNT]
+final [WORD COUNT]
+wordcount [WORD COUNT]
+wrote [WORD COUNT]
+finished [WORD COUNT]
+\tWORD COUNT (words) - must be >= 0
+\tSet your current word count.
+
+word count [WORD COUNT]
+\tWORD COUNT (words) - must be >= 0
+\tSet your current word count.
+
+[WORD COUNT] words
 \tWORD COUNT (words) - must be >= 0
 \tSet your current word count.`
 
 const helpCountExamplesMessage = `count examples:
 
 wc [WORD COUNT]
+\t\`i finished with 200\` - natural
+\t\`wrote 640 this time\` - natural
+\t\`wordcount 734\` - wordcount
+\t\`total 300\` - total
+\t\`final 700\` - final
 \t\`wc 230\` - straight-forward
 \t\`I think my wc is 400 rn\` - natural
-\t\`I think my wc should be 200 actually\` - natural`
+\t\`I think my wc should be 200 actually\` - natural
+
+word count [WORD COUNT]
+\t\`set word count to 700\` - extra words
+\t\`final word count 400\` - final
+\t\`total word count 300\` - total
+
+[WORD COUNT] words
+\t\`I got 1000 words!!!!\` - natural
+\t\`200 words\` - basic`
 
 describe('Parse Help Command', function(){
   describe('self describing generated tests', function(){
