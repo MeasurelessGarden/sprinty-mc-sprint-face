@@ -92,7 +92,7 @@ export class Bot {
 
     // TODO mentions @ Sprinty
     //   _.find(message.mentions.users.array(), userMention => {
-    //     return userMention.id == auth.clientId
+    //     return userMention.id == auth.clientId // TODO use env also?
     //   })
 
     if (message.channel.type == 'dm') {
