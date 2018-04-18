@@ -334,7 +334,15 @@ word count [WORD COUNT]
 
 [WORD COUNT] words
 \tWORD COUNT (words) - must be >= 0
-\tSet your current word count.`
+\tSet your current word count.
+
+add [WORD COUNT] words
+\tWORD COUNT (words) - must be >= 0
+\tAdd to your current word count.
+
+[WORD COUNT] new words
+\tWORD COUNT (words) - must be >= 0
+\tAdd to your current word count.`
 
 const helpCountExamplesMessage = `count examples:
 
@@ -355,7 +363,15 @@ word count [WORD COUNT]
 
 [WORD COUNT] words
 \t\`I got 1000 words!!!!\` - natural
-\t\`200 words\` - basic`
+\t\`200 words\` - basic
+
+add [WORD COUNT] words
+\t\`add 1000 words!!!!\` - natural
+\t\`add 200 words\` - basic
+
+[WORD COUNT] new words
+\t\`1000 new words!!!!\` - natural
+\t\`200 new words\` - basic`
 
 describe('Parse Help Command', function(){
   describe('self describing generated tests', function(){

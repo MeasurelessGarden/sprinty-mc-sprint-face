@@ -3,13 +3,13 @@ export const adminIntro =
 
 const showSprintChannelTemplate = {
   input: [],
-  call: (...args) => 'show',
+  call: () => 'show',
   additionalHelp: 'Admins can show the current sprint channel.',
 }
 
 const configureSprintChannelTemplate = {
   input: [],
-  call: (...args) => 'configure', // TODO need some CONSTS for these!!
+  call: () => 'configure', // TODO need some CONSTS for these!!
   additionalHelp: `Admins can configure the sprint channel, to prevent over-aggressive matching of potential commands during regular conversation elsewhere.
 \t**Important:** You can pin this message, so the next time Sprinty loads, xe will reuse it. If more than one message is pinned, xe'll use the most recent one.`,
 }

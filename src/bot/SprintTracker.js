@@ -1,5 +1,5 @@
 var _ = require('lodash')
-import {run} from '../utils/commandRunner.js'
+import {runSprint} from '../utils/parseUtils.js'
 
 export const RESPONSES = {
   SPRINT_IS_GO: 'starting sprint',
@@ -31,7 +31,7 @@ export class SprintTracker {
   }
 
   processCommand = (message, timestamp) => {
-    const command = run('sprint', message, timestamp)
+    const command = runSprint(message, timestamp)
     if (command === 'cancel') {
       if (this.isSprintConfigured()) {
         return RESPONSES.CANCEL_CONFIRMED

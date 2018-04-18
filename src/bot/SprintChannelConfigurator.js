@@ -1,5 +1,5 @@
 var _ = require('lodash')
-import {run} from '../utils/commandRunner.js'
+import {runAdmin} from '../utils/parseUtils.js'
 
 export class SprintChannelConfigurator {
   constructor() {
@@ -42,7 +42,7 @@ export class SprintChannelConfigurator {
     const commands = _.filter(
       _.flatMap(this.channelInit, channel => {
         return _.map(channel.pinnedMessages, pin => {
-          const command = run('admin', pin.content, pin.createdTimestamp)
+          const command = runAdmin(pin.content)
           if (command) {
             return {
               channel: pin.channel,

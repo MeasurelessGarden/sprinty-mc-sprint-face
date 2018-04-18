@@ -11,9 +11,9 @@ describe('Sprint Generator', function(){
       `generates a sprint from #now starting at #startMin with duration #duration - #reason`,
       function(done, args){
         const sprint = generateSprintWithDuration(
-          Date.parse(args.now),
           args.startMin,
-          args.duration
+          args.duration,
+          Date.parse(args.now)
         )
         expect(sprint).to.be.equalSprintDefinition(args.expected)
         done()
@@ -119,9 +119,9 @@ describe('Sprint Generator', function(){
       'generates a sprint from #now starting at #startMin until #endMin - #reason',
       function(done, args){
         const sprint = generateSprintWithEndTime(
-          Date.parse(args.now),
           args.startMin,
-          args.endMin
+          args.endMin,
+          Date.parse(args.now)
         )
         expect(sprint).to.be.equalSprintDefinition(args.expected)
         done()

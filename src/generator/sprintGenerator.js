@@ -38,7 +38,7 @@ class Sprint {
   }
 }
 
-export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
+export const generateSprintInDeltaWithEndTime = (delta, endMin, timestamp) => {
   // TODO write some dang tests for this!
   // timestamp, a number representing a time
   // delta, a number between 1 and 60
@@ -49,9 +49,9 @@ export const generateSprintInDeltaWithEndTime = (timestamp, delta, endMin) => {
 }
 
 export const generateSprintInDeltaWithDuration = (
-  timestamp,
   delta,
-  duration
+  duration,
+  timestamp
 ) => {
   // TODO write some dang tests for this!
   // timestamp, a number representing a time
@@ -62,7 +62,7 @@ export const generateSprintInDeltaWithDuration = (
   return new Sprint(timestamp, start.getTime(), end.getTime())
 }
 
-export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
+export const generateSprintWithEndTime = (startMin, endMin, timestamp) => {
   // timestamp, a number representing a time
   // startMin, a number between 0 and 59
   // endMin, a number between 0 and 59
@@ -71,7 +71,7 @@ export const generateSprintWithEndTime = (timestamp, startMin, endMin) => {
   return new Sprint(timestamp, start.getTime(), end.getTime())
 }
 
-export const generateSprintWithDuration = (timestamp, startMin, duration) => {
+export const generateSprintWithDuration = (startMin, duration, timestamp) => {
   // timestamp, a number representing a time
   // start, a number between 0 and 59
   // duration, a number between 1 and 60

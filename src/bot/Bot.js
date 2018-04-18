@@ -2,7 +2,7 @@ var _ = require('lodash')
 import {SprintTracker, RESPONSES} from './SprintTracker.js'
 import {CountTracker} from './CountTracker.js'
 import {SprintChannelConfigurator} from './SprintChannelConfigurator.js'
-import {run} from '../utils/commandRunner.js'
+import {runHelp, runAdmin} from '../utils/parseUtils.js'
 
 const Discord = require('discord.js') // TODO make this temporary! or something.
 export class Bot {
@@ -58,8 +58,8 @@ export class Bot {
     return response
   }
 
-  triggerHelpCommands = (message, timestamp) => {
-    const help = run('help', message, timestamp)
+  triggerHelpCommands = message => {
+    const help = runHelp(message)
     if (help) {
       const messages = []
       let block = _.take(help, 4)
@@ -96,10 +96,7 @@ export class Bot {
     //   })
 
     if (message.channel.type == 'dm') {
-      const helpMessages = this.triggerHelpCommands(
-        message.content,
-        message.createdTimestamp
-      )
+      const helpMessages = this.triggerHelpCommands(message.content)
       _.each(helpMessages, helpMessage => {
         message.channel.send(helpMessage)
       })
@@ -118,11 +115,7 @@ export class Bot {
       })
       if (isBotAdmin) {
         // as in, an admin of the *bot*
-        const adminCommand = run(
-          'admin',
-          message.content,
-          message.createdTimestamp
-        )
+        const adminCommand = runAdmin(message.content)
         if (adminCommand === 'configure') {
           this.sprintChannelConfigurator.set(message.channel)
           message.react('👍') // '<U+1F44D>' // TODO get more emojis...

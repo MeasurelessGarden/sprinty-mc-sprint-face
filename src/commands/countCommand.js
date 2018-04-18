@@ -1,4 +1,5 @@
-import {SetCount} from '../generator/countGenerator.js'
+import {setCount, addCount} from '../generator/countGenerator.js'
+
 export const countIntro = 'Track wordcounts.'
 
 /*
@@ -6,9 +7,6 @@ what is my count now?
 add XYZ to my count
 i got NNN
 i have XYZ
-
-"new words"?
-300 new words -> adds to total count
 
 */
 
@@ -22,23 +20,125 @@ const CountInput = countType => {
   }
 }
 
+const AddWordCountTemplate = {
+  input: [ CountInput('word') ],
+  call: (count, previousCount) => {
+    return addCount(count, previousCount, 'word')
+  },
+  additionalHelp: 'Add to your current word count.',
+}
+
 const WordCountTemplate = {
   input: [ CountInput('word') ],
-  call: (...args) => {
-    return new SetCount(args[1], 'word')
+  call: (count, previousCount) => {
+    // TODO do I want SetCount to use previous count??
+    return setCount(count, 'word')
   },
   additionalHelp: 'Set your current word count.',
 }
 
 export const countCommands = [
   // order is used to resolve commands without conflicts
-  // {
-  //   vocabulary: [ ['set'], [ 'wc', 'total', 'final', 'wordcount' ], 'Number' ], // TODO implied by version without 'set'?
-  //   template: WordCountTemplate,
-  //   examples: [
-  //
-  //   ]
-  // },
+  {
+    vocabulary: [ 'Number', [ 'new' ], [ 'words' ] ],
+    template: AddWordCountTemplate,
+    examples: [
+      {
+        name: 'natural',
+        input: '1000 new words!!!!',
+        tags: [ 'natural' ],
+        tests: [
+          {
+            previous: 0,
+            wordCount: 1000,
+            delta: 1000,
+          },
+          {
+            previous: undefined,
+            wordCount: 1000,
+            delta: 1000,
+          },
+          {
+            previous: 500,
+            wordCount: 1500,
+            delta: 1000,
+          },
+        ],
+      },
+      {
+        name: 'basic',
+        input: '200 new words',
+        tags: [ 'basic' ],
+        tests: [
+          {
+            previous: 0,
+            wordCount: 200,
+            delta: 200,
+          },
+          {
+            previous: undefined,
+            wordCount: 200,
+            delta: 200,
+          },
+          {
+            previous: 500,
+            wordCount: 700,
+            delta: 200,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    vocabulary: [ [ 'add' ], 'Number', [ 'words' ] ],
+    template: AddWordCountTemplate,
+    examples: [
+      {
+        name: 'natural',
+        input: 'add 1000 words!!!!',
+        tags: [ 'natural' ],
+        tests: [
+          {
+            previous: 0,
+            wordCount: 1000,
+            delta: 1000,
+          },
+          {
+            previous: undefined,
+            wordCount: 1000,
+            delta: 1000,
+          },
+          {
+            previous: 500,
+            wordCount: 1500,
+            delta: 1000,
+          },
+        ],
+      },
+      {
+        name: 'basic',
+        input: 'add 200 words',
+        tags: [ 'basic' ],
+        tests: [
+          {
+            previous: 0,
+            wordCount: 200,
+            delta: 200,
+          },
+          {
+            previous: undefined,
+            wordCount: 200,
+            delta: 200,
+          },
+          {
+            previous: 500,
+            wordCount: 700,
+            delta: 200,
+          },
+        ],
+      },
+    ],
+  },
   {
     vocabulary: [ 'Number', [ 'words' ] ],
     template: WordCountTemplate,

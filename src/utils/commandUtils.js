@@ -3,6 +3,8 @@ import {sprintIntro, sprintCommands} from '../commands/sprintCommand.js' // TODO
 import {adminIntro, adminCommands} from '../commands/adminCommand.js'
 import {countIntro, countCommands} from '../commands/countCommand.js'
 
+// TODO rename this util to something to do with help command util.... idk...
+
 const COMMAND_LOOKUP = {
   sprint: {intro: sprintIntro, commands: sprintCommands},
   admin: {intro: adminIntro, commands: adminCommands},

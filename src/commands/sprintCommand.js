@@ -52,8 +52,8 @@ const WithDurationTemplate = {
 
 const WithDurationDefaultTemplate = {
   input: [ MinuteOfHourInput('start time') ],
-  call: (...args) => {
-    return generateSprintWithDuration(...args, 30)
+  call: (start, timestamp) => {
+    return generateSprintWithDuration(start, 30, timestamp)
   },
   additionalHelp:
     'Start time is always assumed to be in the future, so the final result will jump forward by an hour if needed to create a valid sprint. Sprints default to 30 min.',
@@ -67,8 +67,8 @@ const WithDeltaDurationTemplate = {
 
 const WithDeltaTemplate = {
   input: [ MinutesInput('delta') ],
-  call: (...args) => {
-    return generateSprintInDeltaWithDuration(...args, 30)
+  call: (delta, timestamp) => {
+    return generateSprintInDeltaWithDuration(delta, 30, timestamp)
   },
   additionalHelp:
     'Start a sprint in a few minutes (up to an hour). Sprints default to 30 min.',
@@ -76,8 +76,8 @@ const WithDeltaTemplate = {
 
 const WithNowDurationTemplate = {
   input: [ MinutesInput('duration') ],
-  call: (...args) => {
-    return generateSprintInDeltaWithDuration(args[0], 1, args[1])
+  call: (duration, timestamp) => {
+    return generateSprintInDeltaWithDuration(1, duration, timestamp)
   },
   additionalHelp:
     'Start a sprint now for the specfied number of minutes (up to an hour).',
@@ -85,23 +85,23 @@ const WithNowDurationTemplate = {
 
 const WithNowEndTimeTemplate = {
   input: [ MinuteOfHourInput('end time') ],
-  call: (...args) => {
-    return generateSprintInDeltaWithEndTime(args[0], 1, args[1])
+  call: (end, timestamp) => {
+    return generateSprintInDeltaWithEndTime(1, end, timestamp)
   },
   additionalHelp: 'Start a sprint now until the specified end time.',
 }
 
 const WithNowDefaultTemplate = {
   input: [],
-  call: (...args) => {
-    return generateSprintInDeltaWithDuration(args[0], 1, 30)
+  call: timestamp => {
+    return generateSprintInDeltaWithDuration(1, 30, timestamp)
   },
   additionalHelp: 'Start a sprint now. Sprints default to 30 min.',
 }
 
 const CancelSprintTemplate = {
   input: [],
-  call: (...args) => {
+  call: () => {
     return 'cancel' // TODO I need a const, probably
   },
   additionalHelp: "There's not much to cancelling sprints.",
@@ -109,7 +109,7 @@ const CancelSprintTemplate = {
 
 const SprintInfoTemplate = {
   input: [],
-  call: (...args) => {
+  call: () => {
     return 'info' // TODO I need a const, probably
   },
   additionalHelp: 'Get information on the configured sprint.',

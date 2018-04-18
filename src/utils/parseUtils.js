@@ -3,6 +3,11 @@ var _ = require('lodash')
 import {combinations} from './combine.js'
 import {isValidCommandName} from '../utils/commandUtils.js'
 
+import {sprintCommands} from '../commands/sprintCommand.js'
+import {adminCommands} from '../commands/adminCommand.js'
+import {helpCommands} from '../commands/helpCommand.js'
+import {countCommands} from '../commands/countCommand.js'
+
 // this one has to do with *raw user messages*
 export const preparseMessage = message => {
   // message, a string typed by a user (assumes no @USERNAME)
@@ -103,7 +108,7 @@ const validate = (templateInputs, commandArgs) => {
   return false
 }
 
-export const createObjFromMessage = (commands, message, timestamp) => {
+export const createObjFromMessage = (commands, message, botArgs) => {
   // message, (string) content of the message
   // timestamp -> pass in Message.createdTimestamp ie 1522815707792
 
@@ -117,9 +122,25 @@ export const createObjFromMessage = (commands, message, timestamp) => {
     )
 
     if (validate(config.template.input, commandArgs)) {
-      const functionArgs = _.concat([ timestamp ], commandArgs)
+      const functionArgs = _.concat(commandArgs, botArgs)
       const obj = config.template.call(...functionArgs)
       return obj
     }
   }
+}
+
+export const runHelp = message => {
+  return createObjFromMessage(helpCommands, message)
+}
+
+export const runAdmin = message => {
+  return createObjFromMessage(adminCommands, message)
+}
+
+export const runSprint = (message, timestamp) => {
+  return createObjFromMessage(sprintCommands, message, timestamp)
+}
+
+export const runCount = (message, prevCount) => {
+  return createObjFromMessage(countCommands, message, prevCount)
 }

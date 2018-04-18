@@ -8,7 +8,7 @@ import {
 export const TESTS = {
   SPRINT: 17,
   ADMIN: 4,
-  COUNT: 5,
+  COUNT: 7,
   HELP: 6,
 }
 
@@ -28,7 +28,7 @@ Capitalization and punctation don't matter. Not to xem, anyway.`
 const CommandInput = {
   name: 'command',
   type: 'Command', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
-  description: `must be one of: ${validCommandsString}`, // TODO this has some duplication in parseUtils for anything ever to work (for now)
+  description: `must be one of: ${validCommandsString}`,
   checks: [ arg => isValidCommandName(arg) ], //
   // TODO 'help' cannot be a standard command name, since it confuses the parser with 'help help'
 }
@@ -36,7 +36,7 @@ const CommandInput = {
 export const BasicHelpTemplate = {
   // exact: true, // TODO need to figure out how to test this - for now, it'll just depend on the same matching everything else does
   input: [],
-  call: (...args) => generateHelp('help', helpIntro, helpCommands),
+  call: () => generateHelp('help', helpIntro, helpCommands),
   additionalHelp:
     '(bet you figured out this one!) Please always ask for help in a DM to Sprinty.',
 }
@@ -44,20 +44,20 @@ export const BasicHelpTemplate = {
 const CommandHelpTemplate = {
   // exact: true,
   input: [ CommandInput ],
-  call: (...args) => generate(args[1], generateHelp),
+  call: command => generate(command, generateHelp),
   additionalHelp:
     'Get more info on running commands. This command must be in a DM.',
 }
 
 const CommandHelpExamplesTemplate = {
   input: [ CommandInput ],
-  call: (...args) => generate(args[1], generateExamples),
+  call: command => generate(command, generateExamples),
   additionalHelp: 'Get examples for commands. This command must be in a DM.',
 }
 
 const HelpExamplesTemplate = {
   input: [],
-  call: (...args) => generateExamples('help', helpIntro, helpCommands),
+  call: () => generateExamples('help', helpIntro, helpCommands),
   additionalHelp: 'Get examples. This command must be in a DM.',
 }
 

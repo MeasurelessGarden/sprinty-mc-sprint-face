@@ -1,24 +1,29 @@
 var _ = require('lodash')
-import {run} from '../utils/commandRunner.js'
+import {runCount} from '../utils/parseUtils.js'
 
 export class CountTracker {
   constructor() {
     this.cache = {}
   }
 
-  processCommand = (user, message, timestamp) => {
-    const command = run('count', message, timestamp)
+  processCommand = (user, message) => {
+    const command = runCount(message, this.getCount(user))
     if (command) {
-      if (command.set) {
+      if (command.delta) {
+        // indicator it was an add not a set
         const message = this.countChangeMessage(
-          this.getCount(user),
-          command.set,
+          command.count,
+          command.delta,
           command.type
         )
-        this.set(user, command.set, command.type)
+        this.set(user, command.count, command.type)
         return message
       }
-      // if command.add ....
+      else if (command) {
+        const message = this.countSetMessage(command.count, command.type)
+        this.set(user, command.count, command.type)
+        return message
+      }
     }
   }
 
@@ -36,11 +41,11 @@ export class CountTracker {
     this.cache[user].type = type
   };
 
-  countChangeMessage = (prevCount, nextCount, type) => {
-    if (prevCount) {
-      return `Count updated to ${nextCount} (was ${prevCount}) (${nextCount -
-        prevCount}Δ)`
-    }
+  countChangeMessage = (count, delta, type) => {
+    return `You have ${delta} new ${type}s. (Now at ${count}.)`
+  }
+
+  countSetMessage = (nextCount, type) => {
     return `You have ${nextCount} ${type}s. You know it. I know it.`
   }
 }
