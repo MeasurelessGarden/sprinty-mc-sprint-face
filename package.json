@@ -2,9 +2,10 @@
   "name": "sprinty-mc-sprintface",
   "version": "0.3.0",
   "description": "Measureless Measures Your Words",
-  "main": "bot.js",
+  "main": "src/main.js",
   "author": "Measureless",
   "scripts": {
+    "start": "NODE_ENV=test babel-node src/main.js",
     "bot": "NODE_ENV=test babel-node src/main.js",
     "test": "NODE_ENV=test mocha --recursive ./test",
     "format": "find src test -name '*.js' | xargs ./node_modules/.bin/prettier --config .prettierrc.json --write"
