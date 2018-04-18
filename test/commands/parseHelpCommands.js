@@ -368,6 +368,7 @@ word count [WORD COUNT]
 add [WORD COUNT] words
 \t\`add 1000 words!!!!\` - natural
 \t\`add 200 words\` - basic
+\t\`add -200 words\` - misleading
 
 [WORD COUNT] new words
 \t\`1000 new words!!!!\` - natural

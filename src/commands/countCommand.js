@@ -137,6 +137,18 @@ export const countCommands = [
           },
         ],
       },
+      {
+        name: 'misleading',
+        input: 'add -200 words',
+        tags: [ 'confusing' ],
+        tests: [
+          {
+            previous: 0,
+            wordCount: 200,
+            delta: 200,
+          },
+        ],
+      },
     ],
   },
   {
