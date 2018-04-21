@@ -58,3 +58,5 @@ The best way to see what commands Sprinty supports, and examples for how to use 
 1. heroku ps:scale worker=1
 
 Sorry bruh, but basically Heroku involves me saying "figure it out yourself".
+
+(It should be clear, but obviously deploying with Heroku is not the only option. It's here as something between a suggestion and documentation of what I'm currently doing - nothing more.)
