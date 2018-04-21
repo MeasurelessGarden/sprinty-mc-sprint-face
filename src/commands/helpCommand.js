@@ -9,7 +9,8 @@ export const TESTS = {
   SPRINT: 17,
   ADMIN: 4,
   COUNT: 7,
-  HELP: 6,
+  HELP: 7,
+  VERSION: 1,
 }
 
 // TODO replace client id 430905454961623060 with a var
@@ -59,6 +60,14 @@ const HelpExamplesTemplate = {
   input: [],
   call: () => generateExamples('help', helpIntro, helpCommands),
   additionalHelp: 'Get examples. This command must be in a DM.',
+}
+
+const VersionTemplate = {
+  input: [],
+  call: () => [
+    `Currently running version: ${process.env.SPRINTY_VERSION || 'undefined'}`,
+  ],
+  additionalHelp: 'Get the current version of Sprinty.',
 }
 
 export const helpCommands = [
@@ -198,6 +207,25 @@ export const helpCommands = [
         input: 'YO HELP',
         tags: [ 'natural' ],
         tests: [ {instructions: TESTS.HELP} ],
+      },
+    ],
+  },
+
+  {
+    vocabulary: [ [ [ 'version' ] ] ],
+    template: VersionTemplate,
+    examples: [
+      {
+        name: 'basic',
+        input: 'version',
+        tags: [ 'basic' ],
+        tests: [ {instructions: TESTS.VERSION} ],
+      },
+      {
+        name: 'natural inquery',
+        input: 'what version are you running?',
+        tags: [ 'natural' ],
+        tests: [ {instructions: TESTS.VERSION} ],
       },
     ],
   },

@@ -34,6 +34,9 @@ const unrollUntestedExamples = _.filter(
   it => it
 )
 
+// test-version is passed in as an env variable in package.json
+const versionMessage = `Currently running version: test-version`
+
 const helpMessage = `**Welcome to Sprinty McSprintFace!**
 
 First up: typing '<@430905454961623060> help' or 'help <@430905454961623060>' will make this goofy bot try to help you!
@@ -47,6 +50,9 @@ Sprinty parses many commands out of normally phrased text, so it's important to 
 Capitalization and punctation don't matter. Not to xem, anyway.
 
 commands:
+
+version
+\tGet the current version of Sprinty.
 
 help
 halp
@@ -71,6 +77,10 @@ show [COMMAND] example
 \tGet examples for commands. This command must be in a DM.`
 
 const helpExamplesMessage = `help examples:
+
+version
+\t\`version\` - basic
+\t\`what version are you running?\` - natural inquery
 
 help
 \t\`help\` - basic
@@ -413,6 +423,7 @@ describe('Parse Help Command', function(){
         [ 'help admin example', helpAdminExamplesMessage ],
         [ 'help count', helpCountMessage ],
         [ 'help count example', helpCountExamplesMessage ],
+        [ 'version', versionMessage ],
       ]
     )
   })

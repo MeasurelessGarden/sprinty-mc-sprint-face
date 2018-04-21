@@ -5,10 +5,10 @@
   "main": "src/main.js",
   "author": "Measureless",
   "scripts": {
-    "start": "NODE_ENV=test babel-node src/main.js",
-    "bot": "NODE_ENV=test babel-node src/main.js",
-    "test": "NODE_ENV=test mocha --recursive ./test",
-    "format": "find src test -name '*.js' | xargs ./node_modules/.bin/prettier --config .prettierrc.json --write"
+    "bot": "SPRINTY_VERSION=$npm_package_version NODE_ENV=test babel-node src/main.js",
+    "test": "SPRINTY_VERSION=test-version NODE_ENV=test mocha --recursive ./test",
+    "format": "find src test -name '*.js' | xargs ./node_modules/.bin/prettier --config .prettierrc.json --write",
+    "version": "echo $npm_package_version"
   },
   "dependencies": {
     "babel-cli": "^6.0.0",

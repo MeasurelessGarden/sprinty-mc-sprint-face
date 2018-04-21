@@ -7,7 +7,7 @@ import {
   parseMessageToArgs,
   createObjFromMessage,
 } from '../../src/utils/parseUtils.js'
-import {BasicHelpTemplate} from '../../src/commands/helpCommand.js'
+import {BasicHelpTemplate, TESTS} from '../../src/commands/helpCommand.js'
 import {expect} from 'chai'
 
 describe('Parse Utils', function(){
@@ -36,7 +36,7 @@ describe('Parse Utils', function(){
         'help',
         0
       )
-      expect(result.length).to.be.equals(6) // 6 parts to the response
+      expect(result.length).to.be.equals(TESTS.HELP)
     })
   })
   describe('preparseMessage', function(){

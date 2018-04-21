@@ -7,15 +7,13 @@ import {
 
 // TODO main command: 'sprint' --> @Sprinty help sprint
 // @Sprinty help sprint examples
-export const sprintIntro = 'There are many valid ways to manage a sprint.'
+export const sprintIntro = 'There are many valid ways to manage a sprint.' // TODO sprint now bruh
 
 /*
 Examples:
 ///should we go at 10?
 // TODO should we go again at 10? (ie: start another)
-*/// TODO sprint now bruh
-
-const MinuteOfHourInput = name => {
+*/ const MinuteOfHourInput = name => {
   return {
     name: name,
     type: 'Number', // TODO validate that a command cannot use this template unless it has the right args inside it (include default param - meaning not required for this, and also has a value)
