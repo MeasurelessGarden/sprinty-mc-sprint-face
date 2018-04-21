@@ -8,6 +8,10 @@ add XYZ to my count
 i got NNN
 i have XYZ
 
+TODO NNN more words (another add command varient? or just an example?)
+woooorrrrds
+like.... 276 words
+
 */
 
 const CountInput = countType => {

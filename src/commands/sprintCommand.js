@@ -13,7 +13,7 @@ export const sprintIntro = 'There are many valid ways to manage a sprint.'
 Examples:
 ///should we go at 10?
 // TODO should we go again at 10? (ie: start another)
-*/
+*/// TODO sprint now bruh
 
 const MinuteOfHourInput = name => {
   return {
