@@ -19,6 +19,25 @@ export class Bot {
         this.client.guilds.array()
       )
     })
+    this.client.on('error', err => {
+      console.error('ERROR', err)
+    })
+    this.client.on('warn', info => {
+      console.warn('WARN', info)
+    })
+    // this.client.on('debug', info => {
+    //   this is too noisy to keep on by default
+    //   console.log('DEBUG', info)
+    // })
+    this.client.on('disconnect', event => {
+      console.log('disconnected', event.code, event.reason)
+    })
+    this.client.on('guildUnavailable', guild => {
+      console.log('unable to access guild', guild.id, guild.name)
+    })
+    this.client.on('reconnecting', () => {
+      this.console.log('reconnecting')
+    })
   }
 
   startSprint = () => {
