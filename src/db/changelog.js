@@ -1,8 +1,8 @@
-import {Tables} from './Table.js'
+import {Database} from './Database.js'
 
 export const changelog = database => {
   if (database) {
-    const t = new Tables(database)
+    const t = new Database(database)
     t.ensureTable('guild_config', [
       'guild_id              varchar(20) PRIMARY KEY',
       'sprint_channel_id     varchar(20)',

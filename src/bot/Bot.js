@@ -6,8 +6,9 @@ import {runHelp, runAdmin} from '../utils/parseUtils.js'
 
 const Discord = require('discord.js') // TODO make this temporary! or something.
 export class Bot {
-  constructor(client) {
+  constructor(client, guildDb) {
     this.client = client
+    this.guildDb = guildDb
     this.sprintTracker = new SprintTracker()
     this.countTracker = new CountTracker()
     this.sprintChannelConfigurator = new SprintChannelConfigurator()
@@ -18,6 +19,11 @@ export class Bot {
       this.sprintChannelConfigurator.loadConfiguration(
         this.client.guilds.array()
       )
+      _.each(this.client.guilds.array(), guild => {
+        this.guildDb.readConfiguredSprintChannel(guild.id, result => {
+          console.log('guild read config', guild.id, result)
+        })
+      })
     })
     this.client.on('error', err => {
       console.error('ERROR', err)

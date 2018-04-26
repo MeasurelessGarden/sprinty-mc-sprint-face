@@ -1,22 +1,23 @@
 import {Bot} from './bot/Bot.js'
 import {changelog} from './db/changelog.js'
+import {Guild} from './db/Guild.js'
 
 const Discord = require('discord.js')
 
 let token = undefined
-let database = undefined
+let databaseUrl = undefined
 try {
   var auth = require('./secret.json')
   token = auth.token
-  database = auth.postgres
+  databaseUrl = auth.postgres
 } catch (err) {
   // console.error(err)
   token = process.env.token
-  database = process.env.DATABASE_URL
+  databaseUrl = process.env.DATABASE_URL
 }
 
-const bot = new Bot(new Discord.Client())
+const bot = new Bot(new Discord.Client(), new Guild(databaseUrl))
 
-// bot.client.login(token)
+bot.client.login(token)
 
-changelog(database)
+changelog(databaseUrl)
