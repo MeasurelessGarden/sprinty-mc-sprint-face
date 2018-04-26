@@ -65,6 +65,11 @@ export const adminCommands = [
         input: "this is set as Sprinty's sprint channel",
         tags: [ 'natural' ],
       },
+      // { // TODO show examples all -> all all all examples (by default 'show examples' should be either the first 2 only, or only those tagged basic. also then 'show examples TAG'...)
+      //   name: 'natural',
+      //   input: "configure this as the sprint channel plz", // and 'configure sprint channel here bro'
+      //   tags: [ 'natural' ],
+      // },
     ],
   },
 ]

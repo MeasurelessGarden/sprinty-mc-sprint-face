@@ -38,23 +38,36 @@ export class Database {
   put = (name, id, values) => {
     const existsQuery = `SELECT * FROM ${name} t WHERE t.${id.column} = '${id.value}'`
     const insertQuery = `INSERT INTO ${name} VALUES (${_.join(
-      _.map(columns, c => {
-        if (!isNaN(parseFloat(c)) && isFinite(c)) {
-          return c
-        }
-        return `'${c}'`
+      // TODO use v.column also - need to look up synatx
+      _.map(_.concat([ id ], values), v => {
+        // if (v.type === 'string') {
+        //   return `'${v.value}'`
+        // }
+        // if (!isNaN(parseFloat(v.value)) && isFinite(v.value)) {
+        //   return v.value
+        // }
+        return `'${v.value}'`
       }),
-      ',\n'
+      ', '
     )});`
-    // const updateQueryUPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
-    // const updateQuery = `UPDATE ${name} SET ${v.column} = '${v.value}' WHERE ${id.column} = '${id.value}'`
+    console.log('put', name, id, values)
+    console.log('-> ', existsQuery)
+    console.log('-> ', insertQuery)
+    // console.log('???', _.map(values, v => {
+    //   if (!isNaN(parseFloat(v.value)) && isFinite(v.value)) {
+    //     return v
+    //   }
+    //   return `'${v.value}'`
+    // }))
 
     this.runQuery(existsQuery, result => {
       if (result.rowCount == 0) {
-        this.runQuery(insertQuery)
+        console.log('running insert query')
+        this.runQuery(insertQuery, result => {
+          console.log('insert result:', result)
+        })
       }
       else {
-        // console.log('table', name, 'already exists') //, result)
         const valueList = _.join(
           _.map(values, v => {
             return `${v.column} = '${v.value}'`

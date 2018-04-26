@@ -14,10 +14,17 @@ export class Guild {
 ])
 */
   configureSprintChannel = (guildId, sprintChannelId, timestamp) => {
-    this.database.put('guild_config', {column: 'guild_id', value: guildId}, [
-      {column: 'sprint_channel_id', value: sprintChannelId},
-      {column: 'sprint_channel_date', value: new Date(timestamp)},
-    ])
+    this.database.put( // TODO change so that new timestamp updates the value! (and then put pinned messages in as appropriate - they shouldn't override newer database config values - just be a backup)
+      'guild_config',
+      {column: 'guild_id', value: guildId, type: 'string'},
+      [
+        {column: 'sprint_channel_id', value: sprintChannelId, type: 'string'},
+        {
+          column: 'sprint_channel_date',
+          value: new Date(timestamp).toISOString(),
+        },
+      ]
+    )
   }
 
   readConfiguredSprintChannel = (guildId, callback) => {

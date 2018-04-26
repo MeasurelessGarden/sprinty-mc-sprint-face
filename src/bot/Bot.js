@@ -143,6 +143,11 @@ export class Bot {
         const adminCommand = runAdmin(message.content)
         if (adminCommand === 'configure') {
           this.sprintChannelConfigurator.set(message.channel)
+          this.guildDb.configureSprintChannel(
+            message.channel.guild.id,
+            message.channel.id,
+            message.createdTimestamp
+          )
           message.react('👍') // '<U+1F44D>' // TODO get more emojis...
         }
         else if (adminCommand === 'show') {
