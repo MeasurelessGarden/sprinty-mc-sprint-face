@@ -148,7 +148,7 @@ export class Bot {
             message.channel.id,
             message.createdTimestamp
           )
-          message.react('👍') // '<U+1F44D>' // TODO get more emojis...
+          message.react('👍')
         }
         else if (adminCommand === 'show') {
           const configuredChannel = this.sprintChannelConfigurator.name()

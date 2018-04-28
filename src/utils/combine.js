@@ -1,4 +1,12 @@
-//https://codereview.stackexchange.com/questions/52119/calculate-all-possible-combinations-of-an-array-of-arrays-or-strings
+/*
+From:
+https://codereview.stackexchange.com/questions/52119/calculate-all-possible-combinations-of-an-array-of-arrays-or-strings
+
+Answer by: Flambino (https://codereview.stackexchange.com/users/14370/flambino)
+
+The only modifications to this solution have been from my auto-formatting.
+*/
+
 export const combinations = array => {
   if (!array.length) {
     return []
