@@ -2,8 +2,10 @@ var _ = require('lodash')
 import {runAdmin} from '../utils/parseUtils.js'
 
 export class SprintChannelConfigurator {
-  constructor() {
+  constructor(guildDb, guildId) {
     this.channelInit = []
+    this.guildDb = guildDb
+    this.guildId = guildId
   }
 
   send = message => {
@@ -12,13 +14,16 @@ export class SprintChannelConfigurator {
     }
   }
 
-  set = channel => {
+  set = (channel, when, saveToDb = true) => {
     this.channel = channel
+    this.when = when
+    if (saveToDb) {
+      this.guildDb.configureSprintChannel(channel.guild.id, channel.id, when)
+    }
   };
 
   name = () => {
     if (this.channel) {
-      // TODO this is the kind of thing that's really insecure if I end up wanting this bot working for multiple actual servers
       return this.channel.name
     }
   }
@@ -34,7 +39,8 @@ export class SprintChannelConfigurator {
       return !_.has(channel, 'pinnedMessages')
     })
     // console.log('incomplete returns?', _.map(incomplete, init=>init.channel.name))
-    console.log('loading pinned messages', incomplete.length)
+    console.log('loading pinned messages', this.guildId, incomplete.length)
+    //TODO why am I getting triplicate messages: "loading pinned messages XYZ 0"????
     return incomplete.length === 0
   }
 
@@ -57,8 +63,29 @@ export class SprintChannelConfigurator {
     )
     const lastConfig = _.head(_.sortBy(commands, [ 'timestamp' ]).reverse())
     if (lastConfig) {
-      this.set(lastConfig.channel)
-      this.send('Sprint channel is up and being monitored again.')
+      if (this.channel) {
+        if (lastConfig.timestamp > this.when) {
+          console.log(
+            'pinned message newer than database!',
+            lastConfig.channel.guild.id,
+            lastConfig.channel.id,
+            lastConfig.timestamp,
+            'db:',
+            this.channel,
+            this.when
+          )
+          this.set(lastConfig.channel, lastConfig.timestamp)
+        }
+      }
+      else {
+        console.log(
+          'nothing loaded from database',
+          lastConfig.channel.guild.id,
+          lastConfig.channel.id,
+          lastConfig.timestamp
+        )
+        this.set(lastConfig.channel, lastConfig.timestamp)
+      }
     }
   }
 
@@ -82,51 +109,59 @@ export class SprintChannelConfigurator {
         this.loadConfigurationFromPinnedCommands()
       }
     }
-    if (
-      channel.type == 'text'
-      //  &&
-      // (channel.name == 'sprinty_test' || channel.name == 'sprinty_test2')
-    ) {
+    if (channel.type == 'text') {
       const initifiedChannel = {channel: channel}
       this.channelInit.push(initifiedChannel)
       this.fetchPinned(initifiedChannel, callback)
     }
   }
 
-  loadConfiguration = guilds => {
-    // const callback = () => {
-    //   if (this.areAllChannelPinsLoaded()) {
-    //     this.loadConfigurationFromPinnedCommands()
-    //   }
-    // }
-    const channels = _.each(guilds, guild => {
-      _.each(guild.channels.array(), channel => {
-        this.initChannelStart(channel)
-      })
+  loadConfiguration = channels => {
+    this.guildDb.readConfiguredSprintChannel(this.guildId, result => {
+      if (result.rowCount === 1) {
+        const channelId = _.head(result.rows).sprint_channel_id
+        const channelWhen = _.head(result.rows).sprint_channel_date
+        console.log(
+          'guild channel saved as ',
+          this.guildId,
+          channelId,
+          channelWhen
+        )
+        this.set(
+          _.find(channels, channel => {
+            return channel.id === channelId
+          }),
+          channelWhen,
+          false
+        )
+      }
     })
-    // _.each(this.channelInit, channel => {
-    //   if (
-    //     channel.channel.name == 'sprinty_test' ||
-    //     channel.channel.name == 'sprinty_test2'
-    //   ) {
-    //     channel.channel.send(
-    //       // TODO unfortunately, these messages make very little sense, bc the bot can't easily know which channel they really belong in
-    //       "I'm online again! Please be patient while I fully load..."
-    //     )
-    //
-    //     // TODO fetch pinned only for this test channel just the moment... it's so slow
-    //     channel.channel
-    //       .fetchPinnedMessages({limit: 2})
-    //       .then(messages => {
-    //         channel.pinnedMessages = messages.array()
-    //         callback()
-    //       })
-    //       .catch(error => {
-    //         console.error(error)
-    //         channel.pinnedMessages = []
-    //         callback()
-    //       })
-    //   }
-    // })
+
+    const callback = () => {
+      if (this.areAllChannelPinsLoaded()) {
+        this.loadConfigurationFromPinnedCommands()
+      }
+    }
+    _.each(channels, channel => {
+      this.initChannelStart(channel)
+    })
+    _.each(this.channelInit, channel => {
+      channel.channel
+        .fetchPinnedMessages({limit: 2})
+        .then(messages => {
+          channel.pinnedMessages = messages.array()
+          callback()
+        })
+        .catch(error => {
+          if (error.message === 'Missing Access') {
+            console.error('Missing Access for ', error.path)
+          }
+          else {
+            console.error(error)
+          }
+          channel.pinnedMessages = []
+          callback()
+        })
+    })
   }
 }

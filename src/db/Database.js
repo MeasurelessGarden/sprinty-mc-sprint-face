@@ -1,29 +1,54 @@
 var _ = require('lodash')
 
 const {Client} = require('pg')
+const {Pool} = require('pg')
 
 export class Database {
   constructor(databaseUrl) {
-    this.databaseUrl = databaseUrl
+    this.pool = new Pool({
+      connectionString: databaseUrl,
+      ssl: true,
+    })
+    this.pool.on('error', (err, client) => {
+      console.error('db pool error', err)
+    })
   }
 
   runQuery = (query, callback) => {
-    const client = new Client({
-      connectionString: this.databaseUrl,
-      ssl: true,
-    })
-
-    client.connect()
-
-    client.query(query, (err, result) => {
-      if (err) {
-        console.error(err)
-      }
-      if (callback) {
+    // const client = new Client({
+    //   connectionString: this.databaseUrl,
+    //   ssl: true,
+    // })
+    //
+    // client.connect()
+    //
+    // client.query(query, (err, result) => {
+    //   if (err) {
+    //     console.error(err)
+    //   }
+    //   if (callback) {
+    //     callback(result)
+    //   }
+    //   client.end()
+    // })
+    /*
+    (async () => {
+      const client = await pool.connect()
+      try {
+        const result = await client.query(query)
         callback(result)
+      } finally {
+        client.release()
       }
-      client.end()
-    })
+    })().catch(err => console.error(err))*/
+    ;(async () => {
+      const result = await this.pool.query(query)
+      callback(result)
+    })().catch(err =>
+      setImmediate(() => {
+        console.error(err)
+      })
+    )
   }
 
   get = (name, id, values, callback) => {

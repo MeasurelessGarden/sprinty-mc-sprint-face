@@ -8,7 +8,7 @@ export const changelog = database => {
     t.ensureTable('guild_config', [
       'guild_id              char(18) PRIMARY KEY',
       'sprint_channel_id     char(18)',
-      'sprint_channel_date   date', // TODO recreate with TIMESTAMP WITH TIME ZONE
+      'sprint_channel_date   timestamp with time zone',
     ])
     t.listTables() // TODO no guarentee that this ran *after* the previous command finished...
   }

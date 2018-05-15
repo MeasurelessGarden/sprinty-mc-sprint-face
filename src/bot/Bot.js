@@ -1,5 +1,6 @@
 var _ = require('lodash')
 import {SprintTracker, RESPONSES} from './SprintTracker.js'
+import {SprintRunner} from './SprintRunner.js'
 import {CountTracker} from './CountTracker.js'
 import {SprintChannelConfigurator} from './SprintChannelConfigurator.js'
 import {runHelp, runAdmin} from '../utils/parseUtils.js'
@@ -9,20 +10,26 @@ export class Bot {
   constructor(client, guildDb) {
     this.client = client
     this.guildDb = guildDb
-    this.sprintTracker = new SprintTracker()
     this.countTracker = new CountTracker()
-    this.sprintChannelConfigurator = new SprintChannelConfigurator()
+    this.guildChannels = {}
 
     this.client.on('message', this.onMessage)
     this.client.on('ready', () => {
       console.log('I am ready!')
-      this.sprintChannelConfigurator.loadConfiguration(
-        this.client.guilds.array()
-      )
+
       _.each(this.client.guilds.array(), guild => {
-        this.guildDb.readConfiguredSprintChannel(guild.id, result => {
-          console.log('guild read config', guild.id, result)
-        })
+        const configurator = new SprintChannelConfigurator(
+          this.guildDb,
+          guild.id
+        )
+        const tracker = new SprintTracker()
+        const sprintManager = {
+          configurator: configurator,
+          tracker: tracker,
+          runner: new SprintRunner(this.client, tracker, configurator),
+        }
+        this.guildChannels[guild.id] = sprintManager
+        sprintManager.configurator.loadConfiguration(guild.channels.array())
       })
     })
     this.client.on('error', err => {
@@ -46,39 +53,21 @@ export class Bot {
     })
   }
 
-  startSprint = () => {
-    // this.sprintChannel.send(':ghost:')
-    this.sprintChannelConfigurator.send(':ghost:')
-    this.client.clearTimeout(this.start)
-  }
-
-  endSprint = () => {
-    this.sprintChannelConfigurator.send('STOP')
-    this.client.clearTimeout(this.end)
-    this.sprintTracker.clearSprint()
-  }
-
   triggerCountCommands = (user, message, timestamp) => {
     return this.countTracker.processCommand(user, message, timestamp)
   }
 
-  triggerSprintCommands = (message, timestamp) => {
-    const response = this.sprintTracker.processCommand(message, timestamp)
+  triggerSprintCommands = (message, timestamp, guildId) => {
+    const response = this.guildChannels[guildId].tracker.processCommand(
+      message,
+      timestamp
+    )
 
     if (response === RESPONSES.SPRINT_IS_GO) {
-      this.start = this.client.setTimeout(
-        this.startSprint,
-        this.sprintTracker.getStartTimeout()
-      )
-      this.end = this.client.setTimeout(
-        this.endSprint,
-        this.sprintTracker.getEndTimeout()
-      )
+      this.guildChannels[guildId].runner.start()
     }
     else if (response === RESPONSES.CANCEL_CONFIRMED) {
-      this.client.clearTimeout(this.start)
-      this.client.clearTimeout(this.end)
-      this.sprintTracker.clearSprint()
+      this.guildChannels[guildId].runner.clear()
     }
     return response
   }
@@ -142,16 +131,16 @@ export class Bot {
         // as in, an admin of the *bot*
         const adminCommand = runAdmin(message.content)
         if (adminCommand === 'configure') {
-          this.sprintChannelConfigurator.set(message.channel)
-          this.guildDb.configureSprintChannel(
-            message.channel.guild.id,
-            message.channel.id,
+          this.guildChannels[message.channel.guild.id].configurator.set(
+            message.channel,
             message.createdTimestamp
           )
           message.react('👍')
         }
         else if (adminCommand === 'show') {
-          const configuredChannel = this.sprintChannelConfigurator.name()
+          const configuredChannel = this.guildChannels[
+            message.channel.guild.id
+          ].configurator.name()
           if (configuredChannel) {
             message.channel.send(
               `The current sprint channel is: "${configuredChannel}"`
@@ -163,10 +152,15 @@ export class Bot {
         }
       }
 
-      if (this.sprintChannelConfigurator.isConfiguredChannel(message.channel)) {
+      if (
+        this.guildChannels[
+          message.channel.guild.id
+        ].configurator.isConfiguredChannel(message.channel)
+      ) {
         let result = this.triggerSprintCommands(
           message.content,
-          message.createdTimestamp
+          message.createdTimestamp,
+          message.guild.id
         )
 
         if (result === RESPONSES.SPRINT_ALREADY_CONFIGURED) {
@@ -182,7 +176,7 @@ export class Bot {
           message.react('🤖')
         }
         else if (result) {
-          this.sprintChannelConfigurator.send(result)
+          this.guildChannels[message.channel.guild.id].configurator.send(result)
         }
 
         result = this.triggerCountCommands(
